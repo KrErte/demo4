@@ -1,0 +1,90 @@
+server:
+  port: 8080
+
+mcp:
+  server:
+    name: mcp-gateway
+    version: 1.0.0
+    stdio-enabled: true
+    http-enabled: true
+    http-port: 8080
+
+  filesystem:
+    enabled: true
+    allowed-paths:
+      - /tmp
+      - /home
+    max-file-size-bytes: 10485760  # 10MB
+
+  http-fetch:
+    enabled: true
+    allowed-domains:
+      - api.github.com
+      - httpbin.org
+      - jsonplaceholder.typicode.com
+    max-response-size-bytes: 5242880  # 5MB
+    timeout-seconds: 30
+
+  postgres:
+    enabled: false
+    url: jdbc:postgresql://localhost:5432/mydb
+    username: readonly_user
+    password: ${POSTGRES_PASSWORD:}
+    max-query-rows: 1000
+    query-timeout-seconds: 30
+
+  policy:
+    default-deny: true
+    default-timeout-ms: 30000
+    default-max-result-bytes: 1048576  # 1MB
+
+    allow-tools:
+      - fs.readFile
+      - fs.listDir
+      - web.fetch
+      - db.query
+      - db.schema
+
+    deny-tools: []
+
+    per-tool:
+      fs.readFile:
+        allow: true
+        timeout-ms: 10000
+        max-result-bytes: 10485760
+        allowed-args:
+          - path
+
+      fs.listDir:
+        allow: true
+        timeout-ms: 5000
+        max-result-bytes: 1048576
+        allowed-args:
+          - path
+
+      web.fetch:
+        allow: true
+        timeout-ms: 30000
+        max-result-bytes: 5242880
+        allowed-args:
+          - url
+          - headers
+
+      db.query:
+        allow: true
+        timeout-ms: 30000
+        max-result-bytes: 5242880
+        allowed-args:
+          - sql
+
+      db.schema:
+        allow: true
+        timeout-ms: 10000
+        max-result-bytes: 1048576
+
+logging:
+  level:
+    root: INFO
+    com.example.mcp: DEBUG
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
