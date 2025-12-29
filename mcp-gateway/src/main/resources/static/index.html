@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MCP Gateway Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+            padding: 20px 40px;
+            border-bottom: 1px solid #334155;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header h1 span {
+            font-size: 28px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: #065f46;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #10b981;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+        }
+
+        .card {
+            background: #1e293b;
+            border-radius: 12px;
+            border: 1px solid #334155;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 16px 20px;
+            background: #334155;
+            font-weight: 600;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .card-body {
+            padding: 20px;
+        }
+
+        .full-width {
+            grid-column: 1 / -1;
+        }
+
+        /* Tools Section */
+        .tool-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .tool-item {
+            background: #0f172a;
+            border-radius: 8px;
+            padding: 16px;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .tool-item.denied {
+            border-left-color: #ef4444;
+            opacity: 0.6;
+        }
+
+        .tool-name {
+            font-weight: 600;
+            color: #60a5fa;
+            margin-bottom: 4px;
+        }
+
+        .tool-desc {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        /* Test Tool Section */
+        .test-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 14px;
+            color: #94a3b8;
+        }
+
+        .form-group select,
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #e2e8f0;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            min-height: 80px;
+            font-family: monospace;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .btn:hover {
+            background: #2563eb;
+        }
+
+        .btn:disabled {
+            background: #475569;
+            cursor: not-allowed;
+        }
+
+        /* Result Section */
+        .result {
+            margin-top: 16px;
+            padding: 16px;
+            background: #0f172a;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 13px;
+            white-space: pre-wrap;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .result.success {
+            border: 1px solid #10b981;
+        }
+
+        .result.error {
+            border: 1px solid #ef4444;
+            color: #fca5a5;
+        }
+
+        /* Audit Log */
+        .audit-log {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .audit-entry {
+            padding: 12px;
+            border-bottom: 1px solid #334155;
+            font-size: 13px;
+        }
+
+        .audit-entry:last-child {
+            border-bottom: none;
+        }
+
+        .audit-time {
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .audit-tool {
+            color: #60a5fa;
+            font-weight: 500;
+        }
+
+        .audit-allow {
+            color: #10b981;
+        }
+
+        .audit-deny {
+            color: #ef4444;
+        }
+
+        /* Policy */
+        .policy-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px;
+            background: #0f172a;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .policy-key {
+            color: #94a3b8;
+        }
+
+        .policy-value {
+            font-weight: 500;
+        }
+
+        .policy-value.on {
+            color: #10b981;
+        }
+
+        .policy-value.off {
+            color: #ef4444;
+        }
+
+        /* Stats */
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .stat-card {
+            background: #1e293b;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid #334155;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: #64748b;
+            margin-top: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><span>🛡️</span> MCP Gateway Dashboard</h1>
+        <div class="status">
+            <div class="status-dot"></div>
+            Server Running
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Stats -->
+        <div class="full-width">
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-tools">-</div>
+                    <div class="stat-label">Registered Tools</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-allowed">-</div>
+                    <div class="stat-label">Allowed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-denied">-</div>
+                    <div class="stat-label">Denied</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="stat-total">-</div>
+                    <div class="stat-label">Total Requests</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Registered Tools -->
+        <div class="card">
+            <div class="card-header">
+                📦 Registered Tools
+                <button class="btn" onclick="loadTools()" style="padding: 6px 12px; font-size: 12px;">Refresh</button>
+            </div>
+            <div class="card-body">
+                <div class="tool-list" id="tool-list">
+                    <div style="color: #64748b;">Loading...</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Test Tool -->
+        <div class="card">
+            <div class="card-header">🧪 Test Tool</div>
+            <div class="card-body">
+                <div class="test-form">
+                    <div class="form-group">
+                        <label>Select Tool</label>
+                        <select id="test-tool">
+                            <option value="">-- Select a tool --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Arguments (JSON)</label>
+                        <textarea id="test-args" placeholder='{"path": "/tmp"}'></textarea>
+                    </div>
+                    <button class="btn" onclick="testTool()">Execute Tool</button>
+                    <div id="test-result"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Policy Overview -->
+        <div class="card">
+            <div class="card-header">⚙️ Policy Configuration</div>
+            <div class="card-body">
+                <div class="policy-item">
+                    <span class="policy-key">Default Deny</span>
+                    <span class="policy-value on">ENABLED</span>
+                </div>
+                <div class="policy-item">
+                    <span class="policy-key">Default Timeout</span>
+                    <span class="policy-value">30s</span>
+                </div>
+                <div class="policy-item">
+                    <span class="policy-key">Max Result Size</span>
+                    <span class="policy-value">1 MB</span>
+                </div>
+                <div class="policy-item">
+                    <span class="policy-key">Filesystem</span>
+                    <span class="policy-value on">ENABLED</span>
+                </div>
+                <div class="policy-item">
+                    <span class="policy-key">HTTP Fetch</span>
+                    <span class="policy-value on">ENABLED</span>
+                </div>
+                <div class="policy-item">
+                    <span class="policy-key">PostgreSQL</span>
+                    <span class="policy-value off">DISABLED</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Audit Log -->
+        <div class="card">
+            <div class="card-header">
+                📋 Recent Activity
+                <button class="btn" onclick="clearAudit()" style="padding: 6px 12px; font-size: 12px; background: #475569;">Clear</button>
+            </div>
+            <div class="card-body">
+                <div class="audit-log" id="audit-log">
+                    <div class="audit-entry">
+                        <div class="audit-time">Waiting for activity...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let auditEntries = [];
+        let stats = { tools: 0, allowed: 0, denied: 0, total: 0 };
+
+        async function loadTools() {
+            try {
+                const response = await fetch('/mcp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: 1,
+                        method: 'tools/list'
+                    })
+                });
+                const data = await response.json();
+
+                if (data.result && data.result.tools) {
+                    const tools = data.result.tools;
+                    stats.tools = tools.length;
+                    updateStats();
+
+                    const toolList = document.getElementById('tool-list');
+                    const toolSelect = document.getElementById('test-tool');
+
+                    toolList.innerHTML = tools.map(tool => `
+                        <div class="tool-item">
+                            <div class="tool-name">${tool.name}</div>
+                            <div class="tool-desc">${tool.description}</div>
+                        </div>
+                    `).join('');
+
+                    toolSelect.innerHTML = '<option value="">-- Select a tool --</option>' +
+                        tools.map(tool => `<option value="${tool.name}">${tool.name}</option>`).join('');
+                }
+            } catch (e) {
+                document.getElementById('tool-list').innerHTML =
+                    '<div style="color: #ef4444;">Error loading tools. Is the server running?</div>';
+            }
+        }
+
+        async function testTool() {
+            const tool = document.getElementById('test-tool').value;
+            const argsText = document.getElementById('test-args').value;
+            const resultDiv = document.getElementById('test-result');
+
+            if (!tool) {
+                resultDiv.innerHTML = '<div class="result error">Please select a tool</div>';
+                return;
+            }
+
+            let args = {};
+            try {
+                if (argsText.trim()) {
+                    args = JSON.parse(argsText);
+                }
+            } catch (e) {
+                resultDiv.innerHTML = '<div class="result error">Invalid JSON arguments</div>';
+                return;
+            }
+
+            try {
+                const response = await fetch('/mcp', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        id: Date.now(),
+                        method: 'tools/call',
+                        params: { name: tool, arguments: args }
+                    })
+                });
+                const data = await response.json();
+
+                if (data.error) {
+                    stats.denied++;
+                    stats.total++;
+                    updateStats();
+                    addAuditEntry(tool, 'DENY', data.error.message);
+                    resultDiv.innerHTML = `<div class="result error">${JSON.stringify(data.error, null, 2)}</div>`;
+                } else {
+                    stats.allowed++;
+                    stats.total++;
+                    updateStats();
+                    addAuditEntry(tool, 'ALLOW', 'Success');
+                    resultDiv.innerHTML = `<div class="result success">${JSON.stringify(data.result, null, 2)}</div>`;
+                }
+            } catch (e) {
+                resultDiv.innerHTML = `<div class="result error">Request failed: ${e.message}</div>`;
+            }
+        }
+
+        function addAuditEntry(tool, decision, message) {
+            const time = new Date().toLocaleTimeString();
+            const entry = { time, tool, decision, message };
+            auditEntries.unshift(entry);
+            if (auditEntries.length > 50) auditEntries.pop();
+            renderAuditLog();
+        }
+
+        function renderAuditLog() {
+            const log = document.getElementById('audit-log');
+            if (auditEntries.length === 0) {
+                log.innerHTML = '<div class="audit-entry"><div class="audit-time">Waiting for activity...</div></div>';
+                return;
+            }
+            log.innerHTML = auditEntries.map(e => `
+                <div class="audit-entry">
+                    <div class="audit-time">${e.time}</div>
+                    <span class="audit-tool">${e.tool}</span> -
+                    <span class="audit-${e.decision.toLowerCase()}">${e.decision}</span>
+                    <div style="color: #64748b; font-size: 12px; margin-top: 4px;">${e.message}</div>
+                </div>
+            `).join('');
+        }
+
+        function clearAudit() {
+            auditEntries = [];
+            stats = { ...stats, allowed: 0, denied: 0, total: 0 };
+            updateStats();
+            renderAuditLog();
+        }
+
+        function updateStats() {
+            document.getElementById('stat-tools').textContent = stats.tools;
+            document.getElementById('stat-allowed').textContent = stats.allowed;
+            document.getElementById('stat-denied').textContent = stats.denied;
+            document.getElementById('stat-total').textContent = stats.total;
+        }
+
+        // Load on start
+        loadTools();
+    </script>
+</body>
+</html>
