@@ -1,249 +1,136 @@
-# Enterprise MCP Gateway
+# MCP Gateway
 
-A production-grade Model Context Protocol (MCP) server implementation in Java that provides secure, policy-controlled access to enterprise resources.
-
-## What is This?
-
-The Enterprise MCP Gateway is a Java-based MCP server that acts as a secure intermediary between AI assistants and enterprise systems. It exposes tools and resources through the MCP protocol while enforcing strict security policies, maintaining audit logs, and providing safe-by-default execution.
-
-## Why Java MCP Gateway?
-
-- **Enterprise-Ready**: Built on Spring Boot 3 with Java 21 for production deployments
-- **Policy-Driven Security**: YAML-based policy engine with default-deny, allowlists, and per-tool configurations
-- **Comprehensive Auditing**: Every invocation is logged with SHA-256 hashed arguments, decision reasons, and timing
-- **Safe by Default**: Strict allowlists, blocked dangerous operations, read-only database access
-- **Extensible**: Easy to add new connectors for additional data sources and tools
-- **Dual Transport**: Supports both stdio (for local use) and HTTP (for networked deployments)
+A minimal, production-grade MCP tool server in Java with a web dashboard.
 
 ## Features
 
-### Core Capabilities
-
-- **Tool Registry**: Dynamic registration of tools from connectors
-- **Policy Engine**: YAML-based rules for access control, timeouts, and result size limits
-- **Audit Logging**: Structured JSON audit events for all invocations
-- **Schema Validation**: JSON Schema validation for tool arguments
-
-### Built-in Connectors
-
-| Connector | Tools | Description |
-|-----------|-------|-------------|
-| FileSystem | `fs.readFile`, `fs.listDir` | Read files and list directories with path allowlist |
-| HttpFetch | `web.fetch` | HTTP GET requests with domain allowlist |
-| PostgreSQL | `db.query`, `db.schema` | Read-only SQL queries with dangerous keyword blocking |
+- **3 Built-in Tools**: `fs.listDir`, `fs.readFile`, `web.fetch`
+- **Web Dashboard**: Test tools, view metrics, monitor activity
+- **Policy Engine**: Default-deny with path/domain allowlists
+- **API Key Security**: Protect API endpoints
+- **In-Memory Metrics**: Track allowed/denied requests
 
 ## Quick Start
 
-### Prerequisites
-
-- Java 21+
-- Gradle 8+
-- (Optional) PostgreSQL for database connector
-
-### Build
-
-```bash
-cd mcp-gateway
-./gradlew build
-```
-
-### Run
-
-#### Stdio Transport (for local AI assistant integration)
-
 ```bash
 ./gradlew bootRun
 ```
 
-The server reads JSON-RPC requests from stdin and writes responses to stdout.
+Open **http://localhost:8080** in your browser.
 
-#### HTTP Transport
+## API Endpoints
+
+All `/api/*` endpoints require header: `X-API-Key: dev-key`
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/tools` | GET | List registered tools |
+| `/api/call` | POST | Call a tool |
+| `/api/metrics` | GET | Get counters and config |
+| `/api/activity` | GET | Recent activity log |
+| `/api/config` | GET | Get API key (for dashboard) |
+
+## Example curl Commands
+
+### List Tools
 
 ```bash
-./gradlew bootRun
+curl -H "X-API-Key: dev-key" http://localhost:8080/api/tools
 ```
 
-Access the HTTP endpoint at `http://localhost:8080/mcp`
-
-### Test
+### List Directory
 
 ```bash
-./gradlew test
+curl -X POST http://localhost:8080/api/call \
+  -H "X-API-Key: dev-key" \
+  -H "Content-Type: application/json" \
+  -d '{"tool": "fs.listDir", "arguments": {"path": "/tmp"}}'
+```
+
+### Read File
+
+```bash
+curl -X POST http://localhost:8080/api/call \
+  -H "X-API-Key: dev-key" \
+  -H "Content-Type: application/json" \
+  -d '{"tool": "fs.readFile", "arguments": {"path": "/tmp/test.txt"}}'
+```
+
+### Fetch URL
+
+```bash
+curl -X POST http://localhost:8080/api/call \
+  -H "X-API-Key: dev-key" \
+  -H "Content-Type: application/json" \
+  -d '{"tool": "web.fetch", "arguments": {"url": "https://httpbin.org/get"}}'
 ```
 
 ## Configuration
 
-Configuration is managed through `src/main/resources/application.yml`.
-
-### Server Configuration
-
-```yaml
-mcp:
-  server:
-    name: mcp-gateway
-    version: 1.0.0
-    stdio-enabled: true
-    http-enabled: true
-    http-port: 8080
-```
-
-### Connector Configuration
-
-```yaml
-mcp:
-  filesystem:
-    enabled: true
-    allowed-paths:
-      - /tmp
-      - /home
-    max-file-size-bytes: 10485760
-
-  http-fetch:
-    enabled: true
-    allowed-domains:
-      - api.github.com
-      - httpbin.org
-    max-response-size-bytes: 5242880
-
-  postgres:
-    enabled: false
-    url: jdbc:postgresql://localhost:5432/mydb
-    username: readonly_user
-    password: ${POSTGRES_PASSWORD:}
-```
-
-### Policy Configuration
+Edit `src/main/resources/application.yml`:
 
 ```yaml
 mcp:
   policy:
-    default-deny: true
-    default-timeout-ms: 30000
-    default-max-result-bytes: 1048576
+    default-deny: true          # Deny paths/domains not in allowlist
+    timeout-ms: 30000           # Request timeout
+    max-result-bytes: 1048576   # 1MB max result size
 
-    allow-tools:
-      - fs.readFile
-      - fs.listDir
-      - web.fetch
+  fs:
+    allowlist:                  # Allowed filesystem paths
+      - /tmp
+      - ./sandbox
 
-    deny-tools: []
+  web:
+    allow-domains:              # Allowed HTTP domains
+      - httpbin.org
+      - api.github.com
 
-    per-tool:
-      fs.readFile:
-        allow: true
-        timeout-ms: 10000
-        max-result-bytes: 10485760
-        allowed-args:
-          - path
+  features:
+    fs-enabled: true            # Enable filesystem tools
+    http-enabled: true          # Enable HTTP fetch tool
+
+  security:
+    api-key: dev-key            # API key for authentication
 ```
 
-## MCP Protocol
+## Response Format
 
-### Supported Methods
-
-| Method | Description |
-|--------|-------------|
-| `initialize` | Initialize the server connection |
-| `tools/list` | List all available tools |
-| `tools/call` | Invoke a tool with arguments |
-| `ping` | Health check |
-
-### Example Requests
-
-#### List Tools
+### Success
 
 ```json
 {
-  "jsonrpc": "2.0",
-  "id": 1,
-  "method": "tools/list"
+  "ok": true,
+  "result": { ... },
+  "elapsedMs": 45,
+  "truncated": false
 }
 ```
 
-#### Call Tool
+### Error
 
 ```json
 {
-  "jsonrpc": "2.0",
-  "id": 2,
-  "method": "tools/call",
-  "params": {
-    "name": "fs.readFile",
-    "arguments": {
-      "path": "/tmp/example.txt"
-    }
-  }
+  "ok": false,
+  "error": "Path not in allowlist: /etc",
+  "code": "DENIED"
 }
 ```
 
-## Adding a New Connector
+Error codes: `DENIED`, `INVALID`, `ERROR`, `TIMEOUT`
 
-1. Create a new class in `com.example.mcp.connectors`:
+## Security Warning
 
-```java
-@Component
-public class MyConnector {
+⚠️ **File Access**: Only paths in the allowlist can be accessed. Configure carefully!
 
-    private final McpConfig config;
-    private final ToolRegistry toolRegistry;
+⚠️ **API Key**: Change `dev-key` to a strong secret in production.
 
-    public MyConnector(McpConfig config, ToolRegistry toolRegistry) {
-        this.config = config;
-        this.toolRegistry = toolRegistry;
-    }
+⚠️ **Domain Allowlist**: Only allowed domains can be fetched.
 
-    @PostConstruct
-    public void registerTools() {
-        // Create JSON schema for tool arguments
-        ObjectNode schema = new ObjectMapper().createObjectNode();
-        schema.put("type", "object");
-        // ... define properties
+## Tests
 
-        // Register the tool
-        toolRegistry.register(new ToolDefinition(
-            "my.tool",
-            "Description of what this tool does",
-            schema,
-            this::myToolImplementation
-        ));
-    }
-
-    private Object myToolImplementation(Map<String, Object> args) {
-        // Implement tool logic
-        return Map.of("result", "value");
-    }
-}
-```
-
-2. Add configuration in `McpConfig.java` if needed
-
-3. Update `application.yml` with configuration and policy rules
-
-4. Add the tool to `allow-tools` list in policy configuration
-
-## HTTP API Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/mcp` | POST | JSON-RPC endpoint for MCP requests |
-| `/mcp/health` | GET | Health check |
-| `/mcp/info` | GET | Server information |
-
-## Audit Log Format
-
-Every tool invocation produces a structured JSON audit event:
-
-```json
-{
-  "timestamp": "2024-01-15T10:30:00Z",
-  "toolName": "fs.readFile",
-  "actor": "local-user",
-  "argsHash": "a3f2...",
-  "decision": "ALLOW",
-  "reason": "Policy check passed",
-  "durationMs": 45,
-  "invocationId": "uuid-here"
-}
+```bash
+./gradlew test
 ```
 
 ## Project Structure
@@ -251,35 +138,21 @@ Every tool invocation produces a structured JSON audit event:
 ```
 mcp-gateway/
 ├── src/main/java/com/example/mcp/
-│   ├── core/
-│   │   ├── McpServer.java          # Main server with stdio/HTTP
-│   │   ├── ToolRegistry.java       # Tool registration
-│   │   ├── PolicyEngine.java       # Policy evaluation
-│   │   ├── AuditService.java       # Audit logging
-│   │   ├── McpRequestHandler.java  # Request lifecycle
-│   │   └── McpException.java       # Exception handling
-│   ├── connectors/
-│   │   ├── FileSystemConnector.java
-│   │   ├── HttpFetchConnector.java
-│   │   └── PostgresReadOnlyConnector.java
-│   ├── model/
-│   │   ├── ToolDefinition.java
-│   │   ├── ToolInvocation.java
-│   │   └── AuditEvent.java
-│   ├── config/
-│   │   ├── McpConfig.java
-│   │   └── PolicyConfig.java
+│   ├── config/GatewayConfig.java    # Configuration
+│   ├── controller/ApiController.java # REST API
+│   ├── filter/ApiKeyFilter.java     # API key auth
+│   ├── model/                       # DTOs
+│   ├── service/
+│   │   ├── ToolService.java         # Tool implementations
+│   │   └── MetricsService.java      # Metrics tracking
 │   └── Application.java
 ├── src/main/resources/
+│   ├── static/index.html            # Dashboard
 │   └── application.yml
-├── src/test/java/com/example/mcp/
-│   ├── PolicyEngineTest.java
-│   └── ToolInvocationTest.java
-├── build.gradle
-├── README.md
-└── SECURITY.md
+└── src/test/java/
+    └── ToolServiceTest.java
 ```
 
 ## License
 
-MIT License
+MIT
