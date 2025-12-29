@@ -360,11 +360,11 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>MCP Gateway Demo</h1>
-            <p>A secure tool gateway for AI assistants to access business data</p>
+            <h1>Pilvetark OÜ - Ärisüsteemid</h1>
+            <p>Demo: AI-assistent pääseb turvaliselt ligi ettevõtte andmetele</p>
             <div class="status-badge">
                 <div class="status-dot"></div>
-                <span>Server Running</span>
+                <span>Reg: 14892367 | EE102345678</span>
             </div>
         </div>
 
@@ -388,8 +388,9 @@
         </div>
 
         <div class="info-box">
-            <h3>How It Works</h3>
-            <p>Select a tool below and click Execute to test it. The gateway logs every request and enforces security policies. Try the business demo tools to see mock accounting, inventory, and HR data!</p>
+            <h3>Pilvetark OÜ - IT-teenuste ettevõte Tallinnas</h3>
+            <p>See on demo Eesti tarkvarafirmast: 12 töötajat, SaaS tooted (PilveCRM, PilveDoc), arendusteenused.
+               Kliendid: Eesti Energia, Bolt, Cleveron jt. Proovi erinevaid päringuid - arved, töötajad, projektid, palgaleht!</p>
         </div>
 
         <div class="main-grid">
@@ -460,50 +461,50 @@
 
         const toolExamples = {
             'fs.listDir': [
-                { label: 'List /tmp', args: { path: '/tmp' } },
-                { label: 'List current dir', args: { path: '.' } }
+                { label: 'Näita /tmp', args: { path: '/tmp' } },
+                { label: 'Praegune kaust', args: { path: '.' } }
             ],
             'fs.readFile': [
-                { label: 'Read test file', args: { path: '/tmp/test.txt' } }
+                { label: 'Loe testfaili', args: { path: '/tmp/test.txt' } }
             ],
             'web.fetch': [
                 { label: 'Test URL', args: { url: 'https://httpbin.org/get' } },
                 { label: 'GitHub API', args: { url: 'https://api.github.com' } }
             ],
             'accounting.getInvoices': [
-                { label: 'All invoices', args: {} },
-                { label: 'Unpaid only', args: { status: 'unpaid' } },
-                { label: 'Overdue only', args: { status: 'overdue' } },
-                { label: 'Last 5', args: { limit: 5 } }
+                { label: 'Kõik arved', args: {} },
+                { label: 'Maksmata', args: { status: 'unpaid' } },
+                { label: 'Üle tähtaja', args: { status: 'overdue' } },
+                { label: 'Makstud', args: { status: 'paid' } }
             ],
             'accounting.getBalance': [
-                { label: 'All accounts', args: {} },
-                { label: 'Checking only', args: { account: 'checking' } },
-                { label: 'Savings only', args: { account: 'savings' } }
+                { label: 'Kõik kontod', args: {} },
+                { label: 'Arvelduskonto', args: { account: 'arvelduskonto' } },
+                { label: 'Reservkonto', args: { account: 'reserv' } }
             ],
             'accounting.getReport': [
-                { label: 'Profit & Loss', args: { type: 'profit_loss' } },
-                { label: 'Balance Sheet', args: { type: 'balance_sheet' } },
-                { label: 'Cash Flow', args: { type: 'cashflow' } }
+                { label: 'Kasumiaruanne', args: { type: 'profit_loss' } },
+                { label: 'Bilanss', args: { type: 'balance_sheet' } },
+                { label: 'Rahavood', args: { type: 'cashflow' } }
             ],
             'inventory.getProducts': [
-                { label: 'All products', args: {} },
-                { label: 'Low stock only', args: { lowStock: true } },
-                { label: 'Electronics', args: { category: 'electronics' } }
+                { label: 'Kõik', args: {} },
+                { label: 'Vähe laos', args: { lowStock: true } },
+                { label: 'Litsentsid', args: { category: 'litsents' } }
             ],
             'inventory.getOrders': [
-                { label: 'All orders', args: {} },
-                { label: 'Pending only', args: { status: 'pending' } },
-                { label: 'Shipped', args: { status: 'shipped' } }
+                { label: 'Kõik projektid', args: {} },
+                { label: 'Töös', args: { status: 'shipped' } },
+                { label: 'Ootel', args: { status: 'pending' } }
             ],
             'hr.getEmployees': [
-                { label: 'All employees', args: {} },
-                { label: 'Engineering', args: { department: 'Engineering' } },
-                { label: 'Sales team', args: { department: 'Sales' } }
+                { label: 'Kõik töötajad', args: {} },
+                { label: 'Arendus', args: { department: 'Arendus' } },
+                { label: 'Müük', args: { department: 'Müük' } }
             ],
             'hr.getPayroll': [
-                { label: 'This month', args: {} },
-                { label: 'December', args: { month: '2024-12' } }
+                { label: 'See kuu', args: {} },
+                { label: 'Detsember 2024', args: { month: '2024-12' } }
             ]
         };
 
