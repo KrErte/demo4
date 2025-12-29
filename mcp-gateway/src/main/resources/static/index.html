@@ -3,275 +3,594 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCP Gateway Dashboard</title>
+    <title>MCP Gateway - Demo Dashboard</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            padding: 20px;
         }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Header */
         .header {
-            background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
-            padding: 16px 24px;
-            border-bottom: 1px solid #334155;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
         }
-        .header h1 { font-size: 20px; display: flex; align-items: center; gap: 10px; }
-        .status { display: flex; align-items: center; gap: 8px; font-size: 13px; }
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 15px;
+            font-size: 14px;
+        }
         .status-dot {
-            width: 8px; height: 8px; background: #10b981; border-radius: 50%;
+            width: 10px;
+            height: 10px;
+            background: #10b981;
+            border-radius: 50%;
             animation: pulse 2s infinite;
         }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        .api-key-bar {
-            background: #1e293b;
-            padding: 10px 24px;
-            border-bottom: 1px solid #334155;
+        /* Cards */
+        .card {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        .card-header {
+            background: #f8fafc;
+            padding: 16px 24px;
+            border-bottom: 1px solid #e2e8f0;
+            font-weight: 600;
+            font-size: 18px;
+            color: #1e293b;
             display: flex;
             align-items: center;
-            gap: 12px;
-            font-size: 13px;
+            gap: 10px;
         }
-        .api-key-bar input {
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 4px;
-            padding: 6px 10px;
-            color: #e2e8f0;
-            width: 200px;
-            font-family: monospace;
+        .card-body {
+            padding: 24px;
         }
 
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
             padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .stat-label {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        /* Main Grid */
+        .main-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 20px;
         }
-        .full-width { grid-column: 1 / -1; }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
+        @media (max-width: 900px) {
+            .main-grid { grid-template-columns: 1fr; }
         }
-        .stat-card {
-            background: #1e293b;
+
+        /* Tool Tester */
+        .tool-category {
+            margin-bottom: 20px;
+        }
+        .tool-category h3 {
+            font-size: 14px;
+            color: #64748b;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .tool-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .tool-btn {
+            padding: 10px 16px;
+            background: #f1f5f9;
+            border: 2px solid transparent;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            color: #475569;
+            transition: all 0.2s;
+        }
+        .tool-btn:hover {
+            background: #e2e8f0;
+            transform: translateY(-1px);
+        }
+        .tool-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #5a67d8;
+        }
+        .tool-btn .emoji {
+            margin-right: 6px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 13px;
+            resize: vertical;
+            min-height: 100px;
+            transition: border-color 0.2s;
+        }
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .quick-examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        .quick-btn {
+            padding: 6px 12px;
+            background: #fef3c7;
+            border: 1px solid #fcd34d;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #92400e;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .quick-btn:hover {
+            background: #fde68a;
+        }
+
+        .execute-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .execute-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .execute-btn:disabled {
+            background: #94a3b8;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .result-box {
+            margin-top: 16px;
             padding: 16px;
             border-radius: 8px;
-            text-align: center;
-            border: 1px solid #334155;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
         }
-        .stat-value { font-size: 28px; font-weight: 700; color: #3b82f6; }
-        .stat-label { font-size: 12px; color: #64748b; margin-top: 4px; }
+        .result-box.success {
+            background: #ecfdf5;
+            border: 2px solid #10b981;
+            color: #065f46;
+        }
+        .result-box.error {
+            background: #fef2f2;
+            border: 2px solid #ef4444;
+            color: #991b1b;
+        }
+        .result-box.info {
+            background: #f0f9ff;
+            border: 2px solid #3b82f6;
+            color: #1e40af;
+        }
 
-        .card {
-            background: #1e293b;
-            border-radius: 8px;
-            border: 1px solid #334155;
-            overflow: hidden;
+        /* Tools List */
+        .tools-list {
+            max-height: 400px;
+            overflow-y: auto;
         }
-        .card-header {
-            padding: 12px 16px;
-            background: #334155;
+        .tool-item {
+            padding: 14px;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .tool-item:last-child { border-bottom: none; }
+        .tool-item:hover { background: #f8fafc; }
+        .tool-icon {
+            font-size: 24px;
+        }
+        .tool-info {
+            flex: 1;
+        }
+        .tool-name {
             font-weight: 600;
+            color: #1e293b;
             font-size: 14px;
+        }
+        .tool-desc {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 2px;
+        }
+        .tool-tag {
+            padding: 4px 8px;
+            background: #e0e7ff;
+            color: #4338ca;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .tool-tag.business { background: #d1fae5; color: #065f46; }
+        .tool-tag.system { background: #fef3c7; color: #92400e; }
+
+        /* Activity */
+        .activity-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .activity-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+        .activity-item:last-child { border-bottom: none; }
+        .activity-status {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .activity-status.allowed { background: #d1fae5; }
+        .activity-status.denied { background: #fee2e2; }
+        .activity-status.error { background: #fef3c7; }
+        .activity-info { flex: 1; }
+        .activity-tool { font-weight: 600; color: #1e293b; font-size: 14px; }
+        .activity-time { font-size: 12px; color: #94a3b8; }
+        .activity-reason { font-size: 12px; color: #64748b; margin-top: 4px; }
+
+        /* Config */
+        .config-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f5f9;
         }
-        .card-body { padding: 16px; }
-
-        .tool-item {
-            background: #0f172a;
-            border-radius: 6px;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-left: 3px solid #3b82f6;
+        .config-item:last-child { border-bottom: none; }
+        .config-key { color: #64748b; font-size: 14px; }
+        .config-value {
+            font-weight: 600;
+            font-size: 14px;
         }
-        .tool-item:last-child { margin-bottom: 0; }
-        .tool-name { font-weight: 600; color: #60a5fa; font-size: 14px; }
-        .tool-desc { font-size: 12px; color: #94a3b8; margin-top: 4px; }
+        .config-value.on { color: #10b981; }
+        .config-value.off { color: #ef4444; }
 
-        .form-group { margin-bottom: 12px; }
-        .form-group label { display: block; font-size: 12px; color: #94a3b8; margin-bottom: 4px; }
-        .form-group select, .form-group textarea {
-            width: 100%;
-            padding: 8px 10px;
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 6px;
-            color: #e2e8f0;
+        /* Info box */
+        .info-box {
+            background: #f0f9ff;
+            border-left: 4px solid #3b82f6;
+            padding: 16px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+        }
+        .info-box h3 {
+            color: #1e40af;
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .info-box p {
+            color: #1e40af;
             font-size: 13px;
+            line-height: 1.5;
         }
-        .form-group textarea { min-height: 70px; font-family: monospace; resize: vertical; }
-
-        .btn {
-            padding: 8px 16px;
-            background: #3b82f6;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-weight: 500;
-            cursor: pointer;
-            font-size: 13px;
-        }
-        .btn:hover { background: #2563eb; }
-        .btn:disabled { background: #475569; cursor: not-allowed; }
-        .btn-sm { padding: 4px 10px; font-size: 11px; }
-
-        .result {
-            margin-top: 12px;
-            padding: 12px;
-            background: #0f172a;
-            border-radius: 6px;
-            font-family: monospace;
-            font-size: 12px;
-            white-space: pre-wrap;
-            max-height: 200px;
-            overflow-y: auto;
-            word-break: break-all;
-        }
-        .result.success { border: 1px solid #10b981; }
-        .result.error { border: 1px solid #ef4444; color: #fca5a5; }
-
-        .policy-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #334155;
-            font-size: 13px;
-        }
-        .policy-item:last-child { border-bottom: none; }
-        .policy-key { color: #94a3b8; }
-        .policy-value { font-weight: 500; }
-        .policy-value.on { color: #10b981; }
-        .policy-value.off { color: #ef4444; }
-
-        .activity-list { max-height: 300px; overflow-y: auto; }
-        .activity-item {
-            padding: 8px 0;
-            border-bottom: 1px solid #334155;
-            font-size: 12px;
-        }
-        .activity-item:last-child { border-bottom: none; }
-        .activity-time { color: #64748b; font-size: 11px; }
-        .activity-tool { color: #60a5fa; font-weight: 500; }
-        .activity-allowed { color: #10b981; }
-        .activity-denied { color: #ef4444; }
-        .activity-error { color: #f59e0b; }
-        .activity-reason { color: #64748b; font-size: 11px; }
     </style>
 </head>
 <body>
-    <div class="header">
-        <h1>🛡️ MCP Gateway Dashboard</h1>
-        <div class="status"><div class="status-dot"></div> Server Running</div>
-    </div>
-
-    <div class="api-key-bar">
-        <label>API Key:</label>
-        <input type="text" id="apiKeyInput" placeholder="Enter API key">
-        <span id="keyStatus" style="color: #64748b;">Loading...</span>
-    </div>
-
     <div class="container">
-        <div class="full-width">
-            <div class="stats">
-                <div class="stat-card">
-                    <div class="stat-value" id="statTools">-</div>
-                    <div class="stat-label">Registered Tools</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="statAllowed">-</div>
-                    <div class="stat-label">Allowed</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="statDenied">-</div>
-                    <div class="stat-label">Denied</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="statTotal">-</div>
-                    <div class="stat-label">Total Requests</div>
-                </div>
+        <div class="header">
+            <h1>MCP Gateway Demo</h1>
+            <p>A secure tool gateway for AI assistants to access business data</p>
+            <div class="status-badge">
+                <div class="status-dot"></div>
+                <span>Server Running</span>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">📦 Registered Tools</div>
-            <div class="card-body" id="toolsList">Loading...</div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">🧪 Test Tool</div>
-            <div class="card-body">
-                <div class="form-group">
-                    <label>Select Tool</label>
-                    <select id="toolSelect">
-                        <option value="">-- Select --</option>
-                        <option value="fs.listDir">fs.listDir</option>
-                        <option value="fs.readFile">fs.readFile</option>
-                        <option value="web.fetch">web.fetch</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Arguments (JSON)</label>
-                    <textarea id="argsInput" placeholder='{"path": "/tmp"}'></textarea>
-                </div>
-                <button class="btn" onclick="executeTool()">Execute</button>
-                <div id="testResult"></div>
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value" id="statTools">-</div>
+                <div class="stat-label">Available Tools</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="statAllowed">-</div>
+                <div class="stat-label">Allowed Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="statDenied">-</div>
+                <div class="stat-label">Denied Requests</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="statTotal">-</div>
+                <div class="stat-label">Total Requests</div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">⚙️ Policy Configuration</div>
-            <div class="card-body" id="policyConfig">Loading...</div>
+        <div class="info-box">
+            <h3>How It Works</h3>
+            <p>Select a tool below and click Execute to test it. The gateway logs every request and enforces security policies. Try the business demo tools to see mock accounting, inventory, and HR data!</p>
+        </div>
+
+        <div class="main-grid">
+            <div class="card">
+                <div class="card-header">
+                    <span>🧪</span> Test a Tool
+                </div>
+                <div class="card-body">
+                    <div class="tool-category">
+                        <h3>Business Tools (Demo Data)</h3>
+                        <div class="tool-buttons" id="businessTools"></div>
+                    </div>
+                    <div class="tool-category">
+                        <h3>System Tools</h3>
+                        <div class="tool-buttons" id="systemTools"></div>
+                    </div>
+
+                    <div id="quickExamplesSection" style="display:none;">
+                        <label style="font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px; display: block;">Quick Examples</label>
+                        <div class="quick-examples" id="quickExamples"></div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Parameters (JSON)</label>
+                        <textarea id="argsInput" placeholder='Click a tool above, then edit parameters here...'></textarea>
+                    </div>
+
+                    <button class="execute-btn" id="executeBtn" onclick="executeTool()" disabled>
+                        Select a Tool First
+                    </button>
+
+                    <div id="resultBox"></div>
+                </div>
+            </div>
+
+            <div>
+                <div class="card">
+                    <div class="card-header">
+                        <span>📦</span> All Available Tools
+                    </div>
+                    <div class="card-body">
+                        <div class="tools-list" id="toolsList">Loading...</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span>⚙️</span> Security Settings
+                    </div>
+                    <div class="card-body" id="configPanel">Loading...</div>
+                </div>
+            </div>
         </div>
 
         <div class="card">
             <div class="card-header">
-                📋 Recent Activity
-                <button class="btn btn-sm" onclick="clearActivity()">Clear View</button>
+                <span>📋</span> Recent Activity
             </div>
             <div class="card-body">
-                <div class="activity-list" id="activityList">Loading...</div>
+                <div class="activity-list" id="activityList">No activity yet</div>
             </div>
         </div>
     </div>
 
     <script>
-        let apiKey = '';
+        let selectedTool = null;
+        const apiKey = 'dev-key';
+
+        const toolExamples = {
+            'fs.listDir': [
+                { label: 'List /tmp', args: { path: '/tmp' } },
+                { label: 'List current dir', args: { path: '.' } }
+            ],
+            'fs.readFile': [
+                { label: 'Read test file', args: { path: '/tmp/test.txt' } }
+            ],
+            'web.fetch': [
+                { label: 'Test URL', args: { url: 'https://httpbin.org/get' } },
+                { label: 'GitHub API', args: { url: 'https://api.github.com' } }
+            ],
+            'accounting.getInvoices': [
+                { label: 'All invoices', args: {} },
+                { label: 'Unpaid only', args: { status: 'unpaid' } },
+                { label: 'Overdue only', args: { status: 'overdue' } },
+                { label: 'Last 5', args: { limit: 5 } }
+            ],
+            'accounting.getBalance': [
+                { label: 'All accounts', args: {} },
+                { label: 'Checking only', args: { account: 'checking' } },
+                { label: 'Savings only', args: { account: 'savings' } }
+            ],
+            'accounting.getReport': [
+                { label: 'Profit & Loss', args: { type: 'profit_loss' } },
+                { label: 'Balance Sheet', args: { type: 'balance_sheet' } },
+                { label: 'Cash Flow', args: { type: 'cashflow' } }
+            ],
+            'inventory.getProducts': [
+                { label: 'All products', args: {} },
+                { label: 'Low stock only', args: { lowStock: true } },
+                { label: 'Electronics', args: { category: 'electronics' } }
+            ],
+            'inventory.getOrders': [
+                { label: 'All orders', args: {} },
+                { label: 'Pending only', args: { status: 'pending' } },
+                { label: 'Shipped', args: { status: 'shipped' } }
+            ],
+            'hr.getEmployees': [
+                { label: 'All employees', args: {} },
+                { label: 'Engineering', args: { department: 'Engineering' } },
+                { label: 'Sales team', args: { department: 'Sales' } }
+            ],
+            'hr.getPayroll': [
+                { label: 'This month', args: {} },
+                { label: 'December', args: { month: '2024-12' } }
+            ]
+        };
+
+        const toolCategories = {
+            business: ['accounting.getInvoices', 'accounting.getBalance', 'accounting.getReport',
+                       'inventory.getProducts', 'inventory.getOrders', 'hr.getEmployees', 'hr.getPayroll'],
+            system: ['fs.listDir', 'fs.readFile', 'web.fetch']
+        };
+
+        const toolEmojis = {
+            'fs.listDir': '📁',
+            'fs.readFile': '📄',
+            'web.fetch': '🌐',
+            'accounting.getInvoices': '🧾',
+            'accounting.getBalance': '💰',
+            'accounting.getReport': '📊',
+            'inventory.getProducts': '📦',
+            'inventory.getOrders': '🛒',
+            'hr.getEmployees': '👥',
+            'hr.getPayroll': '💵'
+        };
 
         async function init() {
-            try {
-                const res = await fetch('/api/config');
-                const cfg = await res.json();
-                apiKey = cfg.apiKey || 'dev-key';
-                document.getElementById('apiKeyInput').value = apiKey;
-                document.getElementById('keyStatus').textContent = 'Loaded from server';
-                document.getElementById('keyStatus').style.color = '#10b981';
-            } catch (e) {
-                apiKey = 'dev-key';
-                document.getElementById('apiKeyInput').value = apiKey;
-                document.getElementById('keyStatus').textContent = 'Using default';
-            }
-
-            document.getElementById('apiKeyInput').addEventListener('input', (e) => {
-                apiKey = e.target.value;
-            });
-
+            renderToolButtons();
             loadTools();
             loadMetrics();
             loadActivity();
-            setInterval(loadMetrics, 2000);
-            setInterval(loadActivity, 2000);
+            setInterval(loadMetrics, 3000);
+            setInterval(loadActivity, 3000);
+        }
+
+        function renderToolButtons() {
+            const businessDiv = document.getElementById('businessTools');
+            const systemDiv = document.getElementById('systemTools');
+
+            toolCategories.business.forEach(tool => {
+                const btn = document.createElement('button');
+                btn.className = 'tool-btn';
+                btn.innerHTML = `<span class="emoji">${toolEmojis[tool] || '🔧'}</span>${tool.split('.')[1]}`;
+                btn.onclick = () => selectTool(tool);
+                btn.dataset.tool = tool;
+                businessDiv.appendChild(btn);
+            });
+
+            toolCategories.system.forEach(tool => {
+                const btn = document.createElement('button');
+                btn.className = 'tool-btn';
+                btn.innerHTML = `<span class="emoji">${toolEmojis[tool] || '🔧'}</span>${tool}`;
+                btn.onclick = () => selectTool(tool);
+                btn.dataset.tool = tool;
+                systemDiv.appendChild(btn);
+            });
+        }
+
+        function selectTool(tool) {
+            selectedTool = tool;
+
+            // Update button states
+            document.querySelectorAll('.tool-btn').forEach(btn => {
+                btn.classList.toggle('selected', btn.dataset.tool === tool);
+            });
+
+            // Update execute button
+            const executeBtn = document.getElementById('executeBtn');
+            executeBtn.disabled = false;
+            executeBtn.textContent = `Execute ${tool}`;
+
+            // Show quick examples
+            const examplesSection = document.getElementById('quickExamplesSection');
+            const examplesDiv = document.getElementById('quickExamples');
+            const examples = toolExamples[tool] || [];
+
+            if (examples.length > 0) {
+                examplesSection.style.display = 'block';
+                examplesDiv.innerHTML = examples.map(ex =>
+                    `<button class="quick-btn" onclick='setArgs(${JSON.stringify(ex.args)})'>${ex.label}</button>`
+                ).join('');
+            } else {
+                examplesSection.style.display = 'none';
+            }
+
+            // Set default args
+            setArgs(examples[0]?.args || {});
+        }
+
+        function setArgs(args) {
+            document.getElementById('argsInput').value = JSON.stringify(args, null, 2);
         }
 
         async function apiFetch(url, options = {}) {
@@ -283,12 +602,22 @@
             try {
                 const res = await apiFetch('/api/tools');
                 const tools = await res.json();
-                document.getElementById('toolsList').innerHTML = tools.map(t => `
-                    <div class="tool-item">
-                        <div class="tool-name">${t.name}</div>
-                        <div class="tool-desc">${t.description}</div>
-                    </div>
-                `).join('');
+
+                document.getElementById('toolsList').innerHTML = tools.map(t => {
+                    const category = toolCategories.business.includes(t.name) ? 'business' : 'system';
+                    const emoji = toolEmojis[t.name] || '🔧';
+                    const desc = t.description.replace(/^[^\s]+\s*/, ''); // Remove emoji from description
+                    return `
+                        <div class="tool-item">
+                            <div class="tool-icon">${emoji}</div>
+                            <div class="tool-info">
+                                <div class="tool-name">${t.name}</div>
+                                <div class="tool-desc">${desc}</div>
+                            </div>
+                            <span class="tool-tag ${category}">${category}</span>
+                        </div>
+                    `;
+                }).join('');
             } catch (e) {
                 document.getElementById('toolsList').innerHTML = '<div style="color:#ef4444">Error loading tools</div>';
             }
@@ -304,13 +633,27 @@
                 document.getElementById('statTotal').textContent = m.totalRequests;
 
                 const cfg = m.config;
-                document.getElementById('policyConfig').innerHTML = `
-                    <div class="policy-item"><span class="policy-key">Default Deny</span><span class="policy-value ${cfg.defaultDeny ? 'on' : 'off'}">${cfg.defaultDeny ? 'ENABLED' : 'DISABLED'}</span></div>
-                    <div class="policy-item"><span class="policy-key">Timeout</span><span class="policy-value">${cfg.timeoutMs}ms</span></div>
-                    <div class="policy-item"><span class="policy-key">Max Result Size</span><span class="policy-value">${formatBytes(cfg.maxResultBytes)}</span></div>
-                    <div class="policy-item"><span class="policy-key">Filesystem</span><span class="policy-value ${cfg.fsEnabled ? 'on' : 'off'}">${cfg.fsEnabled ? 'ENABLED' : 'DISABLED'}</span></div>
-                    <div class="policy-item"><span class="policy-key">HTTP Fetch</span><span class="policy-value ${cfg.httpEnabled ? 'on' : 'off'}">${cfg.httpEnabled ? 'ENABLED' : 'DISABLED'}</span></div>
-                    <div class="policy-item"><span class="policy-key">PostgreSQL</span><span class="policy-value off">DISABLED</span></div>
+                document.getElementById('configPanel').innerHTML = `
+                    <div class="config-item">
+                        <span class="config-key">Default Deny Policy</span>
+                        <span class="config-value ${cfg.defaultDeny ? 'on' : 'off'}">${cfg.defaultDeny ? 'ENABLED' : 'DISABLED'}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-key">Request Timeout</span>
+                        <span class="config-value">${cfg.timeoutMs / 1000}s</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-key">Max Result Size</span>
+                        <span class="config-value">${(cfg.maxResultBytes / 1024 / 1024).toFixed(1)} MB</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-key">Filesystem Access</span>
+                        <span class="config-value ${cfg.fsEnabled ? 'on' : 'off'}">${cfg.fsEnabled ? 'ON' : 'OFF'}</span>
+                    </div>
+                    <div class="config-item">
+                        <span class="config-key">HTTP Fetch</span>
+                        <span class="config-value ${cfg.httpEnabled ? 'on' : 'off'}">${cfg.httpEnabled ? 'ON' : 'OFF'}</span>
+                    </div>
                 `;
             } catch (e) {
                 console.error('Failed to load metrics', e);
@@ -321,83 +664,70 @@
             try {
                 const res = await apiFetch('/api/activity');
                 const activity = await res.json();
+
                 if (activity.length === 0) {
-                    document.getElementById('activityList').innerHTML = '<div style="color:#64748b">No activity yet</div>';
+                    document.getElementById('activityList').innerHTML =
+                        '<div style="color:#94a3b8; text-align:center; padding:20px;">No activity yet. Try executing a tool!</div>';
                     return;
                 }
-                document.getElementById('activityList').innerHTML = activity.map(a => `
-                    <div class="activity-item">
-                        <div class="activity-time">${new Date(a.ts).toLocaleTimeString()}</div>
-                        <span class="activity-tool">${a.tool}</span> -
-                        <span class="activity-${a.decision.toLowerCase()}">${a.decision}</span>
-                        ${a.elapsedMs ? `<span style="color:#64748b">(${a.elapsedMs}ms)</span>` : ''}
-                        <div class="activity-reason">${a.reason}</div>
-                    </div>
-                `).join('');
+
+                document.getElementById('activityList').innerHTML = activity.slice(0, 10).map(a => {
+                    const statusClass = a.decision.toLowerCase();
+                    const statusIcon = a.decision === 'ALLOWED' ? '✓' : a.decision === 'DENIED' ? '✗' : '!';
+                    return `
+                        <div class="activity-item">
+                            <div class="activity-status ${statusClass}">${statusIcon}</div>
+                            <div class="activity-info">
+                                <div class="activity-tool">${a.tool}</div>
+                                <div class="activity-time">${new Date(a.ts).toLocaleTimeString()} ${a.elapsedMs ? `(${a.elapsedMs}ms)` : ''}</div>
+                                <div class="activity-reason">${a.reason}</div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
             } catch (e) {
                 console.error('Failed to load activity', e);
             }
         }
 
-        function clearActivity() {
-            document.getElementById('activityList').innerHTML = '<div style="color:#64748b">Cleared (server-side activity remains)</div>';
-        }
-
         async function executeTool() {
-            const tool = document.getElementById('toolSelect').value;
-            const argsText = document.getElementById('argsInput').value;
-            const resultDiv = document.getElementById('testResult');
+            if (!selectedTool) return;
 
-            if (!tool) {
-                resultDiv.innerHTML = '<div class="result error">Select a tool first</div>';
-                return;
-            }
+            const argsText = document.getElementById('argsInput').value;
+            const resultDiv = document.getElementById('resultBox');
 
             let args = {};
             if (argsText.trim()) {
                 try {
                     args = JSON.parse(argsText);
                 } catch (e) {
-                    resultDiv.innerHTML = '<div class="result error">Invalid JSON</div>';
+                    resultDiv.innerHTML = '<div class="result-box error">Invalid JSON in parameters</div>';
                     return;
                 }
             }
+
+            resultDiv.innerHTML = '<div class="result-box info">Executing...</div>';
 
             try {
                 const res = await apiFetch('/api/call', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tool, arguments: args })
+                    body: JSON.stringify({ tool: selectedTool, arguments: args })
                 });
                 const data = await res.json();
 
                 if (data.ok) {
-                    resultDiv.innerHTML = `<div class="result success">${JSON.stringify(data, null, 2)}</div>`;
+                    resultDiv.innerHTML = `<div class="result-box success">${JSON.stringify(data, null, 2)}</div>`;
                 } else {
-                    resultDiv.innerHTML = `<div class="result error">${JSON.stringify(data, null, 2)}</div>`;
+                    resultDiv.innerHTML = `<div class="result-box error">${JSON.stringify(data, null, 2)}</div>`;
                 }
 
                 loadMetrics();
                 loadActivity();
             } catch (e) {
-                resultDiv.innerHTML = `<div class="result error">Request failed: ${e.message}</div>`;
+                resultDiv.innerHTML = `<div class="result-box error">Request failed: ${e.message}</div>`;
             }
         }
-
-        function formatBytes(bytes) {
-            if (bytes < 1024) return bytes + ' B';
-            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
-            return (bytes / 1048576).toFixed(1) + ' MB';
-        }
-
-        document.getElementById('toolSelect').addEventListener('change', (e) => {
-            const examples = {
-                'fs.listDir': '{"path": "/tmp"}',
-                'fs.readFile': '{"path": "/tmp/test.txt"}',
-                'web.fetch': '{"url": "https://httpbin.org/get"}'
-            };
-            document.getElementById('argsInput').value = examples[e.target.value] || '';
-        });
 
         init();
     </script>

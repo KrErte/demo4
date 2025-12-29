@@ -1,14 +1,14 @@
 # MCP Gateway
 
-A minimal, production-grade MCP tool server in Java with a web dashboard.
+A minimal, production-grade tool gateway in Java with a web dashboard for testing.
 
-## Features
+## What Is This?
 
-- **3 Built-in Tools**: `fs.listDir`, `fs.readFile`, `web.fetch`
-- **Web Dashboard**: Test tools, view metrics, monitor activity
-- **Policy Engine**: Default-deny with path/domain allowlists
-- **API Key Security**: Protect API endpoints
-- **In-Memory Metrics**: Track allowed/denied requests
+MCP Gateway is a secure "middleman" between AI assistants and your business systems. It:
+
+- **Controls access** - Only allowed operations can be performed
+- **Logs everything** - Every request is tracked for auditing
+- **Provides demo data** - Mock accounting, inventory, and HR data for testing
 
 ## Quick Start
 
@@ -18,51 +18,102 @@ A minimal, production-grade MCP tool server in Java with a web dashboard.
 
 Open **http://localhost:8080** in your browser.
 
+## Available Tools
+
+### Business Tools (Mock Demo Data)
+
+| Tool | Description | Example Parameters |
+|------|-------------|-------------------|
+| `accounting.getInvoices` | Get customer invoices | `{"status": "unpaid"}` |
+| `accounting.getBalance` | View account balances | `{}` or `{"account": "checking"}` |
+| `accounting.getReport` | Generate financial reports | `{"type": "profit_loss"}` |
+| `inventory.getProducts` | View product inventory | `{"lowStock": true}` |
+| `inventory.getOrders` | View recent orders | `{"status": "pending"}` |
+| `hr.getEmployees` | View employee directory | `{"department": "Engineering"}` |
+| `hr.getPayroll` | View payroll summary | `{"month": "2024-12"}` |
+
+### System Tools
+
+| Tool | Description | Example Parameters |
+|------|-------------|-------------------|
+| `fs.listDir` | List directory contents | `{"path": "/tmp"}` |
+| `fs.readFile` | Read a file | `{"path": "/tmp/test.txt"}` |
+| `web.fetch` | Fetch a URL | `{"url": "https://httpbin.org/get"}` |
+
 ## API Endpoints
 
 All `/api/*` endpoints require header: `X-API-Key: dev-key`
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
-| `/api/tools` | GET | List registered tools |
-| `/api/call` | POST | Call a tool |
-| `/api/metrics` | GET | Get counters and config |
+| `/api/tools` | GET | List all available tools |
+| `/api/call` | POST | Execute a tool |
+| `/api/metrics` | GET | Get request statistics |
 | `/api/activity` | GET | Recent activity log |
-| `/api/config` | GET | Get API key (for dashboard) |
 
-## Example curl Commands
+## Example API Calls
 
-### List Tools
-
-```bash
-curl -H "X-API-Key: dev-key" http://localhost:8080/api/tools
-```
-
-### List Directory
+### Get Unpaid Invoices
 
 ```bash
 curl -X POST http://localhost:8080/api/call \
   -H "X-API-Key: dev-key" \
   -H "Content-Type: application/json" \
-  -d '{"tool": "fs.listDir", "arguments": {"path": "/tmp"}}'
+  -d '{"tool": "accounting.getInvoices", "arguments": {"status": "unpaid"}}'
 ```
 
-### Read File
+### View Engineering Team
 
 ```bash
 curl -X POST http://localhost:8080/api/call \
   -H "X-API-Key: dev-key" \
   -H "Content-Type: application/json" \
-  -d '{"tool": "fs.readFile", "arguments": {"path": "/tmp/test.txt"}}'
+  -d '{"tool": "hr.getEmployees", "arguments": {"department": "Engineering"}}'
 ```
 
-### Fetch URL
+### Generate Profit & Loss Report
 
 ```bash
 curl -X POST http://localhost:8080/api/call \
   -H "X-API-Key: dev-key" \
   -H "Content-Type: application/json" \
-  -d '{"tool": "web.fetch", "arguments": {"url": "https://httpbin.org/get"}}'
+  -d '{"tool": "accounting.getReport", "arguments": {"type": "profit_loss"}}'
+```
+
+## Example Responses
+
+### Invoice List
+```json
+{
+  "ok": true,
+  "result": {
+    "invoices": [
+      {
+        "id": "INV-2024-1001",
+        "customer": "TechStart OU",
+        "amount": 2450.00,
+        "status": "unpaid",
+        "dueDate": "2024-12-25"
+      }
+    ],
+    "count": 5,
+    "totalAmount": 12500.00
+  }
+}
+```
+
+### Financial Report
+```json
+{
+  "ok": true,
+  "result": {
+    "report": "Kasumiaruanne",
+    "revenue": { "total": 121000.00 },
+    "expenses": { "total": 60450.00 },
+    "netProfit": 60550.00,
+    "profitMargin": "50.0%"
+  }
+}
 ```
 
 ## Configuration
@@ -72,85 +123,57 @@ Edit `src/main/resources/application.yml`:
 ```yaml
 mcp:
   policy:
-    default-deny: true          # Deny paths/domains not in allowlist
-    timeout-ms: 30000           # Request timeout
-    max-result-bytes: 1048576   # 1MB max result size
+    default-deny: true        # Block by default
+    timeout-ms: 30000         # Request timeout
+    max-result-bytes: 1048576 # 1MB max result
 
   fs:
-    allowlist:                  # Allowed filesystem paths
+    allowlist:                # Allowed directories
       - /tmp
       - ./sandbox
 
   web:
-    allow-domains:              # Allowed HTTP domains
+    allow-domains:            # Allowed HTTP domains
       - httpbin.org
       - api.github.com
 
-  features:
-    fs-enabled: true            # Enable filesystem tools
-    http-enabled: true          # Enable HTTP fetch tool
-
   security:
-    api-key: dev-key            # API key for authentication
+    api-key: dev-key          # Change in production!
 ```
 
-## Response Format
+## Security Features
 
-### Success
-
-```json
-{
-  "ok": true,
-  "result": { ... },
-  "elapsedMs": 45,
-  "truncated": false
-}
-```
-
-### Error
-
-```json
-{
-  "ok": false,
-  "error": "Path not in allowlist: /etc",
-  "code": "DENIED"
-}
-```
-
-Error codes: `DENIED`, `INVALID`, `ERROR`, `TIMEOUT`
-
-## Security Warning
-
-⚠️ **File Access**: Only paths in the allowlist can be accessed. Configure carefully!
-
-⚠️ **API Key**: Change `dev-key` to a strong secret in production.
-
-⚠️ **Domain Allowlist**: Only allowed domains can be fetched.
-
-## Tests
-
-```bash
-./gradlew test
-```
+- **API Key Authentication** - All requests require valid API key
+- **Default Deny Policy** - Only whitelisted resources accessible
+- **Request Logging** - Every call logged with timestamp
+- **Size Limits** - Prevents large result attacks
+- **Timeout Protection** - Prevents hanging requests
 
 ## Project Structure
 
 ```
 mcp-gateway/
 ├── src/main/java/com/example/mcp/
-│   ├── config/GatewayConfig.java    # Configuration
-│   ├── controller/ApiController.java # REST API
-│   ├── filter/ApiKeyFilter.java     # API key auth
-│   ├── model/                       # DTOs
-│   ├── service/
-│   │   ├── ToolService.java         # Tool implementations
-│   │   └── MetricsService.java      # Metrics tracking
-│   └── Application.java
+│   ├── config/           # Configuration classes
+│   ├── controller/       # REST API endpoints
+│   ├── filter/           # API key authentication
+│   ├── model/            # Data models
+│   └── service/          # Business logic & mock data
 ├── src/main/resources/
-│   ├── static/index.html            # Dashboard
-│   └── application.yml
-└── src/test/java/
-    └── ToolServiceTest.java
+│   ├── static/           # Web dashboard
+│   └── application.yml   # Configuration
+└── build.gradle          # Build file
+```
+
+## Requirements
+
+- Java 17+
+- No database needed (uses mock data)
+
+## Tests
+
+```bash
+./gradlew test
 ```
 
 ## License
