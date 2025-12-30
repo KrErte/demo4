@@ -100,6 +100,21 @@
         .result-item-status.overdue { background: #fee2e2; color: #991b1b; }
         .msg-success { color: #065f46; }
         .msg-error { color: #991b1b; }
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            margin-left: 12px;
+            padding: 4px 10px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .download-btn:hover { background: #5a6fd6; }
 
         .json-details { margin-top: 10px; }
         .json-details summary { font-size: 12px; color: #94a3b8; cursor: pointer; }
@@ -254,6 +269,8 @@
         let advancedMode = false;
         const messages = [];
         const apiKey = 'dev-key';
+        let lastExportData = null;
+        let lastExportName = '';
 
         const quickActions = {
             invoices: { tool: 'accounting.getInvoices', args: {}, label: 'Näita arveid' },
@@ -291,6 +308,36 @@
 
         function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
+        function downloadExcel() {
+            if (!lastExportData || !Array.isArray(lastExportData)) return;
+            const data = lastExportData;
+            if (data.length === 0) return;
+
+            // Get headers from first item
+            const headers = Object.keys(data[0]);
+            const rows = [headers.join(';')];
+
+            data.forEach(item => {
+                const row = headers.map(h => {
+                    let val = item[h];
+                    if (val === null || val === undefined) val = '';
+                    val = String(val).replace(/"/g, '""');
+                    if (val.includes(';') || val.includes('"') || val.includes('\n')) val = `"${val}"`;
+                    return val;
+                });
+                rows.push(row.join(';'));
+            });
+
+            const csv = '\uFEFF' + rows.join('\n'); // BOM for Excel UTF-8
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = (lastExportName || 'andmed') + '.csv';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
         function appendMessage(type, content, jsonData = null) {
             messages.push({ type, content, jsonData, ts: Date.now() });
             renderMessages();
@@ -322,60 +369,94 @@
 
         function formatResult(tool, data) {
             if (!data.ok) {
+                lastExportData = null;
                 return `<span class="msg-error">Vabandust, midagi läks valesti. Palun proovige uuesti.</span>`;
             }
 
             const result = data.result;
             let html = '';
+            const downloadBtn = '<button class="download-btn" onclick="downloadExcel()">📥 Laadi Excel</button>';
 
             if (tool === 'accounting.getInvoices' && Array.isArray(result)) {
+                lastExportData = result;
+                lastExportName = 'arved';
                 const total = result.reduce((sum, inv) => sum + (inv.amount || inv.total || 0), 0);
-                html = `<div class="result-summary"><strong>Leitud ${result.length} arvet</strong> · Kokku: ${total.toLocaleString('et-EE')}€</div><div class="result-list">`;
+                html = `<div class="result-summary"><strong>Leitud ${result.length} arvet</strong> · Kokku: ${total.toLocaleString('et-EE')}€ ${downloadBtn}</div><div class="result-list">`;
                 result.slice(0, 5).forEach(inv => {
                     const status = inv.status || 'unpaid';
                     const statusLabel = status === 'paid' ? 'Makstud' : status === 'overdue' ? 'Üle tähtaja' : 'Maksmata';
-                    html += `<div class="result-item"><div><div class="result-item-name">${inv.client || inv.customer || 'Klient'}</div><div class="result-item-detail">${inv.number || inv.id || ''}</div></div><div style="text-align:right"><div class="result-item-value">${(inv.amount || inv.total || 0).toLocaleString('et-EE')}€</div><span class="result-item-status ${status}">${statusLabel}</span></div></div>`;
+                    html += `<div class="result-item"><div><div class="result-item-name">${escapeHtml(inv.client || inv.customer || 'Klient')}</div><div class="result-item-detail">${escapeHtml(inv.number || inv.id || '')}</div></div><div style="text-align:right"><div class="result-item-value">${(inv.amount || inv.total || 0).toLocaleString('et-EE')}€</div><span class="result-item-status ${status}">${statusLabel}</span></div></div>`;
                 });
                 if (result.length > 5) html += `<div class="result-item" style="justify-content:center;color:#64748b;">... ja ${result.length - 5} veel</div>`;
                 html += '</div>';
             } else if (tool === 'hr.getEmployees' && Array.isArray(result)) {
-                html = `<div class="result-summary"><strong>Leitud ${result.length} töötajat</strong></div><div class="result-list">`;
-                result.slice(0, 5).forEach(emp => {
-                    html += `<div class="result-item"><div><div class="result-item-name">${emp.name || 'Töötaja'}</div><div class="result-item-detail">${emp.position || emp.department || ''}</div></div><div class="result-item-detail">${emp.email || ''}</div></div>`;
+                lastExportData = result;
+                lastExportName = 'tootajad';
+                html = `<div class="result-summary"><strong>Leitud ${result.length} töötajat</strong> ${downloadBtn}</div><div class="result-list">`;
+                result.forEach(emp => {
+                    html += `<div class="result-item"><div><div class="result-item-name">${escapeHtml(emp.name || 'Töötaja')}</div><div class="result-item-detail">${escapeHtml(emp.position || emp.role || emp.department || '')}</div></div><div class="result-item-detail">${escapeHtml(emp.email || '')}</div></div>`;
                 });
-                if (result.length > 5) html += `<div class="result-item" style="justify-content:center;color:#64748b;">... ja ${result.length - 5} veel</div>`;
                 html += '</div>';
             } else if (tool === 'inventory.getProducts' && Array.isArray(result)) {
-                html = `<div class="result-summary"><strong>Leitud ${result.length} toodet</strong></div><div class="result-list">`;
-                result.slice(0, 5).forEach(prod => {
+                lastExportData = result;
+                lastExportName = 'laoseis';
+                html = `<div class="result-summary"><strong>Leitud ${result.length} toodet</strong> ${downloadBtn}</div><div class="result-list">`;
+                result.forEach(prod => {
                     const lowStock = (prod.stock || prod.quantity || 0) < 10;
-                    html += `<div class="result-item"><div><div class="result-item-name">${prod.name || 'Toode'}</div><div class="result-item-detail">${prod.sku || prod.code || ''}</div></div><div style="text-align:right"><div class="result-item-value">${prod.stock || prod.quantity || 0} tk</div>${lowStock ? '<span class="result-item-status overdue">Vähe!</span>' : ''}</div></div>`;
+                    html += `<div class="result-item"><div><div class="result-item-name">${escapeHtml(prod.name || 'Toode')}</div><div class="result-item-detail">${escapeHtml(prod.sku || prod.code || '')}</div></div><div style="text-align:right"><div class="result-item-value">${prod.stock || prod.quantity || 0} tk</div>${lowStock ? '<span class="result-item-status overdue">Vähe!</span>' : ''}</div></div>`;
                 });
-                if (result.length > 5) html += `<div class="result-item" style="justify-content:center;color:#64748b;">... ja ${result.length - 5} veel</div>`;
                 html += '</div>';
             } else if (tool === 'accounting.getBalance') {
                 if (Array.isArray(result)) {
-                    html = `<div class="result-summary"><strong>Kontojäägid</strong></div><div class="result-list">`;
+                    lastExportData = result;
+                    lastExportName = 'kontod';
+                    html = `<div class="result-summary"><strong>Kontojäägid</strong> ${downloadBtn}</div><div class="result-list">`;
                     result.forEach(acc => {
-                        html += `<div class="result-item"><div class="result-item-name">${acc.name || acc.account || 'Konto'}</div><div class="result-item-value">${(acc.balance || acc.amount || 0).toLocaleString('et-EE')}€</div></div>`;
+                        html += `<div class="result-item"><div class="result-item-name">${escapeHtml(acc.name || acc.account || 'Konto')}</div><div class="result-item-value">${(acc.balance || acc.amount || 0).toLocaleString('et-EE')}€</div></div>`;
                     });
                     html += '</div>';
                 } else if (result && typeof result === 'object') {
-                    html = `<div class="result-summary"><strong>Kontojääk:</strong> ${(result.balance || result.total || 0).toLocaleString('et-EE')}€</div>`;
+                    lastExportData = [result];
+                    lastExportName = 'kontod';
+                    html = `<div class="result-summary"><strong>Kontojääk:</strong> ${(result.balance || result.total || 0).toLocaleString('et-EE')}€ ${downloadBtn}</div>`;
                 }
-            } else if (tool === 'hr.getPayroll') {
-                if (Array.isArray(result)) {
-                    const total = result.reduce((sum, p) => sum + (p.gross || p.amount || 0), 0);
-                    html = `<div class="result-summary"><strong>Palgaleht</strong> · Kokku: ${total.toLocaleString('et-EE')}€</div><div class="result-list">`;
-                    result.slice(0, 5).forEach(p => {
-                        html += `<div class="result-item"><div class="result-item-name">${p.name || p.employee || 'Töötaja'}</div><div class="result-item-value">${(p.gross || p.net || p.amount || 0).toLocaleString('et-EE')}€</div></div>`;
-                    });
-                    html += '</div>';
-                }
+            } else if (tool === 'hr.getPayroll' && Array.isArray(result)) {
+                lastExportData = result;
+                lastExportName = 'palgaleht';
+                const total = result.reduce((sum, p) => sum + (p.gross || p.amount || 0), 0);
+                html = `<div class="result-summary"><strong>Palgaleht</strong> · Kokku: ${total.toLocaleString('et-EE')}€ ${downloadBtn}</div><div class="result-list">`;
+                result.forEach(p => {
+                    html += `<div class="result-item"><div class="result-item-name">${escapeHtml(p.name || p.employee || 'Töötaja')}</div><div class="result-item-value">${(p.gross || p.net || p.amount || 0).toLocaleString('et-EE')}€</div></div>`;
+                });
+                html += '</div>';
+            } else if (tool === 'inventory.getOrders' && Array.isArray(result)) {
+                lastExportData = result;
+                lastExportName = 'tellimused';
+                html = `<div class="result-summary"><strong>Leitud ${result.length} tellimust</strong> ${downloadBtn}</div><div class="result-list">`;
+                result.forEach(ord => {
+                    html += `<div class="result-item"><div><div class="result-item-name">${escapeHtml(ord.customer || ord.client || 'Tellimus')}</div><div class="result-item-detail">${escapeHtml(ord.id || ord.number || '')}</div></div><div class="result-item-value">${(ord.total || ord.amount || 0).toLocaleString('et-EE')}€</div></div>`;
+                });
+                html += '</div>';
+            } else if (Array.isArray(result) && result.length > 0) {
+                // Generic array - show as list
+                lastExportData = result;
+                lastExportName = 'andmed';
+                const label = toolLabels[tool] || tool;
+                html = `<div class="result-summary"><strong>${label.charAt(0).toUpperCase() + label.slice(1)}</strong> · ${result.length} kirjet ${downloadBtn}</div><div class="result-list">`;
+                result.forEach(item => {
+                    if (typeof item === 'object' && item !== null) {
+                        const name = item.name || item.title || item.id || Object.values(item)[0] || '';
+                        const detail = item.description || item.type || item.status || Object.values(item)[1] || '';
+                        html += `<div class="result-item"><div class="result-item-name">${escapeHtml(String(name))}</div><div class="result-item-detail">${escapeHtml(String(detail))}</div></div>`;
+                    } else {
+                        html += `<div class="result-item">${escapeHtml(String(item))}</div>`;
+                    }
+                });
+                html += '</div>';
             } else {
+                lastExportData = null;
                 const label = toolLabels[tool] || tool;
                 html = `<span class="msg-success">✓ ${label.charAt(0).toUpperCase() + label.slice(1)} õnnestus.</span>`;
-                if (Array.isArray(result)) html += ` Leitud ${result.length} kirjet.`;
             }
 
             return html;
