@@ -687,8 +687,12 @@
         }
 
         (function init() {
-            // Load saved API key
-            const savedKey = getApiKey();
+            // Load saved API key, default to dev-key for local development
+            let savedKey = getApiKey();
+            if (!savedKey && window.location.hostname === 'localhost') {
+                savedKey = 'dev-key';
+                localStorage.setItem(API_KEY_STORAGE_KEY, savedKey);
+            }
             if (savedKey) {
                 document.getElementById('apiKeyInput').value = savedKey;
             }
