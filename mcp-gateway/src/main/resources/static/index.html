@@ -12,603 +12,113 @@
             min-height: 100vh;
             padding: 20px;
         }
-
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        /* Header */
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background: #10b981;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; color: white; margin-bottom: 30px; }
+        .header h1 { font-size: 2.5rem; margin-bottom: 10px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .header p { font-size: 1.1rem; opacity: 0.9; }
+        .status-badge { display: inline-flex; align-items: center; gap: 8px; background: rgba(255,255,255,0.2); padding: 8px 16px; border-radius: 20px; margin-top: 15px; font-size: 14px; }
+        .status-dot { width: 10px; height: 10px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
         @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
 
-        /* Hero Section */
-        .hero-section {
-            background: white;
-            border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
-            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-            text-align: center;
-        }
-        .hero-value-prop {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 8px;
-            line-height: 1.3;
-        }
-        .hero-value-prop-en {
-            font-size: 1rem;
-            color: #94a3b8;
-            margin-bottom: 24px;
-        }
-        .hero-subtitle {
-            font-size: 1.1rem;
-            color: #64748b;
-            margin-bottom: 32px;
-            font-weight: 500;
-        }
-        .hero-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-        .hero-card {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 28px 24px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: left;
-        }
-        .hero-card:hover {
-            border-color: #667eea;
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2);
-        }
-        .hero-card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
-        }
-        .hero-card-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 10px;
-        }
-        .hero-card-desc {
-            font-size: 0.9rem;
-            color: #64748b;
-            line-height: 1.5;
-        }
-        .chat-input-container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .chat-input-label {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-bottom: 10px;
-            text-align: left;
-        }
-        .chat-input-wrapper {
-            display: flex;
-            gap: 12px;
-        }
-        .chat-input {
-            flex: 1;
-            padding: 16px 20px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .chat-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
-        }
-        .chat-input::placeholder {
-            color: #94a3b8;
-        }
-        .chat-hint {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-top: 10px;
-            text-align: center;
-        }
+        .hero-section { background: white; border-radius: 20px; padding: 40px; margin-bottom: 30px; box-shadow: 0 15px 50px rgba(0,0,0,0.2); text-align: center; }
+        .hero-value-prop { font-size: 1.8rem; font-weight: 700; color: #1e293b; margin-bottom: 8px; }
+        .hero-value-prop-en { font-size: 1rem; color: #94a3b8; margin-bottom: 24px; }
+        .hero-subtitle { font-size: 1.1rem; color: #64748b; margin-bottom: 32px; font-weight: 500; }
+        .hero-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-bottom: 32px; }
+        .hero-card { background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%); border: 2px solid #e2e8f0; border-radius: 16px; padding: 28px 24px; cursor: pointer; transition: all 0.3s ease; text-align: left; }
+        .hero-card:hover { border-color: #667eea; transform: translateY(-4px); box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2); }
+        .hero-card-icon { font-size: 2.5rem; margin-bottom: 16px; }
+        .hero-card-title { font-size: 1.15rem; font-weight: 700; color: #1e293b; margin-bottom: 10px; }
+        .hero-card-desc { font-size: 0.9rem; color: #64748b; line-height: 1.5; }
 
-        /* Cards */
-        .card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-            margin-bottom: 20px;
-            overflow: hidden;
-        }
-        .card-header {
-            background: #f8fafc;
-            padding: 16px 24px;
-            border-bottom: 1px solid #e2e8f0;
-            font-weight: 600;
-            font-size: 18px;
-            color: #1e293b;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .card-body {
-            padding: 24px;
-        }
+        .card { background: white; border-radius: 16px; box-shadow: 0 10px 40px rgba(0,0,0,0.15); margin-bottom: 20px; overflow: hidden; }
+        .card-header { background: #f8fafc; padding: 16px 24px; border-bottom: 1px solid #e2e8f0; font-weight: 600; font-size: 18px; color: #1e293b; display: flex; align-items: center; gap: 10px; }
+        .card-body { padding: 24px; }
 
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-        .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .stat-label {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-top: 5px;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 16px; margin-bottom: 20px; }
+        .stat-card { background: white; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+        .stat-value { font-size: 1.8rem; font-weight: 700; background: linear-gradient(135deg, #667eea, #764ba2); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .stat-label { font-size: 0.8rem; color: #64748b; margin-top: 4px; }
 
-        /* Main Grid */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        @media (max-width: 900px) {
-            .main-grid { grid-template-columns: 1fr; }
-        }
+        .main-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 20px; }
+        @media (max-width: 900px) { .main-grid { grid-template-columns: 1fr; } }
 
-        /* Tool Tester */
-        .tool-category {
-            margin-bottom: 20px;
-        }
-        .tool-category h3 {
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .tool-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .tool-btn {
-            padding: 10px 16px;
-            background: #f1f5f9;
-            border: 2px solid transparent;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            color: #475569;
-            transition: all 0.2s;
-        }
-        .tool-btn:hover {
-            background: #e2e8f0;
-            transform: translateY(-1px);
-        }
-        .tool-btn.selected {
-            background: #667eea;
-            color: white;
-            border-color: #5a67d8;
-        }
-        .tool-btn .emoji {
-            margin-right: 6px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: #374151;
-            margin-bottom: 6px;
-        }
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 13px;
-            resize: vertical;
-            min-height: 100px;
-            transition: border-color 0.2s;
-        }
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .quick-examples {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        .quick-btn {
-            padding: 6px 12px;
-            background: #fef3c7;
-            border: 1px solid #fcd34d;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #92400e;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .quick-btn:hover {
-            background: #fde68a;
-        }
-
-        .execute-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .execute-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-        .execute-btn:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .result-box {
-            margin-top: 16px;
-            padding: 16px;
-            border-radius: 8px;
-            font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 12px;
-            max-height: 300px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-        .result-box.success {
-            background: #ecfdf5;
-            border: 2px solid #10b981;
-            color: #065f46;
-        }
-        .result-box.error {
-            background: #fef2f2;
-            border: 2px solid #ef4444;
-            color: #991b1b;
-        }
-        .result-box.info {
-            background: #f0f9ff;
-            border: 2px solid #3b82f6;
-            color: #1e40af;
-        }
-
-        /* Tools List */
-        .tools-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        .tool-item {
-            padding: 14px;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .tool-item:last-child { border-bottom: none; }
-        .tool-item:hover { background: #f8fafc; }
-        .tool-icon {
-            font-size: 24px;
-        }
-        .tool-info {
-            flex: 1;
-        }
-        .tool-name {
-            font-weight: 600;
-            color: #1e293b;
-            font-size: 14px;
-        }
-        .tool-desc {
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 2px;
-        }
-        .tool-tag {
-            padding: 4px 8px;
-            background: #e0e7ff;
-            color: #4338ca;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 500;
-        }
-        .tool-tag.business { background: #d1fae5; color: #065f46; }
-        .tool-tag.system { background: #fef3c7; color: #92400e; }
-
-        /* Activity */
-        .activity-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .activity-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-        .activity-item:last-child { border-bottom: none; }
-        .activity-status {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-        .activity-status.allowed { background: #d1fae5; }
-        .activity-status.denied { background: #fee2e2; }
-        .activity-status.error { background: #fef3c7; }
-        .activity-info { flex: 1; }
-        .activity-tool { font-weight: 600; color: #1e293b; font-size: 14px; }
-        .activity-time { font-size: 12px; color: #94a3b8; }
-        .activity-reason { font-size: 12px; color: #64748b; margin-top: 4px; }
-
-        /* Config */
-        .config-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .config-item:last-child { border-bottom: none; }
-        .config-key { color: #64748b; font-size: 14px; }
-        .config-value {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .config-value.on { color: #10b981; }
-        .config-value.off { color: #ef4444; }
-
-        /* Info box */
-        .info-box {
-            background: #f0f9ff;
-            border-left: 4px solid #3b82f6;
-            padding: 16px;
-            margin-bottom: 20px;
-            border-radius: 0 8px 8px 0;
-        }
-        .info-box h3 {
-            color: #1e40af;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-        .info-box p {
-            color: #1e40af;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        /* Chat Messages */
-        .chat-messages {
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 16px;
-            background: #f8fafc;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            min-height: 120px;
-        }
-        .chat-message {
-            margin-bottom: 16px;
-            display: flex;
-            flex-direction: column;
-        }
-        .chat-message:last-child {
-            margin-bottom: 0;
-        }
-        .chat-message.user {
-            align-items: flex-end;
-        }
-        .chat-message.assistant {
-            align-items: flex-start;
-        }
-        .chat-bubble {
-            max-width: 85%;
-            padding: 12px 16px;
-            border-radius: 16px;
-            font-size: 14px;
-            line-height: 1.5;
-        }
-        .chat-message.user .chat-bubble {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border-bottom-right-radius: 4px;
-        }
-        .chat-message.assistant .chat-bubble {
-            background: white;
-            color: #1e293b;
-            border: 1px solid #e2e8f0;
-            border-bottom-left-radius: 4px;
-        }
-        .chat-bubble-label {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-bottom: 4px;
-            font-weight: 500;
-        }
-        .chat-bubble-content {
-            margin-bottom: 8px;
-        }
-        .chat-bubble-content:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Thinking indicator */
-        .thinking-indicator {
-            display: none;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 16px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            border-bottom-left-radius: 4px;
-            max-width: 200px;
-            margin-bottom: 16px;
-        }
-        .thinking-indicator.visible {
-            display: flex;
-        }
-        .thinking-dots {
-            display: flex;
-            gap: 4px;
-        }
-        .thinking-dots span {
-            width: 8px;
-            height: 8px;
-            background: #667eea;
-            border-radius: 50%;
-            animation: thinking 1.4s infinite ease-in-out;
-        }
+        /* Chat UI */
+        .chat-container { display: flex; flex-direction: column; height: 600px; }
+        .chat-messages { flex: 1; overflow-y: auto; padding: 16px; background: #f8fafc; border-radius: 12px; margin-bottom: 16px; }
+        .chat-message { margin-bottom: 16px; display: flex; flex-direction: column; }
+        .chat-message.user { align-items: flex-end; }
+        .chat-message.assistant { align-items: flex-start; }
+        .chat-bubble { max-width: 85%; padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.5; }
+        .chat-message.user .chat-bubble { background: linear-gradient(135deg, #667eea, #764ba2); color: white; border-bottom-right-radius: 4px; }
+        .chat-message.assistant .chat-bubble { background: white; color: #1e293b; border: 1px solid #e2e8f0; border-bottom-left-radius: 4px; }
+        .chat-bubble-label { font-size: 11px; color: #94a3b8; margin-bottom: 4px; font-weight: 500; }
+        .chat-bubble.thinking { color: #64748b; font-style: italic; }
+        .thinking-dots { display: inline-flex; gap: 4px; margin-left: 8px; }
+        .thinking-dots span { width: 6px; height: 6px; background: #667eea; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out; }
         .thinking-dots span:nth-child(1) { animation-delay: 0s; }
         .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
         .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes thinking {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
-            40% { transform: scale(1); opacity: 1; }
-        }
-        .thinking-text {
-            font-size: 13px;
-            color: #64748b;
-        }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0.8); } 40% { transform: scale(1.2); } }
 
-        /* Collapsible JSON */
-        .json-details {
-            margin-top: 8px;
-        }
-        .json-details summary {
-            font-size: 12px;
-            color: #64748b;
-            cursor: pointer;
-            padding: 4px 0;
-        }
-        .json-details summary:hover {
-            color: #667eea;
-        }
-        .json-details pre {
-            margin-top: 8px;
-            padding: 12px;
-            background: #f1f5f9;
-            border-radius: 8px;
-            font-size: 11px;
-            overflow-x: auto;
-            max-height: 200px;
-            overflow-y: auto;
-        }
+        .json-details { margin-top: 10px; }
+        .json-details summary { font-size: 12px; color: #64748b; cursor: pointer; }
+        .json-details summary:hover { color: #667eea; }
+        .json-details pre { margin-top: 8px; padding: 12px; background: #f1f5f9; border-radius: 8px; font-size: 11px; overflow-x: auto; max-height: 200px; }
+        .msg-success { color: #065f46; }
+        .msg-error { color: #991b1b; }
 
-        /* Chat input area in tool tester */
-        .chat-send-row {
-            display: flex;
-            gap: 8px;
-            margin-top: 12px;
-        }
-        .chat-send-btn {
-            padding: 14px 24px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            white-space: nowrap;
-        }
-        .chat-send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-        .chat-send-btn:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
+        /* Tool Picker */
+        .tool-picker { background: #f8fafc; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+        .tool-picker-header { font-size: 13px; font-weight: 600; color: #64748b; margin-bottom: 10px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; }
+        .tool-picker-content { display: none; }
+        .tool-picker.open .tool-picker-content { display: block; }
+        .tool-buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .tool-btn { padding: 8px 12px; background: #e2e8f0; border: 2px solid transparent; border-radius: 6px; cursor: pointer; font-size: 12px; font-weight: 500; color: #475569; transition: all 0.2s; }
+        .tool-btn:hover { background: #cbd5e1; }
+        .tool-btn.selected { background: #667eea; color: white; border-color: #5a67d8; }
+        .tool-btn .emoji { margin-right: 4px; }
+        .quick-examples { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .quick-btn { padding: 4px 10px; background: #fef3c7; border: 1px solid #fcd34d; border-radius: 4px; font-size: 11px; color: #92400e; cursor: pointer; }
+        .quick-btn:hover { background: #fde68a; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; font-weight: 500; color: #374151; margin-bottom: 4px; }
+        .form-group textarea { width: 100%; padding: 10px; border: 1px solid #e2e8f0; border-radius: 6px; font-family: monospace; font-size: 12px; resize: vertical; min-height: 60px; }
 
-        /* Success/Error message styles */
-        .msg-success {
-            color: #065f46;
-        }
-        .msg-error {
-            color: #991b1b;
-        }
+        .chat-input-row { display: flex; gap: 8px; }
+        .chat-input-row input { flex: 1; padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 14px; }
+        .chat-input-row input:focus { outline: none; border-color: #667eea; }
+        .send-btn { padding: 12px 20px; background: linear-gradient(135deg, #667eea, #764ba2); color: white; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; transition: all 0.2s; }
+        .send-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); }
+        .send-btn:disabled { background: #94a3b8; cursor: not-allowed; transform: none; }
+
+        /* Sidebar */
+        .tools-list { max-height: 300px; overflow-y: auto; }
+        .tool-item { padding: 10px; border-bottom: 1px solid #f1f5f9; display: flex; align-items: center; gap: 10px; font-size: 13px; }
+        .tool-item:hover { background: #f8fafc; }
+        .tool-icon { font-size: 20px; }
+        .tool-info { flex: 1; }
+        .tool-name { font-weight: 600; color: #1e293b; }
+        .tool-desc { font-size: 11px; color: #64748b; }
+        .tool-tag { padding: 2px 6px; border-radius: 4px; font-size: 10px; font-weight: 500; }
+        .tool-tag.business { background: #d1fae5; color: #065f46; }
+        .tool-tag.system { background: #fef3c7; color: #92400e; }
+
+        .config-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f1f5f9; font-size: 13px; }
+        .config-key { color: #64748b; }
+        .config-value { font-weight: 600; }
+        .config-value.on { color: #10b981; }
+        .config-value.off { color: #ef4444; }
+
+        .activity-list { max-height: 250px; overflow-y: auto; }
+        .activity-item { padding: 10px 0; border-bottom: 1px solid #f1f5f9; display: flex; gap: 10px; font-size: 13px; }
+        .activity-status { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; }
+        .activity-status.allowed { background: #d1fae5; }
+        .activity-status.denied { background: #fee2e2; }
+        .activity-info { flex: 1; }
+        .activity-tool { font-weight: 600; color: #1e293b; }
+        .activity-time { font-size: 11px; color: #94a3b8; }
+        .activity-reason { font-size: 11px; color: #64748b; }
     </style>
 </head>
 <body>
@@ -616,435 +126,234 @@
         <div class="header">
             <h1>Pilvetark OÜ - Ärisüsteemid</h1>
             <p>Demo: AI-assistent pääseb turvaliselt ligi ettevõtte andmetele</p>
-            <div class="status-badge">
-                <div class="status-dot"></div>
-                <span>Reg: 14892367 | EE102345678</span>
-            </div>
+            <div class="status-badge"><div class="status-dot"></div><span>Reg: 14892367 | EE102345678</span></div>
         </div>
 
-        <!-- Hero Onboarding Section -->
         <div class="hero-section">
             <div class="hero-value-prop">Teie ettevõtte andmed, turvaline AI-assistent</div>
             <div class="hero-value-prop-en">Your company data, powered by a secure AI assistant</div>
             <div class="hero-subtitle">Mida see assistent saab teie ettevõtte heaks teha?</div>
-
             <div class="hero-cards">
-                <div class="hero-card" onclick="prefillPrompt('query')">
+                <div class="hero-card" onclick="prefillChat('Näita mulle kõiki maksmata arveid ja nende kogusummat')">
                     <div class="hero-card-icon">📊</div>
                     <div class="hero-card-title">Küsi ettevõtte andmete kohta</div>
-                    <div class="hero-card-desc">Küsi arvete, töötajate, projektide või finantsaruannete kohta. Assistent leiab vastuse turvaliselt süsteemidest.</div>
+                    <div class="hero-card-desc">Küsi arvete, töötajate, projektide või finantsaruannete kohta.</div>
                 </div>
-                <div class="hero-card" onclick="prefillPrompt('tool')">
+                <div class="hero-card" onclick="prefillChat('Kontrolli laoseisu ja näita tooteid, mida on vähe järel')">
                     <div class="hero-card-icon">🔧</div>
                     <div class="hero-card-title">Käivita turvaline tööriist</div>
-                    <div class="hero-card-desc">Lase assistendil käivitada lubatud toiminguid - näiteks kontrollida laoseisu või genereerida aruandeid.</div>
+                    <div class="hero-card-desc">Lase assistendil käivitada lubatud toiminguid.</div>
                 </div>
-                <div class="hero-card" onclick="prefillPrompt('audit')">
+                <div class="hero-card" onclick="prefillChat('Näita viimased 10 tegevust, mida assistent on teinud')">
                     <div class="hero-card-icon">📋</div>
                     <div class="hero-card-title">Vaata, mida assistent tegi (audit)</div>
-                    <div class="hero-card-desc">Kõik assistendi tegevused logitakse. Vaata, milliseid tööriistu kasutati ja mis otsused tehti.</div>
+                    <div class="hero-card-desc">Kõik assistendi tegevused logitakse.</div>
                 </div>
-            </div>
-
-            <div class="chat-input-container">
-                <div class="chat-input-label">Proovi küsida assistendilt:</div>
-                <div class="chat-input-wrapper">
-                    <input type="text" class="chat-input" id="chatInput" placeholder="Kirjuta oma küsimus siia...">
-                </div>
-                <div class="chat-hint">Klõpsa ülal olevat kaarti, et näha näidisküsimust</div>
             </div>
         </div>
 
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value" id="statTools">-</div>
-                <div class="stat-label">Available Tools</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="statAllowed">-</div>
-                <div class="stat-label">Allowed Requests</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="statDenied">-</div>
-                <div class="stat-label">Denied Requests</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="statTotal">-</div>
-                <div class="stat-label">Total Requests</div>
-            </div>
-        </div>
-
-        <div class="info-box">
-            <h3>Pilvetark OÜ - IT-teenuste ettevõte Tallinnas</h3>
-            <p>See on demo Eesti tarkvarafirmast: 12 töötajat, SaaS tooted (PilveCRM, PilveDoc), arendusteenused.
-               Kliendid: Eesti Energia, Bolt, Cleveron jt. Proovi erinevaid päringuid - arved, töötajad, projektid, palgaleht!</p>
+            <div class="stat-card"><div class="stat-value" id="statTools">-</div><div class="stat-label">Tools</div></div>
+            <div class="stat-card"><div class="stat-value" id="statAllowed">-</div><div class="stat-label">Allowed</div></div>
+            <div class="stat-card"><div class="stat-value" id="statDenied">-</div><div class="stat-label">Denied</div></div>
+            <div class="stat-card"><div class="stat-value" id="statTotal">-</div><div class="stat-label">Total</div></div>
         </div>
 
         <div class="main-grid">
             <div class="card">
-                <div class="card-header">
-                    <span>💬</span> Assistant Chat
-                </div>
+                <div class="card-header"><span>💬</span> Assistant Chat</div>
                 <div class="card-body">
-                    <!-- Chat Messages Area -->
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="chat-message assistant">
-                            <div class="chat-bubble-label">Assistent</div>
-                            <div class="chat-bubble">
-                                Tere! Olen teie ettevõtte assistent. Valige allpool tööriist ja parameetrid, et alustada.
+                    <div class="chat-container">
+                        <div class="chat-messages" id="chatMessages"></div>
+                        <div class="tool-picker open" id="toolPicker">
+                            <div class="tool-picker-header" onclick="toggleToolPicker()">
+                                <span>🔧 Tool Picker</span><span id="toolPickerToggle">▼</span>
+                            </div>
+                            <div class="tool-picker-content">
+                                <div class="tool-buttons" id="toolButtons"></div>
+                                <div id="quickExamplesSection" style="display:none;">
+                                    <div class="quick-examples" id="quickExamples"></div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Parameters (JSON)</label>
+                                    <textarea id="argsInput" placeholder='{"key": "value"}'></textarea>
+                                </div>
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Thinking Indicator -->
-                    <div class="thinking-indicator" id="thinkingIndicator">
-                        <div class="thinking-dots">
-                            <span></span><span></span><span></span>
+                        <div class="chat-input-row">
+                            <input type="text" id="chatInput" placeholder="Kirjuta sõnum või vali tööriist..." onkeydown="if(event.key==='Enter')sendMessage()">
+                            <button class="send-btn" id="sendBtn" onclick="sendMessage()">Saada</button>
                         </div>
-                        <span class="thinking-text">Assistent mõtleb...</span>
                     </div>
-
-                    <div class="tool-category">
-                        <h3>Business Tools (Demo Data)</h3>
-                        <div class="tool-buttons" id="businessTools"></div>
-                    </div>
-                    <div class="tool-category">
-                        <h3>System Tools</h3>
-                        <div class="tool-buttons" id="systemTools"></div>
-                    </div>
-
-                    <div id="quickExamplesSection" style="display:none;">
-                        <label style="font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px; display: block;">Quick Examples</label>
-                        <div class="quick-examples" id="quickExamples"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Parameters (JSON)</label>
-                        <textarea id="argsInput" placeholder='Click a tool above, then edit parameters here...'></textarea>
-                    </div>
-
-                    <div class="chat-send-row">
-                        <button class="execute-btn" id="executeBtn" onclick="executeTool()" disabled style="flex:1;">
-                            Select a Tool First
-                        </button>
-                        <button class="chat-send-btn" id="sendBtn" onclick="executeTool()" disabled>
-                            Send
-                        </button>
-                    </div>
-
-                    <div id="resultBox"></div>
                 </div>
             </div>
-
             <div>
                 <div class="card">
-                    <div class="card-header">
-                        <span>📦</span> All Available Tools
-                    </div>
-                    <div class="card-body">
-                        <div class="tools-list" id="toolsList">Loading...</div>
-                    </div>
+                    <div class="card-header"><span>📦</span> Available Tools</div>
+                    <div class="card-body"><div class="tools-list" id="toolsList">Loading...</div></div>
                 </div>
-
                 <div class="card">
-                    <div class="card-header">
-                        <span>⚙️</span> Security Settings
-                    </div>
+                    <div class="card-header"><span>⚙️</span> Security Settings</div>
                     <div class="card-body" id="configPanel">Loading...</div>
                 </div>
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="card-header">
-                <span>📋</span> Recent Activity
-            </div>
-            <div class="card-body">
-                <div class="activity-list" id="activityList">No activity yet</div>
+                <div class="card">
+                    <div class="card-header"><span>📋</span> Recent Activity</div>
+                    <div class="card-body"><div class="activity-list" id="activityList">No activity</div></div>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
         let selectedTool = null;
+        let isThinking = false;
+        const messages = [];
         const apiKey = 'dev-key';
 
-        const heroPrompts = {
-            query: 'Näita mulle kõiki maksmata arveid ja nende kogusummat',
-            tool: 'Kontrolli laoseisu ja näita tooteid, mida on vähe järel',
-            audit: 'Näita viimased 10 tegevust, mida assistent on teinud'
-        };
-
-        function prefillPrompt(type) {
-            const input = document.getElementById('chatInput');
-            input.value = heroPrompts[type] || '';
-            input.focus();
-            input.classList.add('highlight');
-            setTimeout(() => input.classList.remove('highlight'), 300);
-        }
-
         const toolExamples = {
-            'fs.listDir': [
-                { label: 'Näita /tmp', args: { path: '/tmp' } },
-                { label: 'Praegune kaust', args: { path: '.' } }
-            ],
-            'fs.readFile': [
-                { label: 'Loe testfaili', args: { path: '/tmp/test.txt' } }
-            ],
-            'web.fetch': [
-                { label: 'Test URL', args: { url: 'https://httpbin.org/get' } },
-                { label: 'GitHub API', args: { url: 'https://api.github.com' } }
-            ],
-            'accounting.getInvoices': [
-                { label: 'Kõik arved', args: {} },
-                { label: 'Maksmata', args: { status: 'unpaid' } },
-                { label: 'Üle tähtaja', args: { status: 'overdue' } },
-                { label: 'Makstud', args: { status: 'paid' } }
-            ],
-            'accounting.getBalance': [
-                { label: 'Kõik kontod', args: {} },
-                { label: 'Arvelduskonto', args: { account: 'arvelduskonto' } },
-                { label: 'Reservkonto', args: { account: 'reserv' } }
-            ],
-            'accounting.getReport': [
-                { label: 'Kasumiaruanne', args: { type: 'profit_loss' } },
-                { label: 'Bilanss', args: { type: 'balance_sheet' } },
-                { label: 'Rahavood', args: { type: 'cashflow' } }
-            ],
-            'inventory.getProducts': [
-                { label: 'Kõik', args: {} },
-                { label: 'Vähe laos', args: { lowStock: true } },
-                { label: 'Litsentsid', args: { category: 'litsents' } }
-            ],
-            'inventory.getOrders': [
-                { label: 'Kõik projektid', args: {} },
-                { label: 'Töös', args: { status: 'shipped' } },
-                { label: 'Ootel', args: { status: 'pending' } }
-            ],
-            'hr.getEmployees': [
-                { label: 'Kõik töötajad', args: {} },
-                { label: 'Arendus', args: { department: 'Arendus' } },
-                { label: 'Müük', args: { department: 'Müük' } }
-            ],
-            'hr.getPayroll': [
-                { label: 'See kuu', args: {} },
-                { label: 'Detsember 2024', args: { month: '2024-12' } }
-            ]
+            'accounting.getInvoices': [{ label: 'Kõik', args: {} }, { label: 'Maksmata', args: { status: 'unpaid' } }],
+            'accounting.getBalance': [{ label: 'Kõik kontod', args: {} }],
+            'accounting.getReport': [{ label: 'Kasumiaruanne', args: { type: 'profit_loss' } }],
+            'inventory.getProducts': [{ label: 'Kõik', args: {} }, { label: 'Vähe laos', args: { lowStock: true } }],
+            'inventory.getOrders': [{ label: 'Kõik', args: {} }],
+            'hr.getEmployees': [{ label: 'Kõik', args: {} }],
+            'hr.getPayroll': [{ label: 'See kuu', args: {} }],
+            'fs.listDir': [{ label: '/tmp', args: { path: '/tmp' } }],
+            'fs.readFile': [{ label: 'Test', args: { path: '/tmp/test.txt' } }],
+            'web.fetch': [{ label: 'Test', args: { url: 'https://httpbin.org/get' } }]
         };
-
         const toolCategories = {
-            business: ['accounting.getInvoices', 'accounting.getBalance', 'accounting.getReport',
-                       'inventory.getProducts', 'inventory.getOrders', 'hr.getEmployees', 'hr.getPayroll'],
+            business: ['accounting.getInvoices', 'accounting.getBalance', 'accounting.getReport', 'inventory.getProducts', 'inventory.getOrders', 'hr.getEmployees', 'hr.getPayroll'],
             system: ['fs.listDir', 'fs.readFile', 'web.fetch']
         };
+        const toolEmojis = { 'fs.listDir': '📁', 'fs.readFile': '📄', 'web.fetch': '🌐', 'accounting.getInvoices': '🧾', 'accounting.getBalance': '💰', 'accounting.getReport': '📊', 'inventory.getProducts': '📦', 'inventory.getOrders': '🛒', 'hr.getEmployees': '👥', 'hr.getPayroll': '💵' };
+        const toolHumanNames = { 'accounting.getInvoices': 'arvete päring', 'accounting.getBalance': 'kontojääkide päring', 'accounting.getReport': 'finantsaruanne', 'inventory.getProducts': 'toodete päring', 'inventory.getOrders': 'tellimuste päring', 'hr.getEmployees': 'töötajate päring', 'hr.getPayroll': 'palgaleht', 'fs.listDir': 'kausta sisu', 'fs.readFile': 'faili lugemine', 'web.fetch': 'veebi päring' };
 
-        const toolEmojis = {
-            'fs.listDir': '📁',
-            'fs.readFile': '📄',
-            'web.fetch': '🌐',
-            'accounting.getInvoices': '🧾',
-            'accounting.getBalance': '💰',
-            'accounting.getReport': '📊',
-            'inventory.getProducts': '📦',
-            'inventory.getOrders': '🛒',
-            'hr.getEmployees': '👥',
-            'hr.getPayroll': '💵'
-        };
+        function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
 
-        const toolHumanNames = {
-            'fs.listDir': 'kausta sisu vaatamine',
-            'fs.readFile': 'faili lugemine',
-            'web.fetch': 'veebi päring',
-            'accounting.getInvoices': 'arvete päring',
-            'accounting.getBalance': 'kontojääkide päring',
-            'accounting.getReport': 'finantsaruande genereerimine',
-            'inventory.getProducts': 'toodete päring',
-            'inventory.getOrders': 'tellimuste päring',
-            'hr.getEmployees': 'töötajate päring',
-            'hr.getPayroll': 'palgalehe päring'
-        };
+        function appendMessage(type, content, jsonData = null) {
+            messages.push({ type, content, jsonData, ts: Date.now() });
+            renderMessages();
+        }
 
-        function showThinking(show) {
-            const indicator = document.getElementById('thinkingIndicator');
-            if (show) {
-                indicator.classList.add('visible');
-            } else {
-                indicator.classList.remove('visible');
+        function setThinking(show) {
+            isThinking = show;
+            renderMessages();
+        }
+
+        function renderMessages() {
+            const container = document.getElementById('chatMessages');
+            let html = messages.map(m => {
+                if (m.type === 'user') {
+                    return `<div class="chat-message user"><div class="chat-bubble-label">Teie</div><div class="chat-bubble">${escapeHtml(m.content)}</div></div>`;
+                } else {
+                    const jsonSection = m.jsonData ? `<details class="json-details"><summary>Näita tehnilist vastust (JSON)</summary><pre>${escapeHtml(JSON.stringify(m.jsonData, null, 2))}</pre></details>` : '';
+                    return `<div class="chat-message assistant"><div class="chat-bubble-label">Assistent</div><div class="chat-bubble"><div>${m.content}</div>${jsonSection}</div></div>`;
+                }
+            }).join('');
+            if (isThinking) {
+                html += `<div class="chat-message assistant"><div class="chat-bubble-label">Assistent</div><div class="chat-bubble thinking">Assistent mõtleb<span class="thinking-dots"><span></span><span></span><span></span></span></div></div>`;
             }
+            container.innerHTML = html || '<div class="chat-message assistant"><div class="chat-bubble-label">Assistent</div><div class="chat-bubble">Tere! Olen teie ettevõtte assistent. Valige tööriist või kirjutage küsimus.</div></div>';
+            container.scrollTop = container.scrollHeight;
         }
 
-        function addChatMessage(type, content, jsonData = null) {
-            const messagesDiv = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `chat-message ${type}`;
-
-            let html = '';
-            if (type === 'user') {
-                html = `
-                    <div class="chat-bubble-label">Teie</div>
-                    <div class="chat-bubble">${escapeHtml(content)}</div>
-                `;
-            } else {
-                html = `
-                    <div class="chat-bubble-label">Assistent</div>
-                    <div class="chat-bubble">
-                        <div class="chat-bubble-content">${content}</div>
-                        ${jsonData ? `
-                            <details class="json-details">
-                                <summary>Näita tehnilist vastust (JSON)</summary>
-                                <pre>${escapeHtml(JSON.stringify(jsonData, null, 2))}</pre>
-                            </details>
-                        ` : ''}
-                    </div>
-                `;
-            }
-
-            messageDiv.innerHTML = html;
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
-        function generateHumanResponse(tool, args, data, isSuccess) {
-            const toolName = toolHumanNames[tool] || tool;
+        function generateHumanResponse(tool, data, ok) {
+            const name = toolHumanNames[tool] || tool;
             const emoji = toolEmojis[tool] || '🔧';
-
-            if (!isSuccess) {
-                return `<span class="msg-error">Kahjuks tekkis viga ${toolName} käivitamisel. Palun kontrollige parameetreid ja proovige uuesti.</span>`;
-            }
-
-            let summary = `${emoji} <strong>${toolName.charAt(0).toUpperCase() + toolName.slice(1)}</strong> õnnestus.`;
-
-            // Generate friendly summaries based on tool type
-            if (tool === 'accounting.getInvoices' && data.result) {
-                const invoices = data.result;
-                if (Array.isArray(invoices)) {
-                    summary += ` Leidsin ${invoices.length} arve(t).`;
-                }
-            } else if (tool === 'accounting.getBalance' && data.result) {
-                summary += ` Kontojäägid on edukalt laetud.`;
-            } else if (tool === 'hr.getEmployees' && data.result) {
-                const employees = data.result;
-                if (Array.isArray(employees)) {
-                    summary += ` Leidsin ${employees.length} töötaja(t).`;
-                }
-            } else if (tool === 'inventory.getProducts' && data.result) {
-                const products = data.result;
-                if (Array.isArray(products)) {
-                    summary += ` Leidsin ${products.length} toote(t).`;
-                }
-            } else if (tool === 'fs.listDir' && data.result) {
-                const files = data.result;
-                if (Array.isArray(files)) {
-                    summary += ` Kaustas on ${files.length} elementi.`;
-                }
-            }
-
-            return `<span class="msg-success">${summary}</span>`;
+            if (!ok) return `<span class="msg-error">Kahjuks tekkis viga toimingu "${name}" käivitamisel. Kontrollige parameetreid.</span>`;
+            let summary = `<span class="msg-success">${emoji} <strong>${name.charAt(0).toUpperCase() + name.slice(1)}</strong> õnnestus.</span>`;
+            if (data.result && Array.isArray(data.result)) summary += ` Leitud ${data.result.length} kirjet.`;
+            return summary;
         }
 
-        async function init() {
-            renderToolButtons();
-            loadTools();
-            loadMetrics();
-            loadActivity();
-            setInterval(loadMetrics, 3000);
-            setInterval(loadActivity, 3000);
+        function toggleToolPicker() {
+            document.getElementById('toolPicker').classList.toggle('open');
+            document.getElementById('toolPickerToggle').textContent = document.getElementById('toolPicker').classList.contains('open') ? '▼' : '▶';
         }
 
-        function renderToolButtons() {
-            const businessDiv = document.getElementById('businessTools');
-            const systemDiv = document.getElementById('systemTools');
-
-            toolCategories.business.forEach(tool => {
-                const btn = document.createElement('button');
-                btn.className = 'tool-btn';
-                btn.innerHTML = `<span class="emoji">${toolEmojis[tool] || '🔧'}</span>${tool.split('.')[1]}`;
-                btn.onclick = () => selectTool(tool);
-                btn.dataset.tool = tool;
-                businessDiv.appendChild(btn);
-            });
-
-            toolCategories.system.forEach(tool => {
-                const btn = document.createElement('button');
-                btn.className = 'tool-btn';
-                btn.innerHTML = `<span class="emoji">${toolEmojis[tool] || '🔧'}</span>${tool}`;
-                btn.onclick = () => selectTool(tool);
-                btn.dataset.tool = tool;
-                systemDiv.appendChild(btn);
-            });
+        function prefillChat(text) {
+            document.getElementById('chatInput').value = text;
+            document.getElementById('chatInput').focus();
         }
 
         function selectTool(tool) {
             selectedTool = tool;
-
-            // Update button states
-            document.querySelectorAll('.tool-btn').forEach(btn => {
-                btn.classList.toggle('selected', btn.dataset.tool === tool);
-            });
-
-            // Update execute button
-            const executeBtn = document.getElementById('executeBtn');
-            const sendBtn = document.getElementById('sendBtn');
-            executeBtn.disabled = false;
-            sendBtn.disabled = false;
-            executeBtn.textContent = `Execute ${tool}`;
-
-            // Show quick examples
-            const examplesSection = document.getElementById('quickExamplesSection');
-            const examplesDiv = document.getElementById('quickExamples');
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.toggle('selected', b.dataset.tool === tool));
             const examples = toolExamples[tool] || [];
-
-            if (examples.length > 0) {
-                examplesSection.style.display = 'block';
-                examplesDiv.innerHTML = examples.map(ex =>
-                    `<button class="quick-btn" onclick='setArgs(${JSON.stringify(ex.args)})'>${ex.label}</button>`
-                ).join('');
+            const exSec = document.getElementById('quickExamplesSection');
+            const exDiv = document.getElementById('quickExamples');
+            if (examples.length) {
+                exSec.style.display = 'block';
+                exDiv.innerHTML = examples.map(e => `<button class="quick-btn" onclick='setArgs(${JSON.stringify(e.args)})'>${e.label}</button>`).join('');
+                setArgs(examples[0].args);
             } else {
-                examplesSection.style.display = 'none';
+                exSec.style.display = 'none';
+                setArgs({});
             }
-
-            // Set default args
-            setArgs(examples[0]?.args || {});
         }
 
-        function setArgs(args) {
-            document.getElementById('argsInput').value = JSON.stringify(args, null, 2);
+        function setArgs(args) { document.getElementById('argsInput').value = JSON.stringify(args, null, 2); }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (selectedTool) {
+                await executeTool();
+            } else if (text) {
+                appendMessage('user', text);
+                input.value = '';
+                setThinking(true);
+                setTimeout(() => {
+                    setThinking(false);
+                    appendMessage('assistant', 'Palun valige tööriist allpool olevast Tool Picker menüüst, et ma saaksin teid aidata.');
+                }, 800);
+            }
         }
 
-        async function apiFetch(url, options = {}) {
-            const headers = { 'X-API-Key': apiKey, ...options.headers };
-            return fetch(url, { ...options, headers });
+        async function executeTool() {
+            if (!selectedTool) return;
+            const argsText = document.getElementById('argsInput').value;
+            let args = {};
+            try { if (argsText.trim()) args = JSON.parse(argsText); }
+            catch (e) { appendMessage('assistant', '<span class="msg-error">Parameetrite JSON on vigane.</span>'); return; }
+
+            const userMsg = `Käivitan tööriista: ${toolEmojis[selectedTool] || '🔧'} ${selectedTool} ${JSON.stringify(args)}`;
+            appendMessage('user', userMsg);
+            document.getElementById('chatInput').value = '';
+            setThinking(true);
+
+            try {
+                const res = await fetch('/api/call', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
+                    body: JSON.stringify({ tool: selectedTool, arguments: args })
+                });
+                const data = await res.json();
+                setThinking(false);
+                appendMessage('assistant', generateHumanResponse(selectedTool, data, data.ok), data);
+                loadMetrics(); loadActivity();
+            } catch (e) {
+                setThinking(false);
+                appendMessage('assistant', `<span class="msg-error">Ühenduse viga: ${e.message}</span>`);
+            }
+        }
+
+        async function apiFetch(url, opts = {}) {
+            return fetch(url, { ...opts, headers: { 'X-API-Key': apiKey, ...opts.headers } });
         }
 
         async function loadTools() {
             try {
                 const res = await apiFetch('/api/tools');
                 const tools = await res.json();
-
+                const allTools = [...toolCategories.business, ...toolCategories.system];
+                document.getElementById('toolButtons').innerHTML = allTools.map(t => `<button class="tool-btn" data-tool="${t}" onclick="selectTool('${t}')"><span class="emoji">${toolEmojis[t] || '🔧'}</span>${t.split('.')[1]}</button>`).join('');
                 document.getElementById('toolsList').innerHTML = tools.map(t => {
-                    const category = toolCategories.business.includes(t.name) ? 'business' : 'system';
-                    const emoji = toolEmojis[t.name] || '🔧';
-                    const desc = t.description.replace(/^[^\s]+\s*/, ''); // Remove emoji from description
-                    return `
-                        <div class="tool-item">
-                            <div class="tool-icon">${emoji}</div>
-                            <div class="tool-info">
-                                <div class="tool-name">${t.name}</div>
-                                <div class="tool-desc">${desc}</div>
-                            </div>
-                            <span class="tool-tag ${category}">${category}</span>
-                        </div>
-                    `;
+                    const cat = toolCategories.business.includes(t.name) ? 'business' : 'system';
+                    return `<div class="tool-item"><div class="tool-icon">${toolEmojis[t.name] || '🔧'}</div><div class="tool-info"><div class="tool-name">${t.name}</div><div class="tool-desc">${t.description.substring(0, 50)}</div></div><span class="tool-tag ${cat}">${cat}</span></div>`;
                 }).join('');
-            } catch (e) {
-                document.getElementById('toolsList').innerHTML = '<div style="color:#ef4444">Error loading tools</div>';
-            }
+            } catch (e) { document.getElementById('toolsList').innerHTML = '<div style="color:red">Error</div>'; }
         }
 
         async function loadMetrics() {
@@ -1055,120 +364,35 @@
                 document.getElementById('statAllowed').textContent = m.allowedCount;
                 document.getElementById('statDenied').textContent = m.deniedCount;
                 document.getElementById('statTotal').textContent = m.totalRequests;
-
-                const cfg = m.config;
+                const c = m.config;
                 document.getElementById('configPanel').innerHTML = `
-                    <div class="config-item">
-                        <span class="config-key">Default Deny Policy</span>
-                        <span class="config-value ${cfg.defaultDeny ? 'on' : 'off'}">${cfg.defaultDeny ? 'ENABLED' : 'DISABLED'}</span>
-                    </div>
-                    <div class="config-item">
-                        <span class="config-key">Request Timeout</span>
-                        <span class="config-value">${cfg.timeoutMs / 1000}s</span>
-                    </div>
-                    <div class="config-item">
-                        <span class="config-key">Max Result Size</span>
-                        <span class="config-value">${(cfg.maxResultBytes / 1024 / 1024).toFixed(1)} MB</span>
-                    </div>
-                    <div class="config-item">
-                        <span class="config-key">Filesystem Access</span>
-                        <span class="config-value ${cfg.fsEnabled ? 'on' : 'off'}">${cfg.fsEnabled ? 'ON' : 'OFF'}</span>
-                    </div>
-                    <div class="config-item">
-                        <span class="config-key">HTTP Fetch</span>
-                        <span class="config-value ${cfg.httpEnabled ? 'on' : 'off'}">${cfg.httpEnabled ? 'ON' : 'OFF'}</span>
-                    </div>
-                `;
-            } catch (e) {
-                console.error('Failed to load metrics', e);
-            }
+                    <div class="config-item"><span class="config-key">Default Deny</span><span class="config-value ${c.defaultDeny ? 'on' : 'off'}">${c.defaultDeny ? 'ON' : 'OFF'}</span></div>
+                    <div class="config-item"><span class="config-key">Timeout</span><span class="config-value">${c.timeoutMs/1000}s</span></div>
+                    <div class="config-item"><span class="config-key">FS Access</span><span class="config-value ${c.fsEnabled ? 'on' : 'off'}">${c.fsEnabled ? 'ON' : 'OFF'}</span></div>
+                    <div class="config-item"><span class="config-key">HTTP Fetch</span><span class="config-value ${c.httpEnabled ? 'on' : 'off'}">${c.httpEnabled ? 'ON' : 'OFF'}</span></div>`;
+            } catch (e) { console.error('Metrics error', e); }
         }
 
         async function loadActivity() {
             try {
                 const res = await apiFetch('/api/activity');
                 const activity = await res.json();
-
-                if (activity.length === 0) {
-                    document.getElementById('activityList').innerHTML =
-                        '<div style="color:#94a3b8; text-align:center; padding:20px;">No activity yet. Try executing a tool!</div>';
-                    return;
-                }
-
-                document.getElementById('activityList').innerHTML = activity.slice(0, 10).map(a => {
-                    const statusClass = a.decision.toLowerCase();
-                    const statusIcon = a.decision === 'ALLOWED' ? '✓' : a.decision === 'DENIED' ? '✗' : '!';
-                    return `
-                        <div class="activity-item">
-                            <div class="activity-status ${statusClass}">${statusIcon}</div>
-                            <div class="activity-info">
-                                <div class="activity-tool">${a.tool}</div>
-                                <div class="activity-time">${new Date(a.ts).toLocaleTimeString()} ${a.elapsedMs ? `(${a.elapsedMs}ms)` : ''}</div>
-                                <div class="activity-reason">${a.reason}</div>
-                            </div>
-                        </div>
-                    `;
+                if (!activity.length) { document.getElementById('activityList').innerHTML = '<div style="color:#94a3b8;text-align:center;padding:20px;">No activity</div>'; return; }
+                document.getElementById('activityList').innerHTML = activity.slice(0, 8).map(a => {
+                    const icon = a.decision === 'ALLOWED' ? '✓' : '✗';
+                    return `<div class="activity-item"><div class="activity-status ${a.decision.toLowerCase()}">${icon}</div><div class="activity-info"><div class="activity-tool">${a.tool}</div><div class="activity-time">${new Date(a.ts).toLocaleTimeString()}</div><div class="activity-reason">${a.reason}</div></div></div>`;
                 }).join('');
-            } catch (e) {
-                console.error('Failed to load activity', e);
-            }
+            } catch (e) { console.error('Activity error', e); }
         }
 
-        async function executeTool() {
-            if (!selectedTool) return;
-
-            const argsText = document.getElementById('argsInput').value;
-            const resultDiv = document.getElementById('resultBox');
-
-            let args = {};
-            if (argsText.trim()) {
-                try {
-                    args = JSON.parse(argsText);
-                } catch (e) {
-                    addChatMessage('assistant', '<span class="msg-error">Parameetrite JSON on vigane. Palun kontrollige süntaksit.</span>');
-                    resultDiv.innerHTML = '<div class="result-box error">Invalid JSON in parameters</div>';
-                    return;
-                }
-            }
-
-            // Add user message to chat
-            const userMessage = `${toolEmojis[selectedTool] || '🔧'} ${selectedTool} - ${JSON.stringify(args)}`;
-            addChatMessage('user', userMessage);
-
-            // Show thinking indicator
-            showThinking(true);
-            resultDiv.innerHTML = '<div class="result-box info">Executing...</div>';
-
-            try {
-                const res = await apiFetch('/api/call', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tool: selectedTool, arguments: args })
-                });
-                const data = await res.json();
-
-                showThinking(false);
-
-                if (data.ok) {
-                    const humanResponse = generateHumanResponse(selectedTool, args, data, true);
-                    addChatMessage('assistant', humanResponse, data);
-                    resultDiv.innerHTML = `<div class="result-box success">${JSON.stringify(data, null, 2)}</div>`;
-                } else {
-                    const humanResponse = generateHumanResponse(selectedTool, args, data, false);
-                    addChatMessage('assistant', humanResponse, data);
-                    resultDiv.innerHTML = `<div class="result-box error">${JSON.stringify(data, null, 2)}</div>`;
-                }
-
-                loadMetrics();
-                loadActivity();
-            } catch (e) {
-                showThinking(false);
-                addChatMessage('assistant', `<span class="msg-error">Ühenduse viga: ${e.message}. Palun proovige uuesti.</span>`);
-                resultDiv.innerHTML = `<div class="result-box error">Request failed: ${e.message}</div>`;
-            }
-        }
-
-        init();
+        (async function init() {
+            renderMessages();
+            await loadTools();
+            await loadMetrics();
+            await loadActivity();
+            setInterval(loadMetrics, 5000);
+            setInterval(loadActivity, 5000);
+        })();
     </script>
 </body>
 </html>
