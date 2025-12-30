@@ -126,6 +126,15 @@
             padding: 12px 20px;
             background: #f8fafc;
             border-top: 1px solid #e2e8f0;
+        }
+        .quick-suggestions-label {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .quick-suggestions-buttons {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
@@ -243,16 +252,19 @@
             </div>
 
             <div class="quick-suggestions">
-                <button class="quick-btn" onclick="quickAction('invoices')"><span class="emoji">🧾</span> Arveid</button>
-                <button class="quick-btn" onclick="quickAction('employees')"><span class="emoji">👥</span> Töötajaid</button>
-                <button class="quick-btn" onclick="quickAction('products')"><span class="emoji">📦</span> Laoseisu</button>
-                <button class="quick-btn" onclick="quickAction('balance')"><span class="emoji">💰</span> Kontojääki</button>
-                <button class="quick-btn" onclick="quickAction('payroll')"><span class="emoji">💵</span> Palgalehte</button>
+                <div class="quick-suggestions-label">Kiirvalikud</div>
+                <div class="quick-suggestions-buttons">
+                    <button class="quick-btn" onclick="quickAction('invoices')"><span class="emoji">🧾</span> Arveid</button>
+                    <button class="quick-btn" onclick="quickAction('employees')"><span class="emoji">👥</span> Töötajaid</button>
+                    <button class="quick-btn" onclick="quickAction('products')"><span class="emoji">📦</span> Laoseisu</button>
+                    <button class="quick-btn" onclick="quickAction('balance')"><span class="emoji">💰</span> Kontojääki</button>
+                    <button class="quick-btn" onclick="quickAction('payroll')"><span class="emoji">💵</span> Palgalehte</button>
+                </div>
             </div>
 
             <div class="chat-input-area">
                 <div class="chat-input-row">
-                    <input type="text" class="chat-input" id="chatInput" placeholder="Küsi midagi... nt 'Näita maksmata arveid'" onkeydown="if(event.key==='Enter')sendMessage()">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Kirjutage oma kusimus vabas vormis, nt 'Millised arved on maksmata?'" onkeydown="if(event.key==='Enter')sendMessage()">
                     <button class="send-btn" onclick="sendMessage()">Saada</button>
                 </div>
             </div>
