@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MCP Gateway - Demo Dashboard</title>
+    <title>Pilvetark - AI Assistent</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -12,477 +12,58 @@
             min-height: 100vh;
             padding: 20px;
         }
+        .container { max-width: 800px; margin: 0 auto; }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
+        /* Header - simplified */
+        .header { text-align: center; color: white; margin-bottom: 24px; }
+        .header h1 { font-size: 1.8rem; margin-bottom: 6px; text-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .header p { font-size: 0.95rem; opacity: 0.9; }
 
-        /* Header */
-        .header {
-            text-align: center;
-            color: white;
-            margin-bottom: 30px;
-        }
-        .header h1 {
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-            text-shadow: 0 2px 10px rgba(0,0,0,0.2);
-        }
-        .header p {
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-        .status-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: rgba(255,255,255,0.2);
-            padding: 8px 16px;
-            border-radius: 20px;
-            margin-top: 15px;
-            font-size: 14px;
-        }
-        .status-dot {
-            width: 10px;
-            height: 10px;
-            background: #10b981;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-
-        /* Hero Section */
-        .hero-section {
+        /* Main Chat Card */
+        .chat-card {
             background: white;
             border-radius: 20px;
-            padding: 40px;
-            margin-bottom: 30px;
             box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-            text-align: center;
-        }
-        .hero-value-prop {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 8px;
-            line-height: 1.3;
-        }
-        .hero-value-prop-en {
-            font-size: 1rem;
-            color: #94a3b8;
-            margin-bottom: 24px;
-        }
-        .hero-subtitle {
-            font-size: 1.1rem;
-            color: #64748b;
-            margin-bottom: 32px;
-            font-weight: 500;
-        }
-        .hero-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-            margin-bottom: 32px;
-        }
-        .hero-card {
-            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-            border: 2px solid #e2e8f0;
-            border-radius: 16px;
-            padding: 28px 24px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: left;
-        }
-        .hero-card:hover {
-            border-color: #667eea;
-            transform: translateY(-4px);
-            box-shadow: 0 12px 30px rgba(102, 126, 234, 0.2);
-        }
-        .hero-card-icon {
-            font-size: 2.5rem;
-            margin-bottom: 16px;
-        }
-        .hero-card-title {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: #1e293b;
-            margin-bottom: 10px;
-        }
-        .hero-card-desc {
-            font-size: 0.9rem;
-            color: #64748b;
-            line-height: 1.5;
-        }
-        .chat-input-container {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .chat-input-label {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-bottom: 10px;
-            text-align: left;
-        }
-        .chat-input-wrapper {
-            display: flex;
-            gap: 12px;
-        }
-        .chat-input {
-            flex: 1;
-            padding: 16px 20px;
-            border: 2px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .chat-input:focus {
-            outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.15);
-        }
-        .chat-input::placeholder {
-            color: #94a3b8;
-        }
-        .chat-hint {
-            font-size: 0.8rem;
-            color: #94a3b8;
-            margin-top: 10px;
-            text-align: center;
-        }
-
-        /* Cards */
-        .card {
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
-            margin-bottom: 20px;
             overflow: hidden;
         }
-        .card-header {
-            background: #f8fafc;
-            padding: 16px 24px;
-            border-bottom: 1px solid #e2e8f0;
-            font-weight: 600;
-            font-size: 18px;
-            color: #1e293b;
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 24px;
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: space-between;
         }
-        .card-body {
-            padding: 24px;
-        }
-
-        /* Stats */
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 16px;
-            margin-bottom: 20px;
-        }
-        .stat-card {
-            background: white;
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        .stat-label {
-            font-size: 0.85rem;
-            color: #64748b;
-            margin-top: 5px;
-        }
-
-        /* Main Grid */
-        .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        @media (max-width: 900px) {
-            .main-grid { grid-template-columns: 1fr; }
-        }
-
-        /* Tool Tester */
-        .tool-category {
-            margin-bottom: 20px;
-        }
-        .tool-category h3 {
-            font-size: 14px;
-            color: #64748b;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .tool-buttons {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        .tool-btn {
-            padding: 10px 16px;
-            background: #f1f5f9;
-            border: 2px solid transparent;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 13px;
-            font-weight: 500;
-            color: #475569;
-            transition: all 0.2s;
-        }
-        .tool-btn:hover {
-            background: #e2e8f0;
-            transform: translateY(-1px);
-        }
-        .tool-btn.selected {
-            background: #667eea;
+        .chat-header h2 { font-size: 1.1rem; display: flex; align-items: center; gap: 10px; }
+        .chat-header-dot { width: 10px; height: 10px; background: #10b981; border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        .advanced-toggle {
+            background: rgba(255,255,255,0.2);
+            border: none;
             color: white;
-            border-color: #5a67d8;
-        }
-        .tool-btn .emoji {
-            margin-right: 6px;
-        }
-
-        .form-group {
-            margin-bottom: 16px;
-        }
-        .form-group label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: #374151;
-            margin-bottom: 6px;
-        }
-        .form-group textarea {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 13px;
-            resize: vertical;
-            min-height: 100px;
-            transition: border-color 0.2s;
-        }
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .quick-examples {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        .quick-btn {
             padding: 6px 12px;
-            background: #fef3c7;
-            border: 1px solid #fcd34d;
             border-radius: 6px;
             font-size: 12px;
-            color: #92400e;
             cursor: pointer;
             transition: all 0.2s;
         }
-        .quick-btn:hover {
-            background: #fde68a;
-        }
-
-        .execute-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        .execute-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
-        }
-        .execute-btn:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-
-        .result-box {
-            margin-top: 16px;
-            padding: 16px;
-            border-radius: 8px;
-            font-family: 'Monaco', 'Consolas', monospace;
-            font-size: 12px;
-            max-height: 300px;
-            overflow-y: auto;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-        .result-box.success {
-            background: #ecfdf5;
-            border: 2px solid #10b981;
-            color: #065f46;
-        }
-        .result-box.error {
-            background: #fef2f2;
-            border: 2px solid #ef4444;
-            color: #991b1b;
-        }
-        .result-box.info {
-            background: #f0f9ff;
-            border: 2px solid #3b82f6;
-            color: #1e40af;
-        }
-
-        /* Tools List */
-        .tools-list {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        .tool-item {
-            padding: 14px;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        .tool-item:last-child { border-bottom: none; }
-        .tool-item:hover { background: #f8fafc; }
-        .tool-icon {
-            font-size: 24px;
-        }
-        .tool-info {
-            flex: 1;
-        }
-        .tool-name {
-            font-weight: 600;
-            color: #1e293b;
-            font-size: 14px;
-        }
-        .tool-desc {
-            font-size: 12px;
-            color: #64748b;
-            margin-top: 2px;
-        }
-        .tool-tag {
-            padding: 4px 8px;
-            background: #e0e7ff;
-            color: #4338ca;
-            border-radius: 4px;
-            font-size: 11px;
-            font-weight: 500;
-        }
-        .tool-tag.business { background: #d1fae5; color: #065f46; }
-        .tool-tag.system { background: #fef3c7; color: #92400e; }
-
-        /* Activity */
-        .activity-list {
-            max-height: 300px;
-            overflow-y: auto;
-        }
-        .activity-item {
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-        .activity-item:last-child { border-bottom: none; }
-        .activity-status {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 14px;
-            flex-shrink: 0;
-        }
-        .activity-status.allowed { background: #d1fae5; }
-        .activity-status.denied { background: #fee2e2; }
-        .activity-status.error { background: #fef3c7; }
-        .activity-info { flex: 1; }
-        .activity-tool { font-weight: 600; color: #1e293b; font-size: 14px; }
-        .activity-time { font-size: 12px; color: #94a3b8; }
-        .activity-reason { font-size: 12px; color: #64748b; margin-top: 4px; }
-
-        /* Config */
-        .config-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .config-item:last-child { border-bottom: none; }
-        .config-key { color: #64748b; font-size: 14px; }
-        .config-value {
-            font-weight: 600;
-            font-size: 14px;
-        }
-        .config-value.on { color: #10b981; }
-        .config-value.off { color: #ef4444; }
-
-        /* Info box */
-        .info-box {
-            background: #f0f9ff;
-            border-left: 4px solid #3b82f6;
-            padding: 16px;
-            margin-bottom: 20px;
-            border-radius: 0 8px 8px 0;
-        }
-        .info-box h3 {
-            color: #1e40af;
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-        .info-box p {
-            color: #1e40af;
-            font-size: 13px;
-            line-height: 1.5;
-        }
+        .advanced-toggle:hover { background: rgba(255,255,255,0.3); }
+        .advanced-toggle.active { background: rgba(255,255,255,0.4); }
 
         /* Chat Messages */
         .chat-messages {
-            max-height: 400px;
+            height: 400px;
             overflow-y: auto;
-            padding: 16px;
+            padding: 20px;
             background: #f8fafc;
-            border-radius: 12px;
-            margin-bottom: 16px;
-            min-height: 120px;
         }
-        .chat-message {
-            margin-bottom: 16px;
-            display: flex;
-            flex-direction: column;
-        }
-        .chat-message:last-child {
-            margin-bottom: 0;
-        }
-        .chat-message.user {
-            align-items: flex-end;
-        }
-        .chat-message.assistant {
-            align-items: flex-start;
-        }
+        .chat-message { margin-bottom: 16px; display: flex; flex-direction: column; }
+        .chat-message.user { align-items: flex-end; }
+        .chat-message.assistant { align-items: flex-start; }
         .chat-bubble {
-            max-width: 85%;
+            max-width: 80%;
             padding: 12px 16px;
-            border-radius: 16px;
+            border-radius: 18px;
             font-size: 14px;
             line-height: 1.5;
         }
@@ -496,679 +77,400 @@
             color: #1e293b;
             border: 1px solid #e2e8f0;
             border-bottom-left-radius: 4px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
         }
-        .chat-bubble-label {
-            font-size: 11px;
-            color: #94a3b8;
-            margin-bottom: 4px;
-            font-weight: 500;
-        }
-        .chat-bubble-content {
-            margin-bottom: 8px;
-        }
-        .chat-bubble-content:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Thinking indicator */
-        .thinking-indicator {
-            display: none;
-            align-items: center;
-            gap: 8px;
-            padding: 12px 16px;
-            background: white;
-            border: 1px solid #e2e8f0;
-            border-radius: 16px;
-            border-bottom-left-radius: 4px;
-            max-width: 200px;
-            margin-bottom: 16px;
-        }
-        .thinking-indicator.visible {
-            display: flex;
-        }
-        .thinking-dots {
-            display: flex;
-            gap: 4px;
-        }
-        .thinking-dots span {
-            width: 8px;
-            height: 8px;
-            background: #667eea;
-            border-radius: 50%;
-            animation: thinking 1.4s infinite ease-in-out;
-        }
+        .chat-bubble.thinking { color: #64748b; font-style: italic; }
+        .thinking-dots { display: inline-flex; gap: 4px; margin-left: 8px; }
+        .thinking-dots span { width: 6px; height: 6px; background: #667eea; border-radius: 50%; animation: bounce 1.4s infinite ease-in-out; }
         .thinking-dots span:nth-child(1) { animation-delay: 0s; }
         .thinking-dots span:nth-child(2) { animation-delay: 0.2s; }
         .thinking-dots span:nth-child(3) { animation-delay: 0.4s; }
-        @keyframes thinking {
-            0%, 80%, 100% { transform: scale(0.6); opacity: 0.5; }
-            40% { transform: scale(1); opacity: 1; }
-        }
-        .thinking-text {
-            font-size: 13px;
-            color: #64748b;
-        }
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0.8); } 40% { transform: scale(1.2); } }
 
-        /* Collapsible JSON */
-        .json-details {
-            margin-top: 8px;
-        }
-        .json-details summary {
-            font-size: 12px;
-            color: #64748b;
-            cursor: pointer;
-            padding: 4px 0;
-        }
-        .json-details summary:hover {
-            color: #667eea;
-        }
-        .json-details pre {
-            margin-top: 8px;
-            padding: 12px;
-            background: #f1f5f9;
-            border-radius: 8px;
-            font-size: 11px;
-            overflow-x: auto;
-            max-height: 200px;
-            overflow-y: auto;
-        }
+        /* Result formatting */
+        .result-summary { margin-bottom: 8px; }
+        .result-list { margin: 8px 0; padding-left: 0; list-style: none; }
+        .result-item { padding: 8px 12px; background: #f1f5f9; border-radius: 8px; margin-bottom: 6px; font-size: 13px; display: flex; justify-content: space-between; align-items: center; }
+        .result-item-name { font-weight: 500; color: #1e293b; }
+        .result-item-detail { color: #64748b; font-size: 12px; }
+        .result-item-value { font-weight: 600; color: #667eea; }
+        .result-item-status { font-size: 11px; padding: 2px 8px; border-radius: 10px; }
+        .result-item-status.paid { background: #d1fae5; color: #065f46; }
+        .result-item-status.unpaid { background: #fef3c7; color: #92400e; }
+        .result-item-status.overdue { background: #fee2e2; color: #991b1b; }
+        .msg-success { color: #065f46; }
+        .msg-error { color: #991b1b; }
 
-        /* Chat input area in tool tester */
-        .chat-send-row {
+        .json-details { margin-top: 10px; }
+        .json-details summary { font-size: 12px; color: #94a3b8; cursor: pointer; }
+        .json-details summary:hover { color: #667eea; }
+        .json-details pre { margin-top: 8px; padding: 12px; background: #f1f5f9; border-radius: 8px; font-size: 10px; overflow-x: auto; max-height: 150px; }
+
+        /* Quick Suggestions */
+        .quick-suggestions {
+            padding: 12px 20px;
+            background: #f8fafc;
+            border-top: 1px solid #e2e8f0;
             display: flex;
             gap: 8px;
-            margin-top: 12px;
+            flex-wrap: wrap;
         }
-        .chat-send-btn {
+        .quick-btn {
+            padding: 8px 14px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .quick-btn:hover { border-color: #667eea; color: #667eea; background: #f0f0ff; }
+        .quick-btn .emoji { font-size: 14px; }
+
+        /* Chat Input */
+        .chat-input-area { padding: 16px 20px; background: white; border-top: 1px solid #e2e8f0; }
+        .chat-input-row { display: flex; gap: 10px; }
+        .chat-input {
+            flex: 1;
+            padding: 14px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 15px;
+            transition: border-color 0.2s;
+        }
+        .chat-input:focus { outline: none; border-color: #667eea; }
+        .chat-input::placeholder { color: #94a3b8; }
+        .send-btn {
             padding: 14px 24px;
             background: linear-gradient(135deg, #667eea, #764ba2);
             color: white;
             border: none;
-            border-radius: 8px;
-            font-size: 14px;
+            border-radius: 12px;
             font-weight: 600;
+            font-size: 15px;
             cursor: pointer;
             transition: all 0.2s;
-            white-space: nowrap;
         }
-        .chat-send-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        .send-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4); }
+
+        /* Advanced Panel (hidden by default) */
+        .advanced-panel {
+            display: none;
+            padding: 16px 20px;
+            background: #f1f5f9;
+            border-top: 1px solid #e2e8f0;
         }
-        .chat-send-btn:disabled {
-            background: #94a3b8;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
+        .advanced-panel.visible { display: block; }
+        .advanced-panel h4 { font-size: 12px; color: #64748b; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+        .tool-buttons { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .tool-btn {
+            padding: 6px 12px;
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #475569;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tool-btn:hover { border-color: #667eea; }
+        .tool-btn.selected { background: #667eea; color: white; border-color: #667eea; }
+        .tool-btn .emoji { margin-right: 4px; }
+        .form-group { margin-bottom: 12px; }
+        .form-group label { display: block; font-size: 12px; color: #64748b; margin-bottom: 4px; }
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 12px;
+            resize: vertical;
+            min-height: 60px;
         }
 
-        /* Success/Error message styles */
-        .msg-success {
-            color: #065f46;
+        /* Footer info */
+        .footer-info {
+            text-align: center;
+            margin-top: 20px;
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
         }
-        .msg-error {
-            color: #991b1b;
-        }
+        .footer-info a { color: rgba(255,255,255,0.9); }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>Pilvetark OÜ - Ärisüsteemid</h1>
-            <p>Demo: AI-assistent pääseb turvaliselt ligi ettevõtte andmetele</p>
-            <div class="status-badge">
-                <div class="status-dot"></div>
-                <span>Reg: 14892367 | EE102345678</span>
-            </div>
+            <h1>🏢 Pilvetark OÜ</h1>
+            <p>AI-assistent teie ettevõtte andmetele</p>
         </div>
 
-        <!-- Hero Onboarding Section -->
-        <div class="hero-section">
-            <div class="hero-value-prop">Teie ettevõtte andmed, turvaline AI-assistent</div>
-            <div class="hero-value-prop-en">Your company data, powered by a secure AI assistant</div>
-            <div class="hero-subtitle">Mida see assistent saab teie ettevõtte heaks teha?</div>
+        <div class="chat-card">
+            <div class="chat-header">
+                <h2><span class="chat-header-dot"></span> Assistent</h2>
+                <button class="advanced-toggle" onclick="toggleAdvanced()">⚙️ Täpsem</button>
+            </div>
 
-            <div class="hero-cards">
-                <div class="hero-card" onclick="prefillPrompt('query')">
-                    <div class="hero-card-icon">📊</div>
-                    <div class="hero-card-title">Küsi ettevõtte andmete kohta</div>
-                    <div class="hero-card-desc">Küsi arvete, töötajate, projektide või finantsaruannete kohta. Assistent leiab vastuse turvaliselt süsteemidest.</div>
-                </div>
-                <div class="hero-card" onclick="prefillPrompt('tool')">
-                    <div class="hero-card-icon">🔧</div>
-                    <div class="hero-card-title">Käivita turvaline tööriist</div>
-                    <div class="hero-card-desc">Lase assistendil käivitada lubatud toiminguid - näiteks kontrollida laoseisu või genereerida aruandeid.</div>
-                </div>
-                <div class="hero-card" onclick="prefillPrompt('audit')">
-                    <div class="hero-card-icon">📋</div>
-                    <div class="hero-card-title">Vaata, mida assistent tegi (audit)</div>
-                    <div class="hero-card-desc">Kõik assistendi tegevused logitakse. Vaata, milliseid tööriistu kasutati ja mis otsused tehti.</div>
+            <div class="chat-messages" id="chatMessages"></div>
+
+            <div class="advanced-panel" id="advancedPanel">
+                <h4>Vali tööriist</h4>
+                <div class="tool-buttons" id="toolButtons"></div>
+                <div class="form-group">
+                    <label>Parameetrid (JSON)</label>
+                    <textarea id="argsInput" placeholder='{"key": "value"}'></textarea>
                 </div>
             </div>
 
-            <div class="chat-input-container">
-                <div class="chat-input-label">Proovi küsida assistendilt:</div>
-                <div class="chat-input-wrapper">
-                    <input type="text" class="chat-input" id="chatInput" placeholder="Kirjuta oma küsimus siia...">
-                </div>
-                <div class="chat-hint">Klõpsa ülal olevat kaarti, et näha näidisküsimust</div>
-            </div>
-        </div>
-
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-value" id="statTools">-</div>
-                <div class="stat-label">Available Tools</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="statAllowed">-</div>
-                <div class="stat-label">Allowed Requests</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="statDenied">-</div>
-                <div class="stat-label">Denied Requests</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-value" id="statTotal">-</div>
-                <div class="stat-label">Total Requests</div>
-            </div>
-        </div>
-
-        <div class="info-box">
-            <h3>Pilvetark OÜ - IT-teenuste ettevõte Tallinnas</h3>
-            <p>See on demo Eesti tarkvarafirmast: 12 töötajat, SaaS tooted (PilveCRM, PilveDoc), arendusteenused.
-               Kliendid: Eesti Energia, Bolt, Cleveron jt. Proovi erinevaid päringuid - arved, töötajad, projektid, palgaleht!</p>
-        </div>
-
-        <div class="main-grid">
-            <div class="card">
-                <div class="card-header">
-                    <span>💬</span> Assistant Chat
-                </div>
-                <div class="card-body">
-                    <!-- Chat Messages Area -->
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="chat-message assistant">
-                            <div class="chat-bubble-label">Assistent</div>
-                            <div class="chat-bubble">
-                                Tere! Olen teie ettevõtte assistent. Valige allpool tööriist ja parameetrid, et alustada.
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Thinking Indicator -->
-                    <div class="thinking-indicator" id="thinkingIndicator">
-                        <div class="thinking-dots">
-                            <span></span><span></span><span></span>
-                        </div>
-                        <span class="thinking-text">Assistent mõtleb...</span>
-                    </div>
-
-                    <div class="tool-category">
-                        <h3>Business Tools (Demo Data)</h3>
-                        <div class="tool-buttons" id="businessTools"></div>
-                    </div>
-                    <div class="tool-category">
-                        <h3>System Tools</h3>
-                        <div class="tool-buttons" id="systemTools"></div>
-                    </div>
-
-                    <div id="quickExamplesSection" style="display:none;">
-                        <label style="font-size: 14px; font-weight: 500; color: #374151; margin-bottom: 8px; display: block;">Quick Examples</label>
-                        <div class="quick-examples" id="quickExamples"></div>
-                    </div>
-
-                    <div class="form-group">
-                        <label>Parameters (JSON)</label>
-                        <textarea id="argsInput" placeholder='Click a tool above, then edit parameters here...'></textarea>
-                    </div>
-
-                    <div class="chat-send-row">
-                        <button class="execute-btn" id="executeBtn" onclick="executeTool()" disabled style="flex:1;">
-                            Select a Tool First
-                        </button>
-                        <button class="chat-send-btn" id="sendBtn" onclick="executeTool()" disabled>
-                            Send
-                        </button>
-                    </div>
-
-                    <div id="resultBox"></div>
-                </div>
+            <div class="quick-suggestions">
+                <button class="quick-btn" onclick="quickAction('invoices')"><span class="emoji">🧾</span> Arveid</button>
+                <button class="quick-btn" onclick="quickAction('employees')"><span class="emoji">👥</span> Töötajaid</button>
+                <button class="quick-btn" onclick="quickAction('products')"><span class="emoji">📦</span> Laoseisu</button>
+                <button class="quick-btn" onclick="quickAction('balance')"><span class="emoji">💰</span> Kontojääki</button>
+                <button class="quick-btn" onclick="quickAction('payroll')"><span class="emoji">💵</span> Palgalehte</button>
             </div>
 
-            <div>
-                <div class="card">
-                    <div class="card-header">
-                        <span>📦</span> All Available Tools
-                    </div>
-                    <div class="card-body">
-                        <div class="tools-list" id="toolsList">Loading...</div>
-                    </div>
-                </div>
-
-                <div class="card">
-                    <div class="card-header">
-                        <span>⚙️</span> Security Settings
-                    </div>
-                    <div class="card-body" id="configPanel">Loading...</div>
+            <div class="chat-input-area">
+                <div class="chat-input-row">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Küsi midagi... nt 'Näita maksmata arveid'" onkeydown="if(event.key==='Enter')sendMessage()">
+                    <button class="send-btn" onclick="sendMessage()">Saada</button>
                 </div>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <span>📋</span> Recent Activity
-            </div>
-            <div class="card-body">
-                <div class="activity-list" id="activityList">No activity yet</div>
-            </div>
+        <div class="footer-info">
+            Pilvetark OÜ · Reg: 14892367 · <a href="#" onclick="toggleAdvanced()">Tehniline vaade</a>
         </div>
     </div>
 
     <script>
         let selectedTool = null;
+        let isThinking = false;
+        let advancedMode = false;
+        const messages = [];
         const apiKey = 'dev-key';
 
-        const heroPrompts = {
-            query: 'Näita mulle kõiki maksmata arveid ja nende kogusummat',
-            tool: 'Kontrolli laoseisu ja näita tooteid, mida on vähe järel',
-            audit: 'Näita viimased 10 tegevust, mida assistent on teinud'
+        const quickActions = {
+            invoices: { tool: 'accounting.getInvoices', args: {}, label: 'Näita arveid' },
+            employees: { tool: 'hr.getEmployees', args: {}, label: 'Näita töötajaid' },
+            products: { tool: 'inventory.getProducts', args: {}, label: 'Näita laoseisu' },
+            balance: { tool: 'accounting.getBalance', args: {}, label: 'Näita kontojääki' },
+            payroll: { tool: 'hr.getPayroll', args: {}, label: 'Näita palgalehte' }
         };
 
-        function prefillPrompt(type) {
-            const input = document.getElementById('chatInput');
-            input.value = heroPrompts[type] || '';
-            input.focus();
-            input.classList.add('highlight');
-            setTimeout(() => input.classList.remove('highlight'), 300);
-        }
-
-        const toolExamples = {
-            'fs.listDir': [
-                { label: 'Näita /tmp', args: { path: '/tmp' } },
-                { label: 'Praegune kaust', args: { path: '.' } }
-            ],
-            'fs.readFile': [
-                { label: 'Loe testfaili', args: { path: '/tmp/test.txt' } }
-            ],
-            'web.fetch': [
-                { label: 'Test URL', args: { url: 'https://httpbin.org/get' } },
-                { label: 'GitHub API', args: { url: 'https://api.github.com' } }
-            ],
-            'accounting.getInvoices': [
-                { label: 'Kõik arved', args: {} },
-                { label: 'Maksmata', args: { status: 'unpaid' } },
-                { label: 'Üle tähtaja', args: { status: 'overdue' } },
-                { label: 'Makstud', args: { status: 'paid' } }
-            ],
-            'accounting.getBalance': [
-                { label: 'Kõik kontod', args: {} },
-                { label: 'Arvelduskonto', args: { account: 'arvelduskonto' } },
-                { label: 'Reservkonto', args: { account: 'reserv' } }
-            ],
-            'accounting.getReport': [
-                { label: 'Kasumiaruanne', args: { type: 'profit_loss' } },
-                { label: 'Bilanss', args: { type: 'balance_sheet' } },
-                { label: 'Rahavood', args: { type: 'cashflow' } }
-            ],
-            'inventory.getProducts': [
-                { label: 'Kõik', args: {} },
-                { label: 'Vähe laos', args: { lowStock: true } },
-                { label: 'Litsentsid', args: { category: 'litsents' } }
-            ],
-            'inventory.getOrders': [
-                { label: 'Kõik projektid', args: {} },
-                { label: 'Töös', args: { status: 'shipped' } },
-                { label: 'Ootel', args: { status: 'pending' } }
-            ],
-            'hr.getEmployees': [
-                { label: 'Kõik töötajad', args: {} },
-                { label: 'Arendus', args: { department: 'Arendus' } },
-                { label: 'Müük', args: { department: 'Müük' } }
-            ],
-            'hr.getPayroll': [
-                { label: 'See kuu', args: {} },
-                { label: 'Detsember 2024', args: { month: '2024-12' } }
-            ]
-        };
-
-        const toolCategories = {
-            business: ['accounting.getInvoices', 'accounting.getBalance', 'accounting.getReport',
-                       'inventory.getProducts', 'inventory.getOrders', 'hr.getEmployees', 'hr.getPayroll'],
-            system: ['fs.listDir', 'fs.readFile', 'web.fetch']
+        const toolLabels = {
+            'accounting.getInvoices': 'arvete päring',
+            'accounting.getBalance': 'kontojääkide päring',
+            'accounting.getReport': 'finantsaruanne',
+            'inventory.getProducts': 'laoseisu päring',
+            'inventory.getOrders': 'tellimuste päring',
+            'hr.getEmployees': 'töötajate päring',
+            'hr.getPayroll': 'palgaleht',
+            'fs.listDir': 'kausta sisu',
+            'fs.readFile': 'faili lugemine',
+            'web.fetch': 'veebipäring'
         };
 
         const toolEmojis = {
-            'fs.listDir': '📁',
-            'fs.readFile': '📄',
-            'web.fetch': '🌐',
-            'accounting.getInvoices': '🧾',
-            'accounting.getBalance': '💰',
-            'accounting.getReport': '📊',
-            'inventory.getProducts': '📦',
-            'inventory.getOrders': '🛒',
-            'hr.getEmployees': '👥',
-            'hr.getPayroll': '💵'
+            'accounting.getInvoices': '🧾', 'accounting.getBalance': '💰', 'accounting.getReport': '📊',
+            'inventory.getProducts': '📦', 'inventory.getOrders': '🛒',
+            'hr.getEmployees': '👥', 'hr.getPayroll': '💵',
+            'fs.listDir': '📁', 'fs.readFile': '📄', 'web.fetch': '🌐'
         };
 
-        const toolHumanNames = {
-            'fs.listDir': 'kausta sisu vaatamine',
-            'fs.readFile': 'faili lugemine',
-            'web.fetch': 'veebi päring',
-            'accounting.getInvoices': 'arvete päring',
-            'accounting.getBalance': 'kontojääkide päring',
-            'accounting.getReport': 'finantsaruande genereerimine',
-            'inventory.getProducts': 'toodete päring',
-            'inventory.getOrders': 'tellimuste päring',
-            'hr.getEmployees': 'töötajate päring',
-            'hr.getPayroll': 'palgalehe päring'
-        };
+        const allTools = [
+            'accounting.getInvoices', 'accounting.getBalance', 'accounting.getReport',
+            'inventory.getProducts', 'inventory.getOrders', 'hr.getEmployees', 'hr.getPayroll',
+            'fs.listDir', 'fs.readFile', 'web.fetch'
+        ];
 
-        function showThinking(show) {
-            const indicator = document.getElementById('thinkingIndicator');
-            if (show) {
-                indicator.classList.add('visible');
-            } else {
-                indicator.classList.remove('visible');
-            }
+        function escapeHtml(t) { const d = document.createElement('div'); d.textContent = t; return d.innerHTML; }
+
+        function appendMessage(type, content, jsonData = null) {
+            messages.push({ type, content, jsonData, ts: Date.now() });
+            renderMessages();
         }
 
-        function addChatMessage(type, content, jsonData = null) {
-            const messagesDiv = document.getElementById('chatMessages');
-            const messageDiv = document.createElement('div');
-            messageDiv.className = `chat-message ${type}`;
+        function setThinking(show) {
+            isThinking = show;
+            renderMessages();
+        }
 
+        function renderMessages() {
+            const container = document.getElementById('chatMessages');
+            let html = messages.map(m => {
+                if (m.type === 'user') {
+                    return `<div class="chat-message user"><div class="chat-bubble">${escapeHtml(m.content)}</div></div>`;
+                } else {
+                    const jsonSection = m.jsonData ? `<details class="json-details"><summary>Näita tehnilist infot</summary><pre>${escapeHtml(JSON.stringify(m.jsonData, null, 2))}</pre></details>` : '';
+                    return `<div class="chat-message assistant"><div class="chat-bubble"><div>${m.content}</div>${jsonSection}</div></div>`;
+                }
+            }).join('');
+
+            if (isThinking) {
+                html += `<div class="chat-message assistant"><div class="chat-bubble thinking">Otsin andmeid<span class="thinking-dots"><span></span><span></span><span></span></span></div></div>`;
+            }
+
+            container.innerHTML = html || `<div class="chat-message assistant"><div class="chat-bubble">Tere! 👋 Olen teie ettevõtte assistent. Küsige arvete, töötajate, laoseisu või muu kohta.</div></div>`;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function formatResult(tool, data) {
+            if (!data.ok) {
+                return `<span class="msg-error">Vabandust, midagi läks valesti. Palun proovige uuesti.</span>`;
+            }
+
+            const result = data.result;
             let html = '';
-            if (type === 'user') {
-                html = `
-                    <div class="chat-bubble-label">Teie</div>
-                    <div class="chat-bubble">${escapeHtml(content)}</div>
-                `;
+
+            if (tool === 'accounting.getInvoices' && Array.isArray(result)) {
+                const total = result.reduce((sum, inv) => sum + (inv.amount || inv.total || 0), 0);
+                html = `<div class="result-summary"><strong>Leitud ${result.length} arvet</strong> · Kokku: ${total.toLocaleString('et-EE')}€</div><div class="result-list">`;
+                result.slice(0, 5).forEach(inv => {
+                    const status = inv.status || 'unpaid';
+                    const statusLabel = status === 'paid' ? 'Makstud' : status === 'overdue' ? 'Üle tähtaja' : 'Maksmata';
+                    html += `<div class="result-item"><div><div class="result-item-name">${inv.client || inv.customer || 'Klient'}</div><div class="result-item-detail">${inv.number || inv.id || ''}</div></div><div style="text-align:right"><div class="result-item-value">${(inv.amount || inv.total || 0).toLocaleString('et-EE')}€</div><span class="result-item-status ${status}">${statusLabel}</span></div></div>`;
+                });
+                if (result.length > 5) html += `<div class="result-item" style="justify-content:center;color:#64748b;">... ja ${result.length - 5} veel</div>`;
+                html += '</div>';
+            } else if (tool === 'hr.getEmployees' && Array.isArray(result)) {
+                html = `<div class="result-summary"><strong>Leitud ${result.length} töötajat</strong></div><div class="result-list">`;
+                result.slice(0, 5).forEach(emp => {
+                    html += `<div class="result-item"><div><div class="result-item-name">${emp.name || 'Töötaja'}</div><div class="result-item-detail">${emp.position || emp.department || ''}</div></div><div class="result-item-detail">${emp.email || ''}</div></div>`;
+                });
+                if (result.length > 5) html += `<div class="result-item" style="justify-content:center;color:#64748b;">... ja ${result.length - 5} veel</div>`;
+                html += '</div>';
+            } else if (tool === 'inventory.getProducts' && Array.isArray(result)) {
+                html = `<div class="result-summary"><strong>Leitud ${result.length} toodet</strong></div><div class="result-list">`;
+                result.slice(0, 5).forEach(prod => {
+                    const lowStock = (prod.stock || prod.quantity || 0) < 10;
+                    html += `<div class="result-item"><div><div class="result-item-name">${prod.name || 'Toode'}</div><div class="result-item-detail">${prod.sku || prod.code || ''}</div></div><div style="text-align:right"><div class="result-item-value">${prod.stock || prod.quantity || 0} tk</div>${lowStock ? '<span class="result-item-status overdue">Vähe!</span>' : ''}</div></div>`;
+                });
+                if (result.length > 5) html += `<div class="result-item" style="justify-content:center;color:#64748b;">... ja ${result.length - 5} veel</div>`;
+                html += '</div>';
+            } else if (tool === 'accounting.getBalance') {
+                if (Array.isArray(result)) {
+                    html = `<div class="result-summary"><strong>Kontojäägid</strong></div><div class="result-list">`;
+                    result.forEach(acc => {
+                        html += `<div class="result-item"><div class="result-item-name">${acc.name || acc.account || 'Konto'}</div><div class="result-item-value">${(acc.balance || acc.amount || 0).toLocaleString('et-EE')}€</div></div>`;
+                    });
+                    html += '</div>';
+                } else if (result && typeof result === 'object') {
+                    html = `<div class="result-summary"><strong>Kontojääk:</strong> ${(result.balance || result.total || 0).toLocaleString('et-EE')}€</div>`;
+                }
+            } else if (tool === 'hr.getPayroll') {
+                if (Array.isArray(result)) {
+                    const total = result.reduce((sum, p) => sum + (p.gross || p.amount || 0), 0);
+                    html = `<div class="result-summary"><strong>Palgaleht</strong> · Kokku: ${total.toLocaleString('et-EE')}€</div><div class="result-list">`;
+                    result.slice(0, 5).forEach(p => {
+                        html += `<div class="result-item"><div class="result-item-name">${p.name || p.employee || 'Töötaja'}</div><div class="result-item-value">${(p.gross || p.net || p.amount || 0).toLocaleString('et-EE')}€</div></div>`;
+                    });
+                    html += '</div>';
+                }
             } else {
-                html = `
-                    <div class="chat-bubble-label">Assistent</div>
-                    <div class="chat-bubble">
-                        <div class="chat-bubble-content">${content}</div>
-                        ${jsonData ? `
-                            <details class="json-details">
-                                <summary>Näita tehnilist vastust (JSON)</summary>
-                                <pre>${escapeHtml(JSON.stringify(jsonData, null, 2))}</pre>
-                            </details>
-                        ` : ''}
-                    </div>
-                `;
+                const label = toolLabels[tool] || tool;
+                html = `<span class="msg-success">✓ ${label.charAt(0).toUpperCase() + label.slice(1)} õnnestus.</span>`;
+                if (Array.isArray(result)) html += ` Leitud ${result.length} kirjet.`;
             }
 
-            messageDiv.innerHTML = html;
-            messagesDiv.appendChild(messageDiv);
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            return html;
         }
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        function toggleAdvanced() {
+            advancedMode = !advancedMode;
+            document.getElementById('advancedPanel').classList.toggle('visible', advancedMode);
+            document.querySelector('.advanced-toggle').classList.toggle('active', advancedMode);
         }
 
-        function generateHumanResponse(tool, args, data, isSuccess) {
-            const toolName = toolHumanNames[tool] || tool;
-            const emoji = toolEmojis[tool] || '🔧';
-
-            if (!isSuccess) {
-                return `<span class="msg-error">Kahjuks tekkis viga ${toolName} käivitamisel. Palun kontrollige parameetreid ja proovige uuesti.</span>`;
+        function quickAction(action) {
+            const qa = quickActions[action];
+            if (qa) {
+                selectedTool = qa.tool;
+                appendMessage('user', qa.label);
+                executeTool(qa.tool, qa.args);
             }
-
-            let summary = `${emoji} <strong>${toolName.charAt(0).toUpperCase() + toolName.slice(1)}</strong> õnnestus.`;
-
-            // Generate friendly summaries based on tool type
-            if (tool === 'accounting.getInvoices' && data.result) {
-                const invoices = data.result;
-                if (Array.isArray(invoices)) {
-                    summary += ` Leidsin ${invoices.length} arve(t).`;
-                }
-            } else if (tool === 'accounting.getBalance' && data.result) {
-                summary += ` Kontojäägid on edukalt laetud.`;
-            } else if (tool === 'hr.getEmployees' && data.result) {
-                const employees = data.result;
-                if (Array.isArray(employees)) {
-                    summary += ` Leidsin ${employees.length} töötaja(t).`;
-                }
-            } else if (tool === 'inventory.getProducts' && data.result) {
-                const products = data.result;
-                if (Array.isArray(products)) {
-                    summary += ` Leidsin ${products.length} toote(t).`;
-                }
-            } else if (tool === 'fs.listDir' && data.result) {
-                const files = data.result;
-                if (Array.isArray(files)) {
-                    summary += ` Kaustas on ${files.length} elementi.`;
-                }
-            }
-
-            return `<span class="msg-success">${summary}</span>`;
-        }
-
-        async function init() {
-            renderToolButtons();
-            loadTools();
-            loadMetrics();
-            loadActivity();
-            setInterval(loadMetrics, 3000);
-            setInterval(loadActivity, 3000);
-        }
-
-        function renderToolButtons() {
-            const businessDiv = document.getElementById('businessTools');
-            const systemDiv = document.getElementById('systemTools');
-
-            toolCategories.business.forEach(tool => {
-                const btn = document.createElement('button');
-                btn.className = 'tool-btn';
-                btn.innerHTML = `<span class="emoji">${toolEmojis[tool] || '🔧'}</span>${tool.split('.')[1]}`;
-                btn.onclick = () => selectTool(tool);
-                btn.dataset.tool = tool;
-                businessDiv.appendChild(btn);
-            });
-
-            toolCategories.system.forEach(tool => {
-                const btn = document.createElement('button');
-                btn.className = 'tool-btn';
-                btn.innerHTML = `<span class="emoji">${toolEmojis[tool] || '🔧'}</span>${tool}`;
-                btn.onclick = () => selectTool(tool);
-                btn.dataset.tool = tool;
-                systemDiv.appendChild(btn);
-            });
         }
 
         function selectTool(tool) {
             selectedTool = tool;
+            document.querySelectorAll('.tool-btn').forEach(b => b.classList.toggle('selected', b.dataset.tool === tool));
+            document.getElementById('argsInput').value = '{}';
+        }
 
-            // Update button states
-            document.querySelectorAll('.tool-btn').forEach(btn => {
-                btn.classList.toggle('selected', btn.dataset.tool === tool);
-            });
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const text = input.value.trim();
+            if (!text) return;
 
-            // Update execute button
-            const executeBtn = document.getElementById('executeBtn');
-            const sendBtn = document.getElementById('sendBtn');
-            executeBtn.disabled = false;
-            sendBtn.disabled = false;
-            executeBtn.textContent = `Execute ${tool}`;
+            input.value = '';
 
-            // Show quick examples
-            const examplesSection = document.getElementById('quickExamplesSection');
-            const examplesDiv = document.getElementById('quickExamples');
-            const examples = toolExamples[tool] || [];
+            // Check if advanced mode with tool selected
+            if (advancedMode && selectedTool) {
+                appendMessage('user', text || `Käivitan: ${toolLabels[selectedTool] || selectedTool}`);
+                let args = {};
+                try { args = JSON.parse(document.getElementById('argsInput').value || '{}'); } catch(e) {}
+                executeTool(selectedTool, args);
+                return;
+            }
 
-            if (examples.length > 0) {
-                examplesSection.style.display = 'block';
-                examplesDiv.innerHTML = examples.map(ex =>
-                    `<button class="quick-btn" onclick='setArgs(${JSON.stringify(ex.args)})'>${ex.label}</button>`
-                ).join('');
+            // Natural language - try to match intent
+            appendMessage('user', text);
+            const lower = text.toLowerCase();
+
+            if (lower.includes('arve') || lower.includes('invoice')) {
+                const status = lower.includes('maksm') ? (lower.includes('makstud') ? 'paid' : 'unpaid') : (lower.includes('tähtaj') ? 'overdue' : null);
+                executeTool('accounting.getInvoices', status ? { status } : {});
+            } else if (lower.includes('töötaj') || lower.includes('employee')) {
+                executeTool('hr.getEmployees', {});
+            } else if (lower.includes('lao') || lower.includes('tood') || lower.includes('product') || lower.includes('inventory')) {
+                executeTool('inventory.getProducts', lower.includes('vähe') ? { lowStock: true } : {});
+            } else if (lower.includes('konto') || lower.includes('jääk') || lower.includes('balance')) {
+                executeTool('accounting.getBalance', {});
+            } else if (lower.includes('palga') || lower.includes('payroll')) {
+                executeTool('hr.getPayroll', {});
+            } else if (lower.includes('aruanne') || lower.includes('report')) {
+                executeTool('accounting.getReport', { type: 'profit_loss' });
             } else {
-                examplesSection.style.display = 'none';
+                setThinking(true);
+                setTimeout(() => {
+                    setThinking(false);
+                    appendMessage('assistant', 'Ma saan aidata järgmistes valdkondades: <strong>arved</strong>, <strong>töötajad</strong>, <strong>laoseis</strong>, <strong>kontojäägid</strong> ja <strong>palgaleht</strong>. Proovige küsida näiteks "Näita maksmata arveid" või "Kes on töötajad?"');
+                }, 500);
             }
-
-            // Set default args
-            setArgs(examples[0]?.args || {});
         }
 
-        function setArgs(args) {
-            document.getElementById('argsInput').value = JSON.stringify(args, null, 2);
-        }
-
-        async function apiFetch(url, options = {}) {
-            const headers = { 'X-API-Key': apiKey, ...options.headers };
-            return fetch(url, { ...options, headers });
-        }
-
-        async function loadTools() {
+        async function executeTool(tool, args) {
+            setThinking(true);
             try {
-                const res = await apiFetch('/api/tools');
-                const tools = await res.json();
-
-                document.getElementById('toolsList').innerHTML = tools.map(t => {
-                    const category = toolCategories.business.includes(t.name) ? 'business' : 'system';
-                    const emoji = toolEmojis[t.name] || '🔧';
-                    const desc = t.description.replace(/^[^\s]+\s*/, ''); // Remove emoji from description
-                    return `
-                        <div class="tool-item">
-                            <div class="tool-icon">${emoji}</div>
-                            <div class="tool-info">
-                                <div class="tool-name">${t.name}</div>
-                                <div class="tool-desc">${desc}</div>
-                            </div>
-                            <span class="tool-tag ${category}">${category}</span>
-                        </div>
-                    `;
-                }).join('');
-            } catch (e) {
-                document.getElementById('toolsList').innerHTML = '<div style="color:#ef4444">Error loading tools</div>';
-            }
-        }
-
-        async function loadMetrics() {
-            try {
-                const res = await apiFetch('/api/metrics');
-                const m = await res.json();
-                document.getElementById('statTools').textContent = m.registeredTools;
-                document.getElementById('statAllowed').textContent = m.allowedCount;
-                document.getElementById('statDenied').textContent = m.deniedCount;
-                document.getElementById('statTotal').textContent = m.totalRequests;
-
-                const cfg = m.config;
-                document.getElementById('configPanel').innerHTML = `
-                    <div class="config-item">
-                        <span class="config-key">Default Deny Policy</span>
-                        <span class="config-value ${cfg.defaultDeny ? 'on' : 'off'}">${cfg.defaultDeny ? 'ENABLED' : 'DISABLED'}</span>
-                    </div>
-                    <div class="config-item">
-                        <span class="config-key">Request Timeout</span>
-                        <span class="config-value">${cfg.timeoutMs / 1000}s</span>
-                    </div>
-                    <div class="config-item">
-                        <span class="config-key">Max Result Size</span>
-                        <span class="config-value">${(cfg.maxResultBytes / 1024 / 1024).toFixed(1)} MB</span>
-                    </div>
-                    <div class="config-item">
-                        <span class="config-key">Filesystem Access</span>
-                        <span class="config-value ${cfg.fsEnabled ? 'on' : 'off'}">${cfg.fsEnabled ? 'ON' : 'OFF'}</span>
-                    </div>
-                    <div class="config-item">
-                        <span class="config-key">HTTP Fetch</span>
-                        <span class="config-value ${cfg.httpEnabled ? 'on' : 'off'}">${cfg.httpEnabled ? 'ON' : 'OFF'}</span>
-                    </div>
-                `;
-            } catch (e) {
-                console.error('Failed to load metrics', e);
-            }
-        }
-
-        async function loadActivity() {
-            try {
-                const res = await apiFetch('/api/activity');
-                const activity = await res.json();
-
-                if (activity.length === 0) {
-                    document.getElementById('activityList').innerHTML =
-                        '<div style="color:#94a3b8; text-align:center; padding:20px;">No activity yet. Try executing a tool!</div>';
-                    return;
-                }
-
-                document.getElementById('activityList').innerHTML = activity.slice(0, 10).map(a => {
-                    const statusClass = a.decision.toLowerCase();
-                    const statusIcon = a.decision === 'ALLOWED' ? '✓' : a.decision === 'DENIED' ? '✗' : '!';
-                    return `
-                        <div class="activity-item">
-                            <div class="activity-status ${statusClass}">${statusIcon}</div>
-                            <div class="activity-info">
-                                <div class="activity-tool">${a.tool}</div>
-                                <div class="activity-time">${new Date(a.ts).toLocaleTimeString()} ${a.elapsedMs ? `(${a.elapsedMs}ms)` : ''}</div>
-                                <div class="activity-reason">${a.reason}</div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            } catch (e) {
-                console.error('Failed to load activity', e);
-            }
-        }
-
-        async function executeTool() {
-            if (!selectedTool) return;
-
-            const argsText = document.getElementById('argsInput').value;
-            const resultDiv = document.getElementById('resultBox');
-
-            let args = {};
-            if (argsText.trim()) {
-                try {
-                    args = JSON.parse(argsText);
-                } catch (e) {
-                    addChatMessage('assistant', '<span class="msg-error">Parameetrite JSON on vigane. Palun kontrollige süntaksit.</span>');
-                    resultDiv.innerHTML = '<div class="result-box error">Invalid JSON in parameters</div>';
-                    return;
-                }
-            }
-
-            // Add user message to chat
-            const userMessage = `${toolEmojis[selectedTool] || '🔧'} ${selectedTool} - ${JSON.stringify(args)}`;
-            addChatMessage('user', userMessage);
-
-            // Show thinking indicator
-            showThinking(true);
-            resultDiv.innerHTML = '<div class="result-box info">Executing...</div>';
-
-            try {
-                const res = await apiFetch('/api/call', {
+                const res = await fetch('/api/call', {
                     method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ tool: selectedTool, arguments: args })
+                    headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
+                    body: JSON.stringify({ tool, arguments: args })
                 });
                 const data = await res.json();
-
-                showThinking(false);
-
-                if (data.ok) {
-                    const humanResponse = generateHumanResponse(selectedTool, args, data, true);
-                    addChatMessage('assistant', humanResponse, data);
-                    resultDiv.innerHTML = `<div class="result-box success">${JSON.stringify(data, null, 2)}</div>`;
-                } else {
-                    const humanResponse = generateHumanResponse(selectedTool, args, data, false);
-                    addChatMessage('assistant', humanResponse, data);
-                    resultDiv.innerHTML = `<div class="result-box error">${JSON.stringify(data, null, 2)}</div>`;
-                }
-
-                loadMetrics();
-                loadActivity();
+                setThinking(false);
+                appendMessage('assistant', formatResult(tool, data), data);
             } catch (e) {
-                showThinking(false);
-                addChatMessage('assistant', `<span class="msg-error">Ühenduse viga: ${e.message}. Palun proovige uuesti.</span>`);
-                resultDiv.innerHTML = `<div class="result-box error">Request failed: ${e.message}</div>`;
+                setThinking(false);
+                appendMessage('assistant', `<span class="msg-error">Ühenduse viga. Palun proovige uuesti.</span>`);
             }
         }
 
-        init();
+        function renderToolButtons() {
+            document.getElementById('toolButtons').innerHTML = allTools.map(t =>
+                `<button class="tool-btn" data-tool="${t}" onclick="selectTool('${t}')"><span class="emoji">${toolEmojis[t] || '🔧'}</span>${t.split('.')[1]}</button>`
+            ).join('');
+        }
+
+        (function init() {
+            renderMessages();
+            renderToolButtons();
+        })();
     </script>
 </body>
 </html>
