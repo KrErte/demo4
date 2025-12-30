@@ -23,7 +23,26 @@ mcp:
     http-enabled: true
 
   security:
-    api-key: dev-key
+    # =========================================================================
+    # API KEY CONFIGURATION
+    # =========================================================================
+    # Development: Use a simple key for local testing
+    # Production:  Set via environment variable MCP_SECURITY_API_KEY
+    #
+    # To override in production, set environment variable:
+    #   export MCP_SECURITY_API_KEY=your-secure-random-key-here
+    #
+    # Or pass as JVM argument:
+    #   java -jar app.jar --mcp.security.api-key=your-secure-key
+    #
+    # IMPORTANT: Never commit production keys to version control!
+    # =========================================================================
+    api-key: ${MCP_SECURITY_API_KEY:dev-key}
+
+    # API key validation mode:
+    #   - "strict" = reject requests without valid key (production)
+    #   - "warn"   = log warning but allow request (development)
+    api-key-mode: ${MCP_SECURITY_API_KEY_MODE:strict}
 
 logging:
   level:

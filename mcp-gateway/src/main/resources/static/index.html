@@ -50,6 +50,19 @@
         .advanced-toggle:hover { background: rgba(255,255,255,0.3); }
         .advanced-toggle.active { background: rgba(255,255,255,0.4); }
 
+        /* API Key Banner */
+        .api-key-banner {
+            display: none;
+            padding: 12px 20px;
+            background: #fef3c7;
+            border-bottom: 1px solid #fcd34d;
+            color: #92400e;
+            font-size: 13px;
+            text-align: center;
+        }
+        .api-key-banner.visible { display: block; }
+        .api-key-banner a { color: #92400e; font-weight: 600; cursor: pointer; text-decoration: underline; }
+
         /* Chat Messages */
         .chat-messages {
             height: 400px;
@@ -206,6 +219,14 @@
         .tool-btn .emoji { margin-right: 4px; }
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 12px; color: #64748b; margin-bottom: 4px; }
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 12px;
+        }
         .form-group textarea {
             width: 100%;
             padding: 10px;
@@ -216,6 +237,12 @@
             resize: vertical;
             min-height: 60px;
         }
+        .api-key-status {
+            font-size: 11px;
+            margin-top: 4px;
+        }
+        .api-key-status.valid { color: #065f46; }
+        .api-key-status.missing { color: #92400e; }
 
         /* Footer info */
         .footer-info {
@@ -240,9 +267,19 @@
                 <button class="advanced-toggle" onclick="toggleAdvanced()">⚙️ Täpsem</button>
             </div>
 
+            <div class="api-key-banner" id="apiKeyBanner">
+                Päringu tegemiseks on vajalik API võti. <a onclick="toggleAdvanced()">Seadistage see Täpsem paneelil.</a>
+            </div>
+
             <div class="chat-messages" id="chatMessages"></div>
 
             <div class="advanced-panel" id="advancedPanel">
+                <h4>Seaded</h4>
+                <div class="form-group">
+                    <label>API võti</label>
+                    <input type="password" id="apiKeyInput" placeholder="Sisestage API võti" onchange="saveApiKey()">
+                    <div class="api-key-status" id="apiKeyStatus"></div>
+                </div>
                 <h4>Vali tööriist</h4>
                 <div class="tool-buttons" id="toolButtons"></div>
                 <div class="form-group">
@@ -280,9 +317,45 @@
         let isThinking = false;
         let advancedMode = false;
         const messages = [];
-        const apiKey = 'dev-key';
         let lastExportData = null;
         let lastExportName = '';
+
+        // API Key management
+        const API_KEY_STORAGE_KEY = 'mcp_gateway_api_key';
+
+        function getApiKey() {
+            return localStorage.getItem(API_KEY_STORAGE_KEY) || '';
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (key) {
+                localStorage.setItem(API_KEY_STORAGE_KEY, key);
+            } else {
+                localStorage.removeItem(API_KEY_STORAGE_KEY);
+            }
+            updateApiKeyStatus();
+        }
+
+        function updateApiKeyStatus() {
+            const key = getApiKey();
+            const statusEl = document.getElementById('apiKeyStatus');
+            const bannerEl = document.getElementById('apiKeyBanner');
+
+            if (key) {
+                statusEl.textContent = '✓ API võti on seadistatud';
+                statusEl.className = 'api-key-status valid';
+                bannerEl.classList.remove('visible');
+            } else {
+                statusEl.textContent = 'API võti puudub';
+                statusEl.className = 'api-key-status missing';
+            }
+        }
+
+        function showApiKeyBanner() {
+            const bannerEl = document.getElementById('apiKeyBanner');
+            bannerEl.classList.add('visible');
+        }
 
         const quickActions = {
             invoices: { tool: 'accounting.getInvoices', args: {}, label: 'Näita arveid' },
@@ -574,6 +647,15 @@
         }
 
         async function executeTool(tool, args) {
+            const apiKey = getApiKey();
+
+            // Check if API key is set
+            if (!apiKey) {
+                showApiKeyBanner();
+                appendMessage('assistant', '<span class="msg-error">Päringu tegemiseks on vajalik API võti. Palun seadistage see "Täpsem" paneelil.</span>');
+                return;
+            }
+
             setThinking(true);
             try {
                 const res = await fetch('/api/call', {
@@ -581,6 +663,14 @@
                     headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
                     body: JSON.stringify({ tool, arguments: args })
                 });
+
+                if (res.status === 401 || res.status === 403) {
+                    setThinking(false);
+                    showApiKeyBanner();
+                    appendMessage('assistant', '<span class="msg-error">API võti on vale või puudub. Palun kontrollige võtit "Täpsem" paneelil.</span>');
+                    return;
+                }
+
                 const data = await res.json();
                 setThinking(false);
                 appendMessage('assistant', formatResult(tool, data), data);
@@ -597,6 +687,13 @@
         }
 
         (function init() {
+            // Load saved API key
+            const savedKey = getApiKey();
+            if (savedKey) {
+                document.getElementById('apiKeyInput').value = savedKey;
+            }
+            updateApiKeyStatus();
+
             renderMessages();
             renderToolButtons();
         })();

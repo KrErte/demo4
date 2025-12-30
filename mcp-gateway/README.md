@@ -18,6 +18,14 @@ MCP Gateway is a secure "middleman" between AI assistants and your business syst
 
 Open **http://localhost:8080** in your browser.
 
+### Setting Up API Key in the UI
+
+1. Click **"Täpsem"** (Advanced) button in the top-right of the chat interface
+2. Enter your API key in the **"API võti"** field
+3. The key is saved in your browser's localStorage and persists across sessions
+
+For development, the default API key is `dev-key`.
+
 ## Available Tools
 
 ### Business Tools (Mock Demo Data)
@@ -42,7 +50,7 @@ Open **http://localhost:8080** in your browser.
 
 ## API Endpoints
 
-All `/api/*` endpoints require header: `X-API-Key: dev-key`
+All `/api/*` endpoints require header: `X-API-Key: <your-key>`
 
 | Endpoint | Method | Description |
 |----------|--------|-------------|
@@ -138,7 +146,55 @@ mcp:
       - api.github.com
 
   security:
-    api-key: dev-key          # Change in production!
+    api-key: ${MCP_SECURITY_API_KEY:dev-key}
+```
+
+## Production Deployment
+
+### API Key Configuration
+
+**IMPORTANT:** Never use `dev-key` in production!
+
+Set the API key via environment variable:
+
+```bash
+export MCP_SECURITY_API_KEY=your-secure-random-key-here
+./gradlew bootRun
+```
+
+Or via JVM argument:
+
+```bash
+java -jar mcp-gateway.jar --mcp.security.api-key=your-secure-key
+```
+
+### Production Checklist
+
+- [ ] Generate a secure random API key (min 32 characters)
+- [ ] Set `MCP_SECURITY_API_KEY` environment variable
+- [ ] Review and restrict `fs.allowlist` paths
+- [ ] Review and restrict `web.allow-domains`
+- [ ] Enable HTTPS (use a reverse proxy like nginx)
+- [ ] Set up log aggregation and monitoring
+- [ ] Configure firewall rules to restrict access
+
+### Generating a Secure API Key
+
+```bash
+# Linux/macOS
+openssl rand -base64 32
+
+# Or using /dev/urandom
+head -c 32 /dev/urandom | base64
+```
+
+### Docker Deployment
+
+```bash
+docker run -d \
+  -p 8080:8080 \
+  -e MCP_SECURITY_API_KEY=your-secure-key \
+  mcp-gateway:latest
 ```
 
 ## Security Features
@@ -148,6 +204,7 @@ mcp:
 - **Request Logging** - Every call logged with timestamp
 - **Size Limits** - Prevents large result attacks
 - **Timeout Protection** - Prevents hanging requests
+- **LocalStorage Key Storage** - API key stored client-side, never exposed in URLs
 
 ## Project Structure
 
