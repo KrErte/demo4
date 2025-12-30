@@ -50,6 +50,19 @@
         .advanced-toggle:hover { background: rgba(255,255,255,0.3); }
         .advanced-toggle.active { background: rgba(255,255,255,0.4); }
 
+        /* API Key Banner */
+        .api-key-banner {
+            display: none;
+            padding: 12px 20px;
+            background: #fef3c7;
+            border-bottom: 1px solid #fcd34d;
+            color: #92400e;
+            font-size: 13px;
+            text-align: center;
+        }
+        .api-key-banner.visible { display: block; }
+        .api-key-banner a { color: #92400e; font-weight: 600; cursor: pointer; text-decoration: underline; }
+
         /* Chat Messages */
         .chat-messages {
             height: 400px;
@@ -126,6 +139,15 @@
             padding: 12px 20px;
             background: #f8fafc;
             border-top: 1px solid #e2e8f0;
+        }
+        .quick-suggestions-label {
+            font-size: 11px;
+            color: #94a3b8;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .quick-suggestions-buttons {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
@@ -197,6 +219,14 @@
         .tool-btn .emoji { margin-right: 4px; }
         .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 12px; color: #64748b; margin-bottom: 4px; }
+        .form-group input[type="text"],
+        .form-group input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 12px;
+        }
         .form-group textarea {
             width: 100%;
             padding: 10px;
@@ -207,6 +237,12 @@
             resize: vertical;
             min-height: 60px;
         }
+        .api-key-status {
+            font-size: 11px;
+            margin-top: 4px;
+        }
+        .api-key-status.valid { color: #065f46; }
+        .api-key-status.missing { color: #92400e; }
 
         /* Footer info */
         .footer-info {
@@ -231,9 +267,19 @@
                 <button class="advanced-toggle" onclick="toggleAdvanced()">⚙️ Täpsem</button>
             </div>
 
+            <div class="api-key-banner" id="apiKeyBanner">
+                Päringu tegemiseks on vajalik API võti. <a onclick="toggleAdvanced()">Seadistage see Täpsem paneelil.</a>
+            </div>
+
             <div class="chat-messages" id="chatMessages"></div>
 
             <div class="advanced-panel" id="advancedPanel">
+                <h4>Seaded</h4>
+                <div class="form-group">
+                    <label>API võti</label>
+                    <input type="password" id="apiKeyInput" placeholder="Sisestage API võti" onchange="saveApiKey()">
+                    <div class="api-key-status" id="apiKeyStatus"></div>
+                </div>
                 <h4>Vali tööriist</h4>
                 <div class="tool-buttons" id="toolButtons"></div>
                 <div class="form-group">
@@ -243,16 +289,19 @@
             </div>
 
             <div class="quick-suggestions">
-                <button class="quick-btn" onclick="quickAction('invoices')"><span class="emoji">🧾</span> Arveid</button>
-                <button class="quick-btn" onclick="quickAction('employees')"><span class="emoji">👥</span> Töötajaid</button>
-                <button class="quick-btn" onclick="quickAction('products')"><span class="emoji">📦</span> Laoseisu</button>
-                <button class="quick-btn" onclick="quickAction('balance')"><span class="emoji">💰</span> Kontojääki</button>
-                <button class="quick-btn" onclick="quickAction('payroll')"><span class="emoji">💵</span> Palgalehte</button>
+                <div class="quick-suggestions-label">Kiirvalikud</div>
+                <div class="quick-suggestions-buttons">
+                    <button class="quick-btn" onclick="quickAction('invoices')"><span class="emoji">🧾</span> Arveid</button>
+                    <button class="quick-btn" onclick="quickAction('employees')"><span class="emoji">👥</span> Töötajaid</button>
+                    <button class="quick-btn" onclick="quickAction('products')"><span class="emoji">📦</span> Laoseisu</button>
+                    <button class="quick-btn" onclick="quickAction('balance')"><span class="emoji">💰</span> Kontojääki</button>
+                    <button class="quick-btn" onclick="quickAction('payroll')"><span class="emoji">💵</span> Palgalehte</button>
+                </div>
             </div>
 
             <div class="chat-input-area">
                 <div class="chat-input-row">
-                    <input type="text" class="chat-input" id="chatInput" placeholder="Küsi midagi... nt 'Näita maksmata arveid'" onkeydown="if(event.key==='Enter')sendMessage()">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Kirjutage oma kusimus vabas vormis, nt 'Millised arved on maksmata?'" onkeydown="if(event.key==='Enter')sendMessage()">
                     <button class="send-btn" onclick="sendMessage()">Saada</button>
                 </div>
             </div>
@@ -268,9 +317,45 @@
         let isThinking = false;
         let advancedMode = false;
         const messages = [];
-        const apiKey = 'dev-key';
         let lastExportData = null;
         let lastExportName = '';
+
+        // API Key management
+        const API_KEY_STORAGE_KEY = 'mcp_gateway_api_key';
+
+        function getApiKey() {
+            return localStorage.getItem(API_KEY_STORAGE_KEY) || '';
+        }
+
+        function saveApiKey() {
+            const key = document.getElementById('apiKeyInput').value.trim();
+            if (key) {
+                localStorage.setItem(API_KEY_STORAGE_KEY, key);
+            } else {
+                localStorage.removeItem(API_KEY_STORAGE_KEY);
+            }
+            updateApiKeyStatus();
+        }
+
+        function updateApiKeyStatus() {
+            const key = getApiKey();
+            const statusEl = document.getElementById('apiKeyStatus');
+            const bannerEl = document.getElementById('apiKeyBanner');
+
+            if (key) {
+                statusEl.textContent = '✓ API võti on seadistatud';
+                statusEl.className = 'api-key-status valid';
+                bannerEl.classList.remove('visible');
+            } else {
+                statusEl.textContent = 'API võti puudub';
+                statusEl.className = 'api-key-status missing';
+            }
+        }
+
+        function showApiKeyBanner() {
+            const bannerEl = document.getElementById('apiKeyBanner');
+            bannerEl.classList.add('visible');
+        }
 
         const quickActions = {
             invoices: { tool: 'accounting.getInvoices', args: {}, label: 'Näita arveid' },
@@ -354,23 +439,23 @@
                 if (m.type === 'user') {
                     return `<div class="chat-message user"><div class="chat-bubble">${escapeHtml(m.content)}</div></div>`;
                 } else {
-                    const jsonSection = m.jsonData ? `<details class="json-details"><summary>Näita tehnilist infot</summary><pre>${escapeHtml(JSON.stringify(m.jsonData, null, 2))}</pre></details>` : '';
+                    const jsonSection = m.jsonData ? `<details class="json-details"><summary>Lisainfo</summary><pre>${escapeHtml(JSON.stringify(m.jsonData, null, 2))}</pre></details>` : '';
                     return `<div class="chat-message assistant"><div class="chat-bubble"><div>${m.content}</div>${jsonSection}</div></div>`;
                 }
             }).join('');
 
             if (isThinking) {
-                html += `<div class="chat-message assistant"><div class="chat-bubble thinking">Otsin andmeid<span class="thinking-dots"><span></span><span></span><span></span></span></div></div>`;
+                html += `<div class="chat-message assistant"><div class="chat-bubble thinking">Assistent otsib teie andmeid<span class="thinking-dots"><span></span><span></span><span></span></span></div></div>`;
             }
 
-            container.innerHTML = html || `<div class="chat-message assistant"><div class="chat-bubble">Tere! 👋 Olen teie ettevõtte assistent. Küsige arvete, töötajate, laoseisu või muu kohta.</div></div>`;
+            container.innerHTML = html || `<div class="chat-message assistant"><div class="chat-bubble">Tere! Olen teie ettevõtte assistent. Saan aidata arvete, töötajate, laoseisu ja raamatupidamise küsimustes. Küsige julgelt!</div></div>`;
             container.scrollTop = container.scrollHeight;
         }
 
         function formatResult(tool, data) {
             if (!data.ok) {
                 lastExportData = null;
-                return `<span class="msg-error">Vabandust, midagi läks valesti. Palun proovige uuesti.</span>`;
+                return `<span class="msg-error">Vabandust, selle päringu töötlemisel tekkis tõrge. Palun proovige hiljem uuesti või sõnastage küsimus teisiti.</span>`;
             }
 
             let result = data.result;
@@ -389,7 +474,9 @@
                 lastExportData = result;
                 lastExportName = 'arved';
                 const total = result.reduce((sum, inv) => sum + (inv.amount || inv.total || 0), 0);
-                html = `<div class="result-summary"><strong>Leitud ${result.length} arvet</strong> · Kokku: ${total.toLocaleString('et-EE')}€ ${downloadBtn}</div><div class="result-list">`;
+                const unpaidCount = result.filter(inv => inv.status !== 'paid').length;
+                const unpaidText = unpaidCount > 0 ? ` Neist ${unpaidCount} ootab veel tasumist.` : ' Kõik arved on tasutud.';
+                html = `<div class="result-summary">Teie ettevõttel on <strong>${result.length} arvet</strong> kogusummas ${total.toLocaleString('et-EE')}€.${unpaidText} ${downloadBtn}</div><div class="result-list">`;
                 result.forEach(inv => {
                     const status = inv.status || 'unpaid';
                     const statusLabel = status === 'paid' ? 'Makstud' : status === 'overdue' ? 'Üle tähtaja' : 'Maksmata';
@@ -399,7 +486,7 @@
             } else if (tool === 'hr.getEmployees' && Array.isArray(result)) {
                 lastExportData = result;
                 lastExportName = 'tootajad';
-                html = `<div class="result-summary"><strong>Leitud ${result.length} töötajat</strong> ${downloadBtn}</div><div class="result-list">`;
+                html = `<div class="result-summary">Teie ettevõttes töötab <strong>${result.length} inimest</strong>. Siin on nimekiri: ${downloadBtn}</div><div class="result-list">`;
                 result.forEach(emp => {
                     html += `<div class="result-item"><div><div class="result-item-name">${escapeHtml(emp.name || 'Töötaja')}</div><div class="result-item-detail">${escapeHtml(emp.position || emp.role || emp.department || '')}</div></div><div class="result-item-detail">${escapeHtml(emp.email || '')}</div></div>`;
                 });
@@ -407,7 +494,9 @@
             } else if (tool === 'inventory.getProducts' && Array.isArray(result)) {
                 lastExportData = result;
                 lastExportName = 'laoseis';
-                html = `<div class="result-summary"><strong>Leitud ${result.length} toodet</strong> ${downloadBtn}</div><div class="result-list">`;
+                const lowStockCount = result.filter(p => (p.stock || p.quantity || 0) < 10).length;
+                const lowStockText = lowStockCount > 0 ? ` Tähelepanu: ${lowStockCount} toote laoseis on madal.` : '';
+                html = `<div class="result-summary">Laos on <strong>${result.length} erinevat toodet</strong>.${lowStockText} ${downloadBtn}</div><div class="result-list">`;
                 result.forEach(prod => {
                     const lowStock = (prod.stock || prod.quantity || 0) < 10;
                     html += `<div class="result-item"><div><div class="result-item-name">${escapeHtml(prod.name || 'Toode')}</div><div class="result-item-detail">${escapeHtml(prod.sku || prod.code || '')}</div></div><div style="text-align:right"><div class="result-item-value">${prod.stock || prod.quantity || 0} tk</div>${lowStock ? '<span class="result-item-status overdue">Vähe!</span>' : ''}</div></div>`;
@@ -417,7 +506,8 @@
                 if (Array.isArray(result)) {
                     lastExportData = result;
                     lastExportName = 'kontod';
-                    html = `<div class="result-summary"><strong>Kontojäägid</strong> ${downloadBtn}</div><div class="result-list">`;
+                    const totalBalance = result.reduce((sum, acc) => sum + (acc.balance || acc.amount || 0), 0);
+                    html = `<div class="result-summary">Teie kontode kogujääk on <strong>${totalBalance.toLocaleString('et-EE')}€</strong>. ${downloadBtn}</div><div class="result-list">`;
                     result.forEach(acc => {
                         html += `<div class="result-item"><div class="result-item-name">${escapeHtml(acc.name || acc.account || 'Konto')}</div><div class="result-item-value">${(acc.balance || acc.amount || 0).toLocaleString('et-EE')}€</div></div>`;
                     });
@@ -425,13 +515,13 @@
                 } else if (result && typeof result === 'object') {
                     lastExportData = [result];
                     lastExportName = 'kontod';
-                    html = `<div class="result-summary"><strong>Kontojääk:</strong> ${(result.balance || result.total || 0).toLocaleString('et-EE')}€ ${downloadBtn}</div>`;
+                    html = `<div class="result-summary">Teie kontojääk on hetkel <strong>${(result.balance || result.total || 0).toLocaleString('et-EE')}€</strong>. ${downloadBtn}</div>`;
                 }
             } else if (tool === 'hr.getPayroll' && Array.isArray(result)) {
                 lastExportData = result;
                 lastExportName = 'palgaleht';
                 const total = result.reduce((sum, p) => sum + (p.gross || p.amount || 0), 0);
-                html = `<div class="result-summary"><strong>Palgaleht</strong> · Kokku: ${total.toLocaleString('et-EE')}€ ${downloadBtn}</div><div class="result-list">`;
+                html = `<div class="result-summary">Palgakulu kokku on <strong>${total.toLocaleString('et-EE')}€</strong> (${result.length} töötajat). ${downloadBtn}</div><div class="result-list">`;
                 result.forEach(p => {
                     html += `<div class="result-item"><div class="result-item-name">${escapeHtml(p.name || p.employee || 'Töötaja')}</div><div class="result-item-value">${(p.gross || p.net || p.amount || 0).toLocaleString('et-EE')}€</div></div>`;
                 });
@@ -439,7 +529,8 @@
             } else if (tool === 'inventory.getOrders' && Array.isArray(result)) {
                 lastExportData = result;
                 lastExportName = 'tellimused';
-                html = `<div class="result-summary"><strong>Leitud ${result.length} tellimust</strong> ${downloadBtn}</div><div class="result-list">`;
+                const orderTotal = result.reduce((sum, o) => sum + (o.total || o.amount || 0), 0);
+                html = `<div class="result-summary">Teil on <strong>${result.length} tellimust</strong> kogusummas ${orderTotal.toLocaleString('et-EE')}€. ${downloadBtn}</div><div class="result-list">`;
                 result.forEach(ord => {
                     html += `<div class="result-item"><div><div class="result-item-name">${escapeHtml(ord.customer || ord.client || 'Tellimus')}</div><div class="result-item-detail">${escapeHtml(ord.id || ord.number || '')}</div></div><div class="result-item-value">${(ord.total || ord.amount || 0).toLocaleString('et-EE')}€</div></div>`;
                 });
@@ -448,8 +539,7 @@
                 // Generic array - show as list
                 lastExportData = result;
                 lastExportName = 'andmed';
-                const label = toolLabels[tool] || tool;
-                html = `<div class="result-summary"><strong>${label.charAt(0).toUpperCase() + label.slice(1)}</strong> · ${result.length} kirjet ${downloadBtn}</div><div class="result-list">`;
+                html = `<div class="result-summary">Leidsin <strong>${result.length} kirjet</strong>. ${downloadBtn}</div><div class="result-list">`;
                 result.forEach(item => {
                     if (typeof item === 'object' && item !== null) {
                         const name = item.name || item.title || item.id || Object.values(item)[0] || '';
@@ -476,8 +566,7 @@
                 flattenObj(obj);
                 lastExportData = entries.map(e => ({ [e.key]: e.value }));
                 lastExportName = 'andmed';
-                const label = toolLabels[tool] || tool;
-                html = `<div class="result-summary"><strong>${label.charAt(0).toUpperCase() + label.slice(1)}</strong> ${downloadBtn}</div><div class="result-list">`;
+                html = `<div class="result-summary">Siin on teie ettevõtte andmed: ${downloadBtn}</div><div class="result-list">`;
                 const labelMap = { name: 'Nimi', email: 'E-post', phone: 'Telefon', founded: 'Asutatud', vatNumber: 'KMKR', address: 'Aadress', balance: 'Saldo', total: 'Kokku' };
                 entries.forEach(e => {
                     const keyLabel = labelMap[e.key.split('.').pop()] || e.key;
@@ -488,8 +577,7 @@
                 html += '</div>';
             } else {
                 lastExportData = null;
-                const label = toolLabels[tool] || tool;
-                html = `<span class="msg-success">✓ ${label.charAt(0).toUpperCase() + label.slice(1)} õnnestus.</span>`;
+                html = `<span class="msg-success">Valmis! Teie päring on täidetud.</span>`;
             }
 
             return html;
@@ -553,12 +641,21 @@
                 setThinking(true);
                 setTimeout(() => {
                     setThinking(false);
-                    appendMessage('assistant', 'Ma saan aidata järgmistes valdkondades: <strong>arved</strong>, <strong>töötajad</strong>, <strong>laoseis</strong>, <strong>kontojäägid</strong> ja <strong>palgaleht</strong>. Proovige küsida näiteks "Näita maksmata arveid" või "Kes on töötajad?"');
+                    appendMessage('assistant', 'Saan teid aidata ettevõtte igapäevaste küsimustega. Proovige küsida näiteks:<br><br>• "Millised arved on maksmata?"<br>• "Kes meie ettevõttes töötavad?"<br>• "Kui palju on laos tooteid?"<br>• "Mis on meie kontojääk?"');
                 }, 500);
             }
         }
 
         async function executeTool(tool, args) {
+            const apiKey = getApiKey();
+
+            // Check if API key is set
+            if (!apiKey) {
+                showApiKeyBanner();
+                appendMessage('assistant', '<span class="msg-error">Päringu tegemiseks on vajalik API võti. Palun seadistage see "Täpsem" paneelil.</span>');
+                return;
+            }
+
             setThinking(true);
             try {
                 const res = await fetch('/api/call', {
@@ -566,12 +663,20 @@
                     headers: { 'Content-Type': 'application/json', 'X-API-Key': apiKey },
                     body: JSON.stringify({ tool, arguments: args })
                 });
+
+                if (res.status === 401 || res.status === 403) {
+                    setThinking(false);
+                    showApiKeyBanner();
+                    appendMessage('assistant', '<span class="msg-error">API võti on vale või puudub. Palun kontrollige võtit "Täpsem" paneelil.</span>');
+                    return;
+                }
+
                 const data = await res.json();
                 setThinking(false);
                 appendMessage('assistant', formatResult(tool, data), data);
             } catch (e) {
                 setThinking(false);
-                appendMessage('assistant', `<span class="msg-error">Ühenduse viga. Palun proovige uuesti.</span>`);
+                appendMessage('assistant', `<span class="msg-error">Vabandust, hetkel ei õnnestunud andmeid laadida. Palun proovige mõne hetke pärast uuesti.</span>`);
             }
         }
 
@@ -582,6 +687,13 @@
         }
 
         (function init() {
+            // Load saved API key
+            const savedKey = getApiKey();
+            if (savedKey) {
+                document.getElementById('apiKeyInput').value = savedKey;
+            }
+            updateApiKeyStatus();
+
             renderMessages();
             renderToolButtons();
         })();
