@@ -689,7 +689,9 @@
         (function init() {
             // Load saved API key, default to dev-key for local development
             let savedKey = getApiKey();
-            if (!savedKey && window.location.hostname === 'localhost') {
+            const host = window.location.hostname;
+            const isLocal = host === 'localhost' || host === '127.0.0.1' || host.startsWith('192.168.') || host.endsWith('.local');
+            if (!savedKey && isLocal) {
                 savedKey = 'dev-key';
                 localStorage.setItem(API_KEY_STORAGE_KEY, savedKey);
             }
