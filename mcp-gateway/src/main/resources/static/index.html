@@ -373,21 +373,28 @@
                 return `<span class="msg-error">Vabandust, midagi läks valesti. Palun proovige uuesti.</span>`;
             }
 
-            const result = data.result;
+            let result = data.result;
             let html = '';
             const downloadBtn = '<button class="download-btn" onclick="downloadExcel()">📥 Laadi Excel</button>';
+
+            // Extract array from object if needed (API returns {invoices: [...]} or {employees: [...]} etc)
+            if (result && typeof result === 'object' && !Array.isArray(result)) {
+                const arrayKey = Object.keys(result).find(k => Array.isArray(result[k]));
+                if (arrayKey) {
+                    result = result[arrayKey];
+                }
+            }
 
             if (tool === 'accounting.getInvoices' && Array.isArray(result)) {
                 lastExportData = result;
                 lastExportName = 'arved';
                 const total = result.reduce((sum, inv) => sum + (inv.amount || inv.total || 0), 0);
                 html = `<div class="result-summary"><strong>Leitud ${result.length} arvet</strong> · Kokku: ${total.toLocaleString('et-EE')}€ ${downloadBtn}</div><div class="result-list">`;
-                result.slice(0, 5).forEach(inv => {
+                result.forEach(inv => {
                     const status = inv.status || 'unpaid';
                     const statusLabel = status === 'paid' ? 'Makstud' : status === 'overdue' ? 'Üle tähtaja' : 'Maksmata';
                     html += `<div class="result-item"><div><div class="result-item-name">${escapeHtml(inv.client || inv.customer || 'Klient')}</div><div class="result-item-detail">${escapeHtml(inv.number || inv.id || '')}</div></div><div style="text-align:right"><div class="result-item-value">${(inv.amount || inv.total || 0).toLocaleString('et-EE')}€</div><span class="result-item-status ${status}">${statusLabel}</span></div></div>`;
                 });
-                if (result.length > 5) html += `<div class="result-item" style="justify-content:center;color:#64748b;">... ja ${result.length - 5} veel</div>`;
                 html += '</div>';
             } else if (tool === 'hr.getEmployees' && Array.isArray(result)) {
                 lastExportData = result;
@@ -451,6 +458,32 @@
                     } else {
                         html += `<div class="result-item">${escapeHtml(String(item))}</div>`;
                     }
+                });
+                html += '</div>';
+            } else if (data.result && typeof data.result === 'object' && !Array.isArray(data.result)) {
+                // Object with properties - display as list
+                const obj = data.result;
+                const entries = [];
+                const flattenObj = (o, prefix = '') => {
+                    Object.entries(o).forEach(([k, v]) => {
+                        if (v && typeof v === 'object' && !Array.isArray(v)) {
+                            flattenObj(v, prefix + k + '.');
+                        } else {
+                            entries.push({ key: prefix + k, value: v });
+                        }
+                    });
+                };
+                flattenObj(obj);
+                lastExportData = entries.map(e => ({ [e.key]: e.value }));
+                lastExportName = 'andmed';
+                const label = toolLabels[tool] || tool;
+                html = `<div class="result-summary"><strong>${label.charAt(0).toUpperCase() + label.slice(1)}</strong> ${downloadBtn}</div><div class="result-list">`;
+                const labelMap = { name: 'Nimi', email: 'E-post', phone: 'Telefon', founded: 'Asutatud', vatNumber: 'KMKR', address: 'Aadress', balance: 'Saldo', total: 'Kokku' };
+                entries.forEach(e => {
+                    const keyLabel = labelMap[e.key.split('.').pop()] || e.key;
+                    let val = e.value;
+                    if (Array.isArray(val)) val = val.length + ' kirjet';
+                    html += `<div class="result-item"><div class="result-item-name">${escapeHtml(keyLabel)}</div><div class="result-item-detail">${escapeHtml(String(val || '-'))}</div></div>`;
                 });
                 html += '</div>';
             } else {
