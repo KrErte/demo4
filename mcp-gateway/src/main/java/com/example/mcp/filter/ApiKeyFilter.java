@@ -85,6 +85,8 @@ public class ApiKeyFilter implements Filter {
     private boolean isPublicEndpoint(String path) {
         return path.equals("/api/config") ||
                path.equals("/api/auth/login") ||
-               path.startsWith("/api/auth/login");
+               path.startsWith("/api/auth/login") ||
+               path.equals("/api/payments/webhook") ||
+               path.startsWith("/payment/");
     }
 }
