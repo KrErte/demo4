@@ -42,19 +42,29 @@
             color: #374151;
             margin-bottom: 6px;
         }
-        .form-group input {
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
             width: 100%;
             padding: 14px 16px;
             border: 2px solid #e5e7eb;
             border-radius: 10px;
             font-size: 16px;
             transition: border-color 0.2s;
+            font-family: inherit;
         }
-        .form-group input:focus {
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
             outline: none;
             border-color: #667eea;
         }
-        .form-group input::placeholder { color: #9ca3af; }
+        .form-group input::placeholder,
+        .form-group textarea::placeholder { color: #9ca3af; }
+        .form-group textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
 
         .amount-input-wrapper {
             position: relative;
@@ -158,6 +168,147 @@
         }
 
         .hidden { display: none !important; }
+
+        /* Step indicator */
+        .step-indicator {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            padding: 16px 24px 0;
+        }
+        .step-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #e5e7eb;
+            transition: all 0.3s;
+        }
+        .step-dot.active {
+            background: #667eea;
+            width: 24px;
+            border-radius: 4px;
+        }
+        .step-dot.completed {
+            background: #10b981;
+        }
+
+        /* Landing step */
+        .landing-content {
+            text-align: center;
+        }
+        .landing-content h2 {
+            font-size: 1.25rem;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+        .landing-content .subtitle {
+            color: #6b7280;
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+        .benefits-list {
+            text-align: left;
+            margin-bottom: 24px;
+        }
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .benefit-item:last-child {
+            border-bottom: none;
+        }
+        .benefit-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+        .benefit-text {
+            font-size: 14px;
+            color: #374151;
+            line-height: 1.4;
+        }
+        .benefit-text strong {
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        /* Button row */
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .btn-secondary {
+            flex: 1;
+            padding: 14px 16px;
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-secondary:hover {
+            background: #e5e7eb;
+        }
+        .btn-primary {
+            flex: 2;
+            padding: 14px 16px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Summary box */
+        .summary-box {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .summary-box h4 {
+            font-size: 13px;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+        }
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0;
+            font-size: 13px;
+        }
+        .summary-label {
+            color: #64748b;
+        }
+        .summary-value {
+            color: #1e293b;
+            font-weight: 500;
+            text-align: right;
+            max-width: 60%;
+        }
     </style>
 </head>
 <body>
@@ -165,12 +316,134 @@
         <div class="card">
             <div class="card-header">
                 <h1>Pilvetark</h1>
-                <p>Turvaline maksmine</p>
+                <p id="headerSubtitle">Automatiseeri oma toovood</p>
             </div>
 
-            <!-- Payment Form -->
-            <div id="paymentForm" class="card-body">
+            <!-- Step Indicator -->
+            <div class="step-indicator" id="stepIndicator">
+                <div class="step-dot active" data-step="1"></div>
+                <div class="step-dot" data-step="2"></div>
+                <div class="step-dot" data-step="3"></div>
+            </div>
+
+            <!-- Step 1: Landing -->
+            <div id="step1" class="card-body">
+                <div class="landing-content">
+                    <h2>Saaste 10+ tundi nadalas</h2>
+                    <p class="subtitle">Automatiseerime teie korduvad toovood AI abil</p>
+
+                    <div class="benefits-list">
+                        <div class="benefit-item">
+                            <div class="benefit-icon">⚡</div>
+                            <div class="benefit-text">
+                                <strong>Kiire seadistus</strong>
+                                Valmis 24h jooksul, mitte nadalate parast
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">🔄</div>
+                            <div class="benefit-text">
+                                <strong>Tais integratsioon</strong>
+                                Gmail, Sheets, Slack, CRM ja muud tooriistad
+                            </div>
+                        </div>
+                        <div class="benefit-item">
+                            <div class="benefit-icon">💰</div>
+                            <div class="benefit-text">
+                                <strong>Selge hind</strong>
+                                Fikseeritud kuutasu, ei mingeid ullatusi
+                            </div>
+                        </div>
+                    </div>
+
+                    <button class="submit-btn" onclick="goToStep(2)">
+                        Alusta (2 min)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Step 2: Scoping -->
+            <div id="step2" class="card-body hidden">
+                <div class="form-group">
+                    <label for="workflow">Mis toovoog automatiseerida?</label>
+                    <select id="workflow">
+                        <option value="">Vali...</option>
+                        <option value="email">E-mailide tootlemine</option>
+                        <option value="data-entry">Andmete sisestamine</option>
+                        <option value="reporting">Aruandlus ja raportid</option>
+                        <option value="invoicing">Arveldamine</option>
+                        <option value="customer-support">Klienditugi</option>
+                        <option value="other">Muu</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="platform">Kus see elab?</label>
+                    <select id="platform">
+                        <option value="">Vali...</option>
+                        <option value="gmail">Gmail / Google Workspace</option>
+                        <option value="sheets">Google Sheets</option>
+                        <option value="slack">Slack</option>
+                        <option value="crm">CRM (Pipedrive, HubSpot, jne)</option>
+                        <option value="custom">Muu / Custom</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="volume">Maht</label>
+                    <select id="volume">
+                        <option value="">Vali...</option>
+                        <option value="1-10">1-10 paringiut paevas</option>
+                        <option value="10-100">10-100 paevas</option>
+                        <option value="100+">100+ paevas</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="criticality">Kriitilisus</label>
+                    <select id="criticality">
+                        <option value="">Vali...</option>
+                        <option value="low">Madal - mugavus</option>
+                        <option value="medium">Keskmine - oluline</option>
+                        <option value="high">Kõrge - kriitline</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="details">Lisa detailid (valikuline)</label>
+                    <textarea id="details" placeholder="Kirjeldage oma praegust protsessi..."></textarea>
+                </div>
+
+                <div class="btn-row">
+                    <button class="btn-secondary" onclick="goToStep(1)">Tagasi</button>
+                    <button class="btn-primary" onclick="goToStep(3)">Edasi</button>
+                </div>
+            </div>
+
+            <!-- Step 3: Checkout (existing payment form) -->
+            <div id="step3" class="card-body hidden">
                 <div id="errorMsg" class="error-msg"></div>
+
+                <!-- Summary Box -->
+                <div class="summary-box" id="summaryBox">
+                    <h4>Kokkuvote</h4>
+                    <div class="summary-item">
+                        <span class="summary-label">Toovoog:</span>
+                        <span class="summary-value" id="sumWorkflow">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Platvorm:</span>
+                        <span class="summary-value" id="sumPlatform">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Maht:</span>
+                        <span class="summary-value" id="sumVolume">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Kriitilisus:</span>
+                        <span class="summary-value" id="sumCriticality">-</span>
+                    </div>
+                </div>
 
                 <form onsubmit="submitPayment(event)">
                     <div class="form-group">
@@ -186,9 +459,10 @@
                         </div>
                     </div>
 
-                    <button type="submit" class="submit-btn" id="submitBtn">
-                        Maksa
-                    </button>
+                    <div class="btn-row">
+                        <button type="button" class="btn-secondary" onclick="goToStep(2)">Tagasi</button>
+                        <button type="submit" class="btn-primary" id="submitBtn">Maksa</button>
+                    </div>
                 </form>
             </div>
 
@@ -227,6 +501,91 @@
         const API_KEY_STORAGE_KEY = 'mcp_gateway_api_key';
         let currentPaymentId = null;
         let pollInterval = null;
+        let currentStep = 1;
+
+        // Scoping data
+        const scopingData = {
+            workflow: '',
+            platform: '',
+            volume: '',
+            criticality: '',
+            details: ''
+        };
+
+        // Labels for display
+        const workflowLabels = {
+            'email': 'E-mailide tootlemine',
+            'data-entry': 'Andmete sisestamine',
+            'reporting': 'Aruandlus ja raportid',
+            'invoicing': 'Arveldamine',
+            'customer-support': 'Klienditugi',
+            'other': 'Muu'
+        };
+        const platformLabels = {
+            'gmail': 'Gmail / Google Workspace',
+            'sheets': 'Google Sheets',
+            'slack': 'Slack',
+            'crm': 'CRM',
+            'custom': 'Muu / Custom'
+        };
+        const volumeLabels = {
+            '1-10': '1-10 paevas',
+            '10-100': '10-100 paevas',
+            '100+': '100+ paevas'
+        };
+        const criticalityLabels = {
+            'low': 'Madal',
+            'medium': 'Keskmine',
+            'high': 'Kõrge'
+        };
+
+        function goToStep(step) {
+            // Save scoping data if leaving step 2
+            if (currentStep === 2) {
+                scopingData.workflow = document.getElementById('workflow').value;
+                scopingData.platform = document.getElementById('platform').value;
+                scopingData.volume = document.getElementById('volume').value;
+                scopingData.criticality = document.getElementById('criticality').value;
+                scopingData.details = document.getElementById('details').value;
+            }
+
+            // Update summary if going to step 3
+            if (step === 3) {
+                document.getElementById('sumWorkflow').textContent = workflowLabels[scopingData.workflow] || '-';
+                document.getElementById('sumPlatform').textContent = platformLabels[scopingData.platform] || '-';
+                document.getElementById('sumVolume').textContent = volumeLabels[scopingData.volume] || '-';
+                document.getElementById('sumCriticality').textContent = criticalityLabels[scopingData.criticality] || '-';
+            }
+
+            // Update header subtitle
+            const subtitles = {
+                1: 'Automatiseeri oma toovood',
+                2: 'Räägi meile lähemalt',
+                3: 'Turvaline maksmine'
+            };
+            document.getElementById('headerSubtitle').textContent = subtitles[step];
+
+            // Hide all steps
+            document.getElementById('step1').classList.add('hidden');
+            document.getElementById('step2').classList.add('hidden');
+            document.getElementById('step3').classList.add('hidden');
+
+            // Show current step
+            document.getElementById('step' + step).classList.remove('hidden');
+
+            // Update step indicators
+            document.querySelectorAll('.step-dot').forEach((dot, i) => {
+                const dotStep = i + 1;
+                dot.classList.remove('active', 'completed');
+                if (dotStep === step) {
+                    dot.classList.add('active');
+                } else if (dotStep < step) {
+                    dot.classList.add('completed');
+                }
+            });
+
+            currentStep = step;
+        }
 
         function getApiKey() {
             const saved = localStorage.getItem(API_KEY_STORAGE_KEY);
@@ -249,9 +608,17 @@
         }
 
         function showView(viewId) {
-            ['paymentForm', 'processingView', 'successView', 'errorView'].forEach(id => {
-                document.getElementById(id).classList.toggle('hidden', id !== viewId);
+            ['step1', 'step2', 'step3', 'processingView', 'successView', 'errorView'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.toggle('hidden', id !== viewId);
             });
+            // Hide step indicator for status views
+            const indicator = document.getElementById('stepIndicator');
+            if (['processingView', 'successView', 'errorView'].includes(viewId)) {
+                indicator.classList.add('hidden');
+            } else {
+                indicator.classList.remove('hidden');
+            }
         }
 
         async function submitPayment(e) {
@@ -337,7 +704,7 @@
             document.getElementById('submitBtn').disabled = false;
             document.getElementById('submitBtn').textContent = 'Maksa';
             hideError();
-            showView('paymentForm');
+            goToStep(1);
         }
 
         // Check if returning from Stripe
