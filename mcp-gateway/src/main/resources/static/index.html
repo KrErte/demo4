@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pilvetark - Maksed</title>
+    <title>Pilvetark - AI e-mailide tootleja</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -239,6 +239,77 @@
         .benefit-text strong {
             display: block;
             margin-bottom: 2px;
+        }
+
+        /* Collapsible accordion */
+        .accordion {
+            margin-bottom: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .accordion-toggle {
+            width: 100%;
+            padding: 14px 16px;
+            background: #f9fafb;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+        .accordion-toggle:hover {
+            background: #f3f4f6;
+        }
+        .accordion-icon {
+            transition: transform 0.2s;
+            font-size: 12px;
+        }
+        .accordion.open .accordion-icon {
+            transform: rotate(180deg);
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+        .accordion.open .accordion-content {
+            max-height: 400px;
+        }
+        .accordion-inner {
+            padding: 16px;
+            background: white;
+        }
+        .how-it-works-list {
+            list-style: none;
+        }
+        .how-it-works-list li {
+            display: flex;
+            gap: 12px;
+            padding: 10px 0;
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.4;
+        }
+        .how-it-works-list li:not(:last-child) {
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .how-step-num {
+            width: 22px;
+            height: 22px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 600;
+            flex-shrink: 0;
         }
 
         /* Button row */
@@ -489,7 +560,7 @@
         <div class="card">
             <div class="card-header">
                 <h1>Pilvetark</h1>
-                <p id="headerSubtitle">Automatiseeri oma toovood</p>
+                <p id="headerSubtitle">AI e-mailide tootleja</p>
             </div>
 
             <!-- Step Indicator -->
@@ -502,35 +573,65 @@
             <!-- Step 1: Landing -->
             <div id="step1" class="card-body">
                 <div class="landing-content">
-                    <h2>Saaste 10+ tundi nadalas</h2>
-                    <p class="subtitle">Automatiseerime teie korduvad toovood AI abil</p>
+                    <h2>Automatiseeri oma e-mailid</h2>
+                    <p class="subtitle">AI abiline, mis hoiab su postkasti korras</p>
 
                     <div class="benefits-list">
                         <div class="benefit-item">
-                            <div class="benefit-icon">⚡</div>
+                            <div class="benefit-icon">🏷️</div>
                             <div class="benefit-text">
-                                <strong>Kiire seadistus</strong>
-                                Valmis 24h jooksul, mitte nadalate parast
+                                <strong>Sildistab ja sorteerib</strong>
+                                Kirjad lähevad automaatselt õigetesse kaustadesse
                             </div>
                         </div>
                         <div class="benefit-item">
-                            <div class="benefit-icon">🔄</div>
+                            <div class="benefit-icon">✍️</div>
                             <div class="benefit-text">
-                                <strong>Tais integratsioon</strong>
-                                Gmail, Sheets, Slack, CRM ja muud tooriistad
+                                <strong>Koostab vastusemustandid</strong>
+                                Tõstab esile olulise ja pakub vastusevariante
                             </div>
                         </div>
                         <div class="benefit-item">
-                            <div class="benefit-icon">💰</div>
+                            <div class="benefit-icon">🔗</div>
                             <div class="benefit-text">
-                                <strong>Selge hind</strong>
-                                Fikseeritud kuutasu, ei mingeid ullatusi
+                                <strong>Gmail / Workspace integratsioon</strong>
+                                Sujuv ühendus sinu olemasoleva e-postiga
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Collapsible: How it works -->
+                    <div class="accordion" id="howItWorksAccordion">
+                        <button class="accordion-toggle" onclick="toggleAccordion('howItWorksAccordion')">
+                            <span>Kuidas see tootab?</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-inner">
+                                <ul class="how-it-works-list">
+                                    <li>
+                                        <span class="how-step-num">1</span>
+                                        <span>Uhendad oma e-posti (Gmail / Google Workspace)</span>
+                                    </li>
+                                    <li>
+                                        <span class="how-step-num">2</span>
+                                        <span>Valime koos sobiva toovoo ja reeglid</span>
+                                    </li>
+                                    <li>
+                                        <span class="how-step-num">3</span>
+                                        <span>Saad Proof Log / Task Exposure lingi, kus näed, mida AI teeb (valikuline)</span>
+                                    </li>
+                                    <li>
+                                        <span class="how-step-num">4</span>
+                                        <span>Maksad ja automatsioon hakkab kohe toole</span>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
 
                     <button class="submit-btn" onclick="goToStep(2)">
-                        Alusta (2 min)
+                        Alusta
                     </button>
                 </div>
             </div>
@@ -761,6 +862,12 @@
             'high': 'Kõrge'
         };
 
+        // Accordion toggle function
+        function toggleAccordion(id) {
+            const accordion = document.getElementById(id);
+            accordion.classList.toggle('open');
+        }
+
         function goToStep(step) {
             // Save scoping data if leaving step 2
             if (currentStep === 2) {
@@ -781,7 +888,7 @@
 
             // Update header subtitle
             const subtitles = {
-                1: 'Automatiseeri oma toovood',
+                1: 'AI e-mailide tootleja',
                 2: 'Räägi meile lähemalt',
                 3: 'Turvaline maksmine'
             };
