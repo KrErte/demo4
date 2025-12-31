@@ -40,6 +40,8 @@ public class PaymentService {
     @Value("${app.base-url:http://localhost:8080}")
     private String baseUrl;
 
+    private boolean mockMode = false;
+
     public PaymentService(PaymentRepository paymentRepository, PaymentEventRepository paymentEventRepository) {
         this.paymentRepository = paymentRepository;
         this.paymentEventRepository = paymentEventRepository;
@@ -51,19 +53,30 @@ public class PaymentService {
             Stripe.apiKey = stripeSecretKey;
             log.info("Stripe API initialized");
         } else {
-            log.warn("Stripe secret key not configured - payments will fail");
+            mockMode = true;
+            log.warn("Stripe not configured - running in MOCK MODE (payments are simulated)");
         }
+    }
+
+    public boolean isMockMode() {
+        return mockMode;
     }
 
     @Transactional
     public Payment createCheckoutSession(String email, BigDecimal amount, String currency) throws StripeException {
-        if (stripeSecretKey == null || stripeSecretKey.isBlank()) {
-            throw new IllegalStateException("Stripe is not configured");
-        }
-
         // Create local payment record
         Payment payment = new Payment(email, amount, currency != null ? currency : "EUR");
         payment.setStatus(PaymentStatus.PENDING);
+
+        if (mockMode) {
+            // Mock mode - create simulated checkout
+            String mockSessionId = "mock_session_" + payment.getId();
+            payment.setStripeSessionId(mockSessionId);
+            payment.setCheckoutUrl(baseUrl + "/mock-checkout.html?session_id=" + mockSessionId + "&amount=" + amount + "&email=" + email);
+            payment = paymentRepository.save(payment);
+            log.info("Created MOCK checkout session {} for payment {}", mockSessionId, payment.getId());
+            return payment;
+        }
 
         // Create Stripe Checkout Session
         long amountInCents = amount.multiply(BigDecimal.valueOf(100)).longValue();
@@ -213,6 +226,11 @@ public class PaymentService {
             return payment;
         }
 
+        // In mock mode, just return current status (updated via mock endpoint)
+        if (mockMode) {
+            return payment;
+        }
+
         Session session = Session.retrieve(payment.getStripeSessionId());
         String status = session.getStatus();
 
@@ -233,6 +251,45 @@ public class PaymentService {
             }
         }
 
+        return payment;
+    }
+
+    /**
+     * Complete a mock payment (for testing without Stripe).
+     */
+    @Transactional
+    public Payment completeMockPayment(String sessionId) {
+        if (!mockMode) {
+            throw new IllegalStateException("Mock payments only available in mock mode");
+        }
+
+        Payment payment = paymentRepository.findByStripeSessionId(sessionId)
+            .orElseThrow(() -> new IllegalArgumentException("Payment not found for session: " + sessionId));
+
+        payment.setStatus(PaymentStatus.COMPLETED);
+        payment.setCompletedAt(Instant.now());
+        payment = paymentRepository.save(payment);
+
+        log.info("MOCK payment {} completed", payment.getId());
+        return payment;
+    }
+
+    /**
+     * Cancel a mock payment (for testing without Stripe).
+     */
+    @Transactional
+    public Payment cancelMockPayment(String sessionId) {
+        if (!mockMode) {
+            throw new IllegalStateException("Mock payments only available in mock mode");
+        }
+
+        Payment payment = paymentRepository.findByStripeSessionId(sessionId)
+            .orElseThrow(() -> new IllegalArgumentException("Payment not found for session: " + sessionId));
+
+        payment.setStatus(PaymentStatus.CANCELLED);
+        payment = paymentRepository.save(payment);
+
+        log.info("MOCK payment {} cancelled", payment.getId());
         return payment;
     }
 }
