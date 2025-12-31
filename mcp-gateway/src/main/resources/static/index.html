@@ -309,6 +309,179 @@
             text-align: right;
             max-width: 60%;
         }
+
+        /* Post-payment success styles */
+        .success-header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .success-header .check-icon {
+            width: 56px;
+            height: 56px;
+            background: #d1fae5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 24px;
+            color: #10b981;
+        }
+        .success-header h2 {
+            font-size: 1.2rem;
+            color: #1f2937;
+            margin-bottom: 4px;
+        }
+        .success-header p {
+            font-size: 14px;
+            color: #6b7280;
+        }
+
+        .next-steps {
+            margin-bottom: 20px;
+        }
+        .next-step-item {
+            display: flex;
+            gap: 12px;
+            padding: 16px 0;
+            border-bottom: 1px solid #f3f4f6;
+        }
+        .next-step-item:last-child {
+            border-bottom: none;
+        }
+        .step-number {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+        .step-number.done {
+            background: #10b981;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .step-content h4 {
+            font-size: 14px;
+            color: #1f2937;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .step-content p {
+            font-size: 13px;
+            color: #6b7280;
+            line-height: 1.4;
+        }
+        .step-content textarea {
+            margin-top: 10px;
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: vertical;
+            min-height: 70px;
+        }
+        .step-content textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .step-content .checkbox-row {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-top: 8px;
+            padding: 10px 12px;
+            background: #f8fafc;
+            border-radius: 8px;
+        }
+        .step-content .checkbox-row input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            flex-shrink: 0;
+            cursor: pointer;
+        }
+        .step-content .checkbox-row label {
+            font-size: 13px;
+            color: #374151;
+            cursor: pointer;
+            line-height: 1.4;
+        }
+        .step-content .helper-text {
+            font-size: 12px;
+            color: #9ca3af;
+            margin-top: 6px;
+        }
+
+        .onboarding-cta {
+            margin-top: 20px;
+        }
+
+        .new-payment-link {
+            text-align: center;
+            margin-top: 20px;
+            padding-top: 16px;
+            border-top: 1px solid #f3f4f6;
+        }
+        .new-payment-link button {
+            background: none;
+            border: none;
+            color: #9ca3af;
+            font-size: 13px;
+            cursor: pointer;
+            padding: 8px 12px;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+        .new-payment-link button:hover {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        .new-payment-link .warning-text {
+            display: none;
+            font-size: 12px;
+            color: #dc2626;
+            margin-top: 8px;
+        }
+        .new-payment-link.confirm-visible .warning-text {
+            display: block;
+        }
+        .new-payment-link .confirm-btns {
+            display: none;
+            gap: 8px;
+            justify-content: center;
+            margin-top: 8px;
+        }
+        .new-payment-link.confirm-visible .confirm-btns {
+            display: flex;
+        }
+        .new-payment-link.confirm-visible > button:first-child {
+            display: none;
+        }
+        .confirm-btns button {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            cursor: pointer;
+            border: none;
+        }
+        .confirm-btns .btn-cancel {
+            background: #f3f4f6;
+            color: #374151;
+        }
+        .confirm-btns .btn-confirm {
+            background: #dc2626;
+            color: white;
+        }
     </style>
 </head>
 <body>
@@ -475,12 +648,60 @@
                 <div class="status-desc">Suuname teid makseteenusesse. Palun arge sulgege seda akent.</div>
             </div>
 
-            <!-- Success Status -->
-            <div id="successView" class="status-card hidden">
-                <div class="status-icon success">&#10003;</div>
-                <div class="status-title">Makse onnestus!</div>
-                <div class="status-desc" id="successDesc">Teie makse on edukalt tehtud.</div>
-                <button class="back-btn" onclick="resetForm()">Uus makse</button>
+            <!-- Success Status with Next Steps -->
+            <div id="successView" class="card-body hidden">
+                <div class="success-header">
+                    <div class="check-icon">&#10003;</div>
+                    <h2>Makse onnestus!</h2>
+                    <p id="successDesc">Tere tulemast Pilvetarki!</p>
+                </div>
+
+                <div class="next-steps" id="nextStepsPanel">
+                    <div class="next-step-item">
+                        <div class="step-number done">&#10003;</div>
+                        <div class="step-content">
+                            <h4>Kinnitus e-mailile</h4>
+                            <p>Saatsime kinnituse ja arve teie e-posti aadressile. Kontrollige ka ramposti kausta.</p>
+                        </div>
+                    </div>
+
+                    <div class="next-step-item">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>Kirjelda oma esimene automatsioon</h4>
+                            <p>Mida tahaksite automatiseerida? Kirjeldage vabas vormis.</p>
+                            <textarea id="automationDesc" placeholder="Nt: Tahan, et iga kord kui saan e-maili teatud kliendilt, lisatakse see automaatselt Google Sheets tabelisse..."></textarea>
+                        </div>
+                    </div>
+
+                    <div class="next-step-item">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>Proof Log ja Task Exposure</h4>
+                            <p>Soovid naha, mida automatsioon taustal teeb?</p>
+                            <div class="checkbox-row">
+                                <input type="checkbox" id="proofLog" checked>
+                                <label for="proofLog">Jah, tahan naha automatsioonide logi ja staatust</label>
+                            </div>
+                            <p class="helper-text">Saad selle hiljem seadetest muuta.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="onboarding-cta">
+                    <button class="submit-btn" onclick="startOnboarding()">
+                        Alusta onboardingut
+                    </button>
+                </div>
+
+                <div class="new-payment-link" id="newPaymentSection">
+                    <button onclick="showNewPaymentConfirm()">Soovin teha uue makse</button>
+                    <p class="warning-text">Kas olete kindel? Teil on juba aktiivne tellimus.</p>
+                    <div class="confirm-btns">
+                        <button class="btn-cancel" onclick="hideNewPaymentConfirm()">Tuhista</button>
+                        <button class="btn-confirm" onclick="resetForm()">Jah, uus makse</button>
+                    </div>
+                </div>
             </div>
 
             <!-- Error Status -->
@@ -502,6 +723,7 @@
         let currentPaymentId = null;
         let pollInterval = null;
         let currentStep = 1;
+        let isPaymentSuccess = false;
 
         // Scoping data
         const scopingData = {
@@ -619,6 +841,37 @@
             } else {
                 indicator.classList.remove('hidden');
             }
+
+            // Update header for success view
+            if (viewId === 'successView') {
+                document.getElementById('headerSubtitle').textContent = 'Jargmised sammud';
+                isPaymentSuccess = true;
+            }
+        }
+
+        function showSuccessWithAmount(amount) {
+            document.getElementById('successDesc').textContent =
+                amount ? `Makse summas ${amount} EUR on edukalt tehtud.` : 'Tere tulemast Pilvetarki!';
+            showView('successView');
+        }
+
+        function startOnboarding() {
+            const automationDesc = document.getElementById('automationDesc').value;
+            const proofLog = document.getElementById('proofLog').checked;
+
+            // Scroll to next steps panel
+            document.getElementById('nextStepsPanel').scrollIntoView({ behavior: 'smooth' });
+
+            // Show confirmation (you could add more logic here)
+            alert('Tanan! Votame teiega peagi uhendust, et seadistada teie esimene automatsioon.');
+        }
+
+        function showNewPaymentConfirm() {
+            document.getElementById('newPaymentSection').classList.add('confirm-visible');
+        }
+
+        function hideNewPaymentConfirm() {
+            document.getElementById('newPaymentSection').classList.remove('confirm-visible');
         }
 
         async function submitPayment(e) {
@@ -683,9 +936,7 @@
                     const status = data.payment.status;
                     if (status === 'COMPLETED') {
                         clearInterval(pollInterval);
-                        document.getElementById('successDesc').textContent =
-                            `Makse summas ${data.payment.amount} EUR on edukalt tehtud.`;
-                        showView('successView');
+                        showSuccessWithAmount(data.payment.amount);
                     } else if (status === 'FAILED' || status === 'CANCELLED') {
                         clearInterval(pollInterval);
                         showView('errorView');
@@ -698,19 +949,31 @@
 
         function resetForm() {
             currentPaymentId = null;
+            isPaymentSuccess = false;
             if (pollInterval) clearInterval(pollInterval);
             document.getElementById('email').value = '';
             document.getElementById('amount').value = '';
             document.getElementById('submitBtn').disabled = false;
             document.getElementById('submitBtn').textContent = 'Maksa';
+            document.getElementById('automationDesc').value = '';
+            document.getElementById('proofLog').checked = true;
+            hideNewPaymentConfirm();
             hideError();
             goToStep(1);
         }
 
-        // Check if returning from Stripe
+        // Check if returning from Stripe or URL indicates success
         (function init() {
             const params = new URLSearchParams(window.location.search);
             const sessionId = params.get('session_id');
+            const paymentParam = params.get('payment');
+
+            // Handle ?payment=success URL param
+            if (paymentParam === 'success') {
+                showView('successView');
+                window.history.replaceState({}, document.title, '/');
+                return;
+            }
 
             if (sessionId) {
                 showView('processingView');
@@ -726,9 +989,7 @@
                         const status = data.payment.status;
 
                         if (status === 'COMPLETED') {
-                            document.getElementById('successDesc').textContent =
-                                `Makse summas ${data.payment.amount} EUR on edukalt tehtud.`;
-                            showView('successView');
+                            showSuccessWithAmount(data.payment.amount);
                         } else if (status === 'FAILED' || status === 'CANCELLED') {
                             showView('errorView');
                         } else {
