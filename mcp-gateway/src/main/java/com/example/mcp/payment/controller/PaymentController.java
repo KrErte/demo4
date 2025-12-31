@@ -174,6 +174,48 @@ public class PaymentController {
         }
     }
 
+    /**
+     * Complete a mock payment (only in mock mode).
+     * POST /api/payments/mock/complete
+     */
+    @PostMapping("/mock/complete")
+    public ResponseEntity<?> completeMockPayment(@RequestBody MockPaymentRequest request) {
+        try {
+            Payment payment = paymentService.completeMockPayment(request.sessionId());
+            return ResponseEntity.ok(Map.of(
+                "ok", true,
+                "payment", payment.toDto()
+            ));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("ok", false, "error", e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("ok", false, "error", e.getMessage()));
+        }
+    }
+
+    /**
+     * Cancel a mock payment (only in mock mode).
+     * POST /api/payments/mock/cancel
+     */
+    @PostMapping("/mock/cancel")
+    public ResponseEntity<?> cancelMockPayment(@RequestBody MockPaymentRequest request) {
+        try {
+            Payment payment = paymentService.cancelMockPayment(request.sessionId());
+            return ResponseEntity.ok(Map.of(
+                "ok", true,
+                "payment", payment.toDto()
+            ));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest()
+                .body(Map.of("ok", false, "error", e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(Map.of("ok", false, "error", e.getMessage()));
+        }
+    }
+
     private ResponseEntity<Map<String, Object>> badRequest(String message) {
         return ResponseEntity.badRequest()
             .body(Map.of(
@@ -188,4 +230,6 @@ public class PaymentController {
         BigDecimal amount,
         String currency
     ) {}
+
+    public record MockPaymentRequest(String sessionId) {}
 }
