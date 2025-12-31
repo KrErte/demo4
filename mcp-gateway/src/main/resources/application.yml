@@ -35,6 +35,19 @@ stripe:
 app:
   base-url: ${APP_BASE_URL:http://localhost:8080}
 
+# Google OAuth configuration
+google:
+  oauth:
+    client-id: ${GOOGLE_CLIENT_ID:}
+    client-secret: ${GOOGLE_CLIENT_SECRET:}
+    redirect-uri: ${GOOGLE_REDIRECT_URI:${app.base-url}/api/oauth/google/callback}
+    scopes:
+      - https://www.googleapis.com/auth/gmail.readonly
+      - https://www.googleapis.com/auth/gmail.labels
+      - https://www.googleapis.com/auth/gmail.modify
+      - https://www.googleapis.com/auth/userinfo.email
+      - https://www.googleapis.com/auth/userinfo.profile
+
 mcp:
   policy:
     default-deny: true
