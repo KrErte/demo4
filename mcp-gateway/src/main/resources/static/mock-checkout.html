@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Demo Makse - Pilvetark</title>
+    <title>Demo Aktiveerimine - Pilvetark</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -132,23 +132,23 @@
 <body>
     <div class="container">
         <div class="mock-badge">
-            DEMO REZIIM - See on simuleeritud makseleht
+            DEMO REŽIIM – See on simuleeritud aktiveerimisleht
         </div>
 
         <div class="card">
             <div class="card-header">
                 <h1>Pilvetark</h1>
-                <p>Turvaline maksmine</p>
+                <p>Turvaline aktiveerimine</p>
             </div>
 
             <div class="card-body">
                 <div class="payment-info">
                     <div class="payment-row">
-                        <span class="payment-label">E-post</span>
+                        <span class="payment-label">Kontakt</span>
                         <span class="payment-value" id="emailDisplay">-</span>
                     </div>
                     <div class="payment-row">
-                        <span class="payment-label">Summa</span>
+                        <span class="payment-label">Aktiveerimistasu</span>
                         <span class="payment-value payment-total" id="amountDisplay">-</span>
                     </div>
                 </div>
@@ -170,15 +170,15 @@
                 </div>
 
                 <button class="btn btn-primary" onclick="completePayment()">
-                    Maksa
+                    Aktiveeri
                 </button>
                 <button class="btn btn-secondary" onclick="cancelPayment()">
-                    Tuhista
+                    Tühista
                 </button>
 
                 <div class="test-cards">
-                    <h3>Demo reziim</h3>
-                    <p>Kaardi andmed on eeltaidetud. Vajutage "Maksa" makse simuleerimiseks.</p>
+                    <h3>Demo režiim</h3>
+                    <p>Kaardi andmed on eeltäidetud. Vajutage "Aktiveeri" simuleerimiseks.</p>
                 </div>
             </div>
         </div>
@@ -215,7 +215,7 @@
                 if (res.ok) {
                     window.location.href = '/payment/success?session_id=' + sessionId;
                 } else {
-                    alert('Makse ebaonnestus');
+                    alert('Aktiveerimine ebaõnnestus');
                 }
             } catch (e) {
                 alert('Viga: ' + e.message);
