@@ -1206,29 +1206,55 @@
             <div id="step1" class="card-body">
                 <div class="landing-content">
                     <h2>Delegeeri otsused. Näe, miks.</h2>
-                    <p class="subtitle">AI teeb sinu eest otsuseid e-postis. Iga tegevus on nähtav, põhjendatud ja auditeeritav.</p>
+                    <p class="subtitle">Sa kirjeldad, mis on oluline. AI otsustab ja tegutseb. Iga samm on põhjendatud ja jälgitav.</p>
                     <p class="differentiator">See pole tööriist. See on vastutav assistent.</p>
 
                     <div class="benefits-list">
                         <div class="benefit-item">
                             <div class="benefit-icon">🎯</div>
                             <div class="benefit-text">
-                                <strong>Otsustab sinu eest</strong>
-                                Hindab sõnumeid ja tegutseb vastavalt sinu kavatsustele
+                                <strong>Võtab vastutuse</strong>
+                                AI ei oota käsku — ta hindab olukorda ja tegutseb sinu kavatsuse järgi
                             </div>
                         </div>
                         <div class="benefit-item">
                             <div class="benefit-icon">📋</div>
                             <div class="benefit-text">
-                                <strong>Jätab jälje</strong>
-                                Näed täpselt, mida AI kaalus ja miks ta nii otsustas
+                                <strong>Põhjendab iga otsust</strong>
+                                Näed, mida AI kaalus, miks ta nii otsustas ja mis toimus
                             </div>
                         </div>
                         <div class="benefit-item">
                             <div class="benefit-icon">🔒</div>
                             <div class="benefit-text">
-                                <strong>Sina jääd kontrolli</strong>
-                                Muuda oma kavatsusi igal ajal. Audit log säilitab kõik.
+                                <strong>Jälg jääb alles</strong>
+                                Täielik audit log. Muutmiskindel. Sinu kontroll säilib.
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Collapsible: Why this is different -->
+                    <div class="accordion" id="whyDifferentAccordion">
+                        <button class="accordion-toggle" onclick="toggleAccordion('whyDifferentAccordion')">
+                            <span>Miks see erineb tavalisest?</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-inner">
+                                <ul class="how-it-works-list">
+                                    <li>
+                                        <span class="how-step-num">≠</span>
+                                        <span><strong>Pole reeglid.</strong> Sa ei defineeri "kui X, siis Y". Sa kirjeldad, mis sulle oluline on.</span>
+                                    </li>
+                                    <li>
+                                        <span class="how-step-num">≠</span>
+                                        <span><strong>Pole must kast.</strong> Iga otsus on nähtav koos põhjendusega. Mitte kunagi "lihtsalt juhtus".</span>
+                                    </li>
+                                    <li>
+                                        <span class="how-step-num">≠</span>
+                                        <span><strong>Pole pime usaldus.</strong> Audit log säilitab kõik. Sa näed, mida AI tegi ja miks.</span>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -1248,15 +1274,41 @@
                                     </li>
                                     <li>
                                         <span class="how-step-num">2</span>
-                                        <span>Kirjeldad, mis sulle oluline on — AI mõistab sinu kavatsust</span>
+                                        <span>Kirjeldad oma kavatsust — mitte reegleid, vaid põhimõtteid</span>
                                     </li>
                                     <li>
                                         <span class="how-step-num">3</span>
-                                        <span>Saad ligipääsu Otsuste Logile, kus näed iga tegevust ja põhjendust</span>
+                                        <span>AI alustab tegutsemist. Iga otsus logitakse koos põhjendusega.</span>
                                     </li>
                                     <li>
                                         <span class="how-step-num">4</span>
-                                        <span>Aktiveerid ja AI hakkab tegutsema — sina jälgid</span>
+                                        <span>Sina jälgid ja täpsustad kavatsust vastavalt vajadusele</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Collapsible: Who is this for -->
+                    <div class="accordion" id="whoForAccordion">
+                        <button class="accordion-toggle" onclick="toggleAccordion('whoForAccordion')">
+                            <span>Kellele see sobib?</span>
+                            <span class="accordion-icon">▼</span>
+                        </button>
+                        <div class="accordion-content">
+                            <div class="accordion-inner">
+                                <ul class="how-it-works-list">
+                                    <li>
+                                        <span class="how-step-num">→</span>
+                                        <span>Juhid, kes vajavad e-posti haldust, kuid mitte käsitsi sorteerimist</span>
+                                    </li>
+                                    <li>
+                                        <span class="how-step-num">→</span>
+                                        <span>Meeskonnad, kes peavad otsuseid auditeerima</span>
+                                    </li>
+                                    <li>
+                                        <span class="how-step-num">→</span>
+                                        <span>Inimesed, kes usaldavad AI-d ainult siis, kui see põhjendab oma tegevust</span>
                                     </li>
                                 </ul>
                             </div>
@@ -1387,7 +1439,7 @@
                 <div class="success-header">
                     <div class="check-icon">&#10003;</div>
                     <h2>Sinu AI on nüüd aktiivne</h2>
-                    <p id="successDesc">Iga otsus logitakse. Sina jääd kontrolli.</p>
+                    <p id="successDesc">Ta hakkab otsustama. Sina jälgid.</p>
                 </div>
 
                 <!-- Initial setup panel (before intent is saved) -->
@@ -1396,29 +1448,29 @@
                         <div class="step-number done">&#10003;</div>
                         <div class="step-content">
                             <h4>Kinnitus saadetud</h4>
-                            <p>Saatsime kinnituse sinu kontaktaadressile. Kontrolli ka rämpsposti kausta.</p>
+                            <p>Saatsime kinnituse sinu kontaktaadressile.</p>
                         </div>
                     </div>
 
                     <div class="next-step-item">
                         <div class="step-number">2</div>
                         <div class="step-content">
-                            <h4>Kirjelda, mis sulle oluline on</h4>
-                            <p>Milliseid otsuseid peaks AI sinu eest tegema? Kirjelda oma kavatsust vabas vormis.</p>
-                            <textarea id="automationDesc" placeholder="Nt: Tahan, et kõik päringud klientidelt saaksid kiire vastuse. AI peaks hindama, kas tegemist on kiire teemaga, ja vajadusel koostama vastuse."></textarea>
+                            <h4>Kirjelda oma kavatsust</h4>
+                            <p>Mitte reegleid. Kirjelda, mis on sulle oluline ja millist käitumist sa AI-lt ootad.</p>
+                            <textarea id="automationDesc" placeholder="Nt: Kliendipäringud on kiireloomulised. Turunduskirjad võib ignoreerida. Kui keegi küsib hinnapakkumist, koosta vastuse mustand."></textarea>
                         </div>
                     </div>
 
                     <div class="next-step-item">
                         <div class="step-number">3</div>
                         <div class="step-content">
-                            <h4>Otsuste Logi</h4>
-                            <p>Soovid näha, mida AI kaalus ja miks ta nii otsustas?</p>
+                            <h4>Otsuste jälgimine</h4>
+                            <p>AI logib iga otsuse koos põhjendusega. Sa näed, mida ta kaalus.</p>
                             <div class="checkbox-row">
                                 <input type="checkbox" id="proofLog" checked>
-                                <label for="proofLog">Jah, tahan näha otsuste ajalugu ja põhjendusi</label>
+                                <label for="proofLog">Tahan näha otsuste ajalugu ja põhjendusi</label>
                             </div>
-                            <p class="helper-text">Saad selle igal ajal seadetest muuta.</p>
+                            <p class="helper-text">Audit log on alati saadaval. Seda ei saa välja lülitada.</p>
                         </div>
                     </div>
                 </div>
@@ -1433,24 +1485,24 @@
                 <div id="intentConfirmedPanel" class="intent-confirmed hidden">
                     <div class="confirmed-header">
                         <div class="confirmed-icon">&#10003;</div>
-                        <h3>Sinu kavatsus on salvestatud</h3>
-                        <p>AI tegutseb nüüd sinu määratud põhimõtete järgi.</p>
+                        <h3>Kavatsus salvestatud</h3>
+                        <p>AI on valmis otsustama. Iga tegevus logitakse.</p>
                     </div>
 
                     <div class="what-happens-next">
-                        <h4>Mis edasi?</h4>
+                        <h4>Mis nüüd juhtub</h4>
                         <ul>
                             <li>
                                 <span class="bullet">→</span>
-                                <span>AI alustab kohe sissetulevate sõnumite hindamist sinu kavatsuse põhjal.</span>
+                                <span>AI hindab sissetulevaid sõnumeid sinu kavatsuse põhjal</span>
                             </li>
                             <li>
                                 <span class="bullet">→</span>
-                                <span>Iga tehtud otsus koos põhjendusega ilmub Otsuste Logisse.</span>
+                                <span>Iga otsus salvestatakse koos põhjendusega — mida ta kaalus ja miks</span>
                             </li>
                             <li>
                                 <span class="bullet">→</span>
-                                <span>Saad oma kavatsust igal ajal muuta või täpsustada.</span>
+                                <span>Sa saad kavatsust täpsustada. AI kohaneb.</span>
                             </li>
                         </ul>
                     </div>
@@ -1460,12 +1512,12 @@
                             Muuda kavatsust
                         </button>
                         <button class="btn-filled" onclick="viewDecisionLog()">
-                            Vaata Otsuste Logi
+                            Vaata otsuseid
                         </button>
                     </div>
 
                     <div class="intent-saved-note">
-                        <p>Kavatsust saad muuta Seadete alt igal ajal.</p>
+                        <p>Audit log säilitab kõik otsused. Seda ei saa kustutada.</p>
                     </div>
                 </div>
 
