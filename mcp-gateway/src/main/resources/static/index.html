@@ -959,6 +959,226 @@
             font-size: 12px;
             color: #9ca3af;
         }
+
+        /* Decision Log Styles */
+        .decision-log-view {
+            animation: fadeIn 0.3s ease;
+        }
+
+        .log-header {
+            margin-bottom: 20px;
+        }
+        .log-header h2 {
+            font-size: 1.1rem;
+            color: #1f2937;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .log-header h2 .log-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+
+        .log-explainer {
+            background: #f0f9ff;
+            border: 1px solid #bae6fd;
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 20px;
+        }
+        .log-explainer h4 {
+            font-size: 13px;
+            color: #0369a1;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        .log-explainer p {
+            font-size: 12px;
+            color: #0c4a6e;
+            line-height: 1.5;
+            margin-bottom: 6px;
+        }
+        .log-explainer p:last-child {
+            margin-bottom: 0;
+        }
+
+        .log-guarantees {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+        .log-guarantee {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 11px;
+            color: #0369a1;
+            background: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #bae6fd;
+        }
+        .log-guarantee .check {
+            color: #10b981;
+            font-weight: bold;
+        }
+
+        .log-entries {
+            margin-bottom: 20px;
+        }
+        .log-entry {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        .log-entry:last-child {
+            margin-bottom: 0;
+        }
+        .log-entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 12px 14px;
+            background: #f9fafb;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .log-entry-meta {
+            flex: 1;
+        }
+        .log-entry-time {
+            font-size: 11px;
+            color: #9ca3af;
+            margin-bottom: 2px;
+        }
+        .log-entry-trigger {
+            font-size: 13px;
+            color: #374151;
+            font-weight: 500;
+        }
+        .log-entry-status {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            font-weight: 500;
+        }
+        .log-entry-status.acted {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .log-entry-status.skipped {
+            background: #f3f4f6;
+            color: #6b7280;
+        }
+
+        .log-entry-body {
+            padding: 14px;
+        }
+        .log-entry-section {
+            margin-bottom: 12px;
+        }
+        .log-entry-section:last-child {
+            margin-bottom: 0;
+        }
+        .log-entry-label {
+            font-size: 11px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+        .log-entry-decision {
+            font-size: 14px;
+            color: #1f2937;
+            font-weight: 500;
+        }
+        .log-entry-reasoning {
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.5;
+            background: #f9fafb;
+            padding: 10px 12px;
+            border-radius: 6px;
+            border-left: 3px solid #667eea;
+        }
+        .log-entry-outcome {
+            font-size: 13px;
+            color: #374151;
+        }
+        .log-entry-outcome .outcome-action {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            background: #f3f4f6;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+
+        .log-empty {
+            text-align: center;
+            padding: 32px 16px;
+            color: #6b7280;
+        }
+        .log-empty .empty-icon {
+            width: 48px;
+            height: 48px;
+            background: #f3f4f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 20px;
+        }
+        .log-empty h4 {
+            font-size: 14px;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+        .log-empty p {
+            font-size: 13px;
+        }
+
+        .log-footer {
+            display: flex;
+            gap: 12px;
+        }
+        .log-footer .btn-back {
+            flex: 1;
+            padding: 12px;
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .log-footer .btn-back:hover {
+            background: #e5e7eb;
+        }
+
+        .log-retention-note {
+            text-align: center;
+            margin-top: 16px;
+            padding-top: 12px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .log-retention-note p {
+            font-size: 11px;
+            color: #9ca3af;
+        }
     </style>
 </head>
 <body>
@@ -1265,6 +1485,103 @@
                 <div class="status-title">Aktiveerimine ebaõnnestus</div>
                 <div class="status-desc" id="errorDesc">Midagi läks valesti. Palun proovige uuesti.</div>
                 <button class="back-btn" onclick="resetForm()">Proovi uuesti</button>
+            </div>
+
+            <!-- Decision Log View -->
+            <div id="decisionLogView" class="card-body decision-log-view hidden">
+                <div class="log-header">
+                    <h2>
+                        <span class="log-icon">📋</span>
+                        Otsuste Ajalugu
+                    </h2>
+                </div>
+
+                <!-- Explainer Panel -->
+                <div class="log-explainer">
+                    <h4>Miks see logi eksisteerib</h4>
+                    <p>See on täielik ajalugu kõigist AI tehtud otsustest. Iga kirje näitab, mida AI kaalus, miks ta nii otsustas ja mis toimus.</p>
+                    <p>Logi ei peida midagi. Otsused on seletatavad. Kirjeid ei saa vaikselt kustutada.</p>
+                    <div class="log-guarantees">
+                        <span class="log-guarantee"><span class="check">✓</span> Täielik läbipaistvus</span>
+                        <span class="log-guarantee"><span class="check">✓</span> Auditeeritav</span>
+                        <span class="log-guarantee"><span class="check">✓</span> Muutmiskindel</span>
+                    </div>
+                </div>
+
+                <!-- Log Entries Container -->
+                <div class="log-entries" id="logEntriesContainer">
+                    <!-- Sample Entry 1 -->
+                    <div class="log-entry">
+                        <div class="log-entry-header">
+                            <div class="log-entry-meta">
+                                <div class="log-entry-time">Täna, 14:32</div>
+                                <div class="log-entry-trigger">Kiri saatjalt: klient@firma.ee</div>
+                            </div>
+                            <span class="log-entry-status acted">Tegutses</span>
+                        </div>
+                        <div class="log-entry-body">
+                            <div class="log-entry-section">
+                                <div class="log-entry-label">Otsus</div>
+                                <div class="log-entry-decision">Koostati vastuse mustand ja märgiti kiireks</div>
+                            </div>
+                            <div class="log-entry-section">
+                                <div class="log-entry-label">Miks AI nii otsustas</div>
+                                <div class="log-entry-reasoning">Sõnum sisaldas küsimust hinnapakkumise kohta. Sinu kavatsuse järgi on kliendipäringud kiireloomulised. Saatja on varasemalt suhtlust algatanud 3 korda.</div>
+                            </div>
+                            <div class="log-entry-section">
+                                <div class="log-entry-label">Tulemus</div>
+                                <div class="log-entry-outcome">
+                                    <span class="outcome-action">📝 Mustand loodud</span>
+                                    <span class="outcome-action">🏷️ Märgistatud: Kiire</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Sample Entry 2 -->
+                    <div class="log-entry">
+                        <div class="log-entry-header">
+                            <div class="log-entry-meta">
+                                <div class="log-entry-time">Täna, 11:15</div>
+                                <div class="log-entry-trigger">Kiri saatjalt: uudiskiri@marketing.com</div>
+                            </div>
+                            <span class="log-entry-status skipped">Jättis vahele</span>
+                        </div>
+                        <div class="log-entry-body">
+                            <div class="log-entry-section">
+                                <div class="log-entry-label">Otsus</div>
+                                <div class="log-entry-decision">Tegevust ei võetud</div>
+                            </div>
+                            <div class="log-entry-section">
+                                <div class="log-entry-label">Miks AI nii otsustas</div>
+                                <div class="log-entry-reasoning">Tuvastati masspostitusena. Sinu kavatsus ei hõlma turunduskirju. Saatja ei ole sinu kontaktide hulgas.</div>
+                            </div>
+                            <div class="log-entry-section">
+                                <div class="log-entry-label">Tulemus</div>
+                                <div class="log-entry-outcome">
+                                    <span class="outcome-action">⏭️ Vahele jäetud</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Empty State (hidden when entries exist) -->
+                <div class="log-empty hidden" id="logEmptyState">
+                    <div class="empty-icon">📭</div>
+                    <h4>Otsuseid pole veel tehtud</h4>
+                    <p>Kui AI teeb esimese otsuse, ilmub see siia koos täieliku põhjendusega.</p>
+                </div>
+
+                <div class="log-footer">
+                    <button class="btn-back" onclick="closeDecisionLog()">
+                        Tagasi
+                    </button>
+                </div>
+
+                <div class="log-retention-note">
+                    <p>Kõik otsused säilitatakse. Logisid ei saa kustutada.</p>
+                </div>
             </div>
 
             <div class="footer">
@@ -1671,13 +1988,13 @@
         }
 
         function showView(viewId) {
-            ['step1', 'step2', 'step3', 'processingView', 'successView', 'errorView'].forEach(id => {
+            ['step1', 'step2', 'step3', 'processingView', 'successView', 'errorView', 'decisionLogView'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.classList.toggle('hidden', id !== viewId);
             });
             // Hide step indicator for status views
             const indicator = document.getElementById('stepIndicator');
-            if (['processingView', 'successView', 'errorView'].includes(viewId)) {
+            if (['processingView', 'successView', 'errorView', 'decisionLogView'].includes(viewId)) {
                 indicator.classList.add('hidden');
             } else {
                 indicator.classList.remove('hidden');
@@ -1751,22 +2068,41 @@
             const proofLogUrl = scopingData.proofLogUrl || localStorage.getItem(DEMO_PROOF_URL_KEY);
 
             if (proofLogUrl) {
+                // External log URL provided - open in new tab
                 window.open(proofLogUrl, '_blank');
             } else {
-                // Show inline message that log will be available
-                const panel = document.getElementById('intentConfirmedPanel');
-                const existingMsg = panel.querySelector('.log-pending-msg');
-                if (!existingMsg) {
-                    const msg = document.createElement('div');
-                    msg.className = 'log-pending-msg';
-                    msg.style.cssText = 'background:#f0f9ff;border:1px solid #bae6fd;color:#0369a1;padding:12px;border-radius:8px;margin-top:12px;font-size:13px;text-align:center;';
-                    msg.textContent = 'Otsuste Logi link saadetakse sinu kontaktaadressile, kui esimesed otsused on tehtud.';
-                    panel.querySelector('.confirmed-actions').after(msg);
-
-                    // Remove after 5 seconds
-                    setTimeout(() => msg.remove(), 5000);
-                }
+                // Show built-in Decision Log view
+                showDecisionLogView();
             }
+        }
+
+        function showDecisionLogView() {
+            // Hide all other views
+            ['step1', 'step2', 'step3', 'processingView', 'successView', 'errorView'].forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+            });
+
+            // Hide step indicator
+            document.getElementById('stepIndicator').classList.add('hidden');
+
+            // Show Decision Log view
+            document.getElementById('decisionLogView').classList.remove('hidden');
+
+            // Update header
+            document.getElementById('headerSubtitle').textContent = 'Otsuste Ajalugu';
+
+            // Scroll to top
+            document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function closeDecisionLog() {
+            // Hide Decision Log view
+            document.getElementById('decisionLogView').classList.add('hidden');
+
+            // Return to success view with confirmation panel
+            document.getElementById('successView').classList.remove('hidden');
+            document.getElementById('headerSubtitle').textContent = 'Kavatsus salvestatud';
         }
 
         function showNewPaymentConfirm() {
@@ -1901,6 +2237,7 @@
             document.getElementById('nextStepsPanel').classList.remove('hidden');
             document.getElementById('onboardingCta').classList.remove('hidden');
             document.getElementById('intentConfirmedPanel').classList.add('hidden');
+            document.getElementById('decisionLogView').classList.add('hidden');
             // Clear demo localStorage (but keep demo mode toggle state)
             localStorage.removeItem(DEMO_EMAIL_KEY);
             localStorage.removeItem(DEMO_PROOF_URL_KEY);
