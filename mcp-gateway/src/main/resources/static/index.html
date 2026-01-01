@@ -821,6 +821,144 @@
         .form-group.demo-mode .demo-hint {
             display: block;
         }
+
+        /* Inline validation error */
+        .inline-error {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            margin-bottom: 16px;
+            display: none;
+        }
+        .inline-error.visible {
+            display: block;
+        }
+
+        /* Intent Confirmed State */
+        .intent-confirmed {
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .confirmed-header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .confirmed-header .confirmed-icon {
+            width: 48px;
+            height: 48px;
+            background: #d1fae5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 20px;
+            color: #10b981;
+        }
+        .confirmed-header h3 {
+            font-size: 1.1rem;
+            color: #1f2937;
+            margin-bottom: 4px;
+            font-weight: 600;
+        }
+        .confirmed-header p {
+            font-size: 13px;
+            color: #6b7280;
+        }
+
+        .what-happens-next {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+        .what-happens-next h4 {
+            font-size: 13px;
+            color: #374151;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+        .what-happens-next ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .what-happens-next li {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.4;
+        }
+        .what-happens-next li:not(:last-child) {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .what-happens-next .bullet {
+            color: #667eea;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .confirmed-actions {
+            display: flex;
+            gap: 12px;
+        }
+        .confirmed-actions .btn-outline {
+            flex: 1;
+            padding: 12px 16px;
+            background: white;
+            color: #374151;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+        }
+        .confirmed-actions .btn-outline:hover {
+            border-color: #667eea;
+            color: #667eea;
+        }
+        .confirmed-actions .btn-filled {
+            flex: 1;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .confirmed-actions .btn-filled:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .intent-saved-note {
+            text-align: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e5e7eb;
+        }
+        .intent-saved-note p {
+            font-size: 12px;
+            color: #9ca3af;
+        }
     </style>
 </head>
 <body>
@@ -913,6 +1051,9 @@
 
             <!-- Step 2: Scoping -->
             <div id="step2" class="card-body hidden">
+                <!-- Inline validation error -->
+                <div class="inline-error" id="step2Error"></div>
+
                 <!-- Demo connect success state (hidden by default) -->
                 <div class="email-connect-success hidden" id="demoConnectSuccess">
                     <div class="success-icon">✓</div>
@@ -1029,6 +1170,7 @@
                     <p id="successDesc">Iga otsus logitakse. Sina jääd kontrolli.</p>
                 </div>
 
+                <!-- Initial setup panel (before intent is saved) -->
                 <div class="next-steps" id="nextStepsPanel">
                     <div class="next-step-item">
                         <div class="step-number done">&#10003;</div>
@@ -1061,10 +1203,50 @@
                     </div>
                 </div>
 
-                <div class="onboarding-cta">
-                    <button class="submit-btn" onclick="startOnboarding()">
-                        Kirjelda oma kavatsus
+                <div class="onboarding-cta" id="onboardingCta">
+                    <button class="submit-btn" onclick="saveIntent()">
+                        Salvesta kavatsus
                     </button>
+                </div>
+
+                <!-- Confirmation panel (after intent is saved) -->
+                <div id="intentConfirmedPanel" class="intent-confirmed hidden">
+                    <div class="confirmed-header">
+                        <div class="confirmed-icon">&#10003;</div>
+                        <h3>Sinu kavatsus on salvestatud</h3>
+                        <p>AI tegutseb nüüd sinu määratud põhimõtete järgi.</p>
+                    </div>
+
+                    <div class="what-happens-next">
+                        <h4>Mis edasi?</h4>
+                        <ul>
+                            <li>
+                                <span class="bullet">→</span>
+                                <span>AI alustab kohe sissetulevate sõnumite hindamist sinu kavatsuse põhjal.</span>
+                            </li>
+                            <li>
+                                <span class="bullet">→</span>
+                                <span>Iga tehtud otsus koos põhjendusega ilmub Otsuste Logisse.</span>
+                            </li>
+                            <li>
+                                <span class="bullet">→</span>
+                                <span>Saad oma kavatsust igal ajal muuta või täpsustada.</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="confirmed-actions">
+                        <button class="btn-outline" onclick="editIntent()">
+                            Muuda kavatsust
+                        </button>
+                        <button class="btn-filled" onclick="viewDecisionLog()">
+                            Vaata Otsuste Logi
+                        </button>
+                    </div>
+
+                    <div class="intent-saved-note">
+                        <p>Kavatsust saad muuta Seadete alt igal ajal.</p>
+                    </div>
                 </div>
 
                 <div class="new-payment-link" id="newPaymentSection">
@@ -1275,22 +1457,25 @@
             // Validate email - in demo mode, accept any email with @ and .
             if (isDemoMode) {
                 if (email && email.includes('@') && email.includes('.')) {
+                    hideStep2Error();
                     simulateDemoConnect(email, proofLogUrl);
                     return;
                 } else if (!email) {
-                    alert('Palun sisesta postkasti aadress');
+                    showStep2Error('Palun sisesta postkasti aadress');
                     return;
                 } else {
-                    alert('Palun sisesta kehtiv aadress (peab sisaldama @ ja .)');
+                    showStep2Error('Palun sisesta kehtiv aadress (peab sisaldama @ ja .)');
                     return;
                 }
             }
 
             // Normal mode - standard validation
             if (!email) {
-                alert('Palun sisesta postkasti aadress');
+                showStep2Error('Palun sisesta postkasti aadress');
                 return;
             }
+
+            hideStep2Error();
 
             // Save and proceed
             scopingData.email = email;
@@ -1511,15 +1696,77 @@
             showView('successView');
         }
 
-        function startOnboarding() {
+        // Step 2 inline error functions
+        function showStep2Error(message) {
+            const errorDiv = document.getElementById('step2Error');
+            errorDiv.textContent = message;
+            errorDiv.classList.add('visible');
+        }
+
+        function hideStep2Error() {
+            const errorDiv = document.getElementById('step2Error');
+            errorDiv.classList.remove('visible');
+        }
+
+        // Intent saving and confirmation
+        function saveIntent() {
             const automationDesc = document.getElementById('automationDesc').value;
             const proofLog = document.getElementById('proofLog').checked;
 
-            // Scroll to next steps panel
-            document.getElementById('nextStepsPanel').scrollIntoView({ behavior: 'smooth' });
+            // Save intent to localStorage (since no backend changes allowed)
+            const intentData = {
+                description: automationDesc,
+                proofLogEnabled: proofLog,
+                savedAt: new Date().toISOString()
+            };
+            localStorage.setItem('savedIntent', JSON.stringify(intentData));
 
-            // Show confirmation (you could add more logic here)
-            alert('Aitäh! Võtame teiega peagi ühendust, et seadistada teie AI kavatsused.');
+            // Hide the setup panel and show confirmation
+            document.getElementById('nextStepsPanel').classList.add('hidden');
+            document.getElementById('onboardingCta').classList.add('hidden');
+            document.getElementById('intentConfirmedPanel').classList.remove('hidden');
+
+            // Update header
+            document.getElementById('headerSubtitle').textContent = 'Kavatsus salvestatud';
+
+            // Scroll to top of success view
+            document.querySelector('.success-header').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function editIntent() {
+            // Show setup panel again, hide confirmation
+            document.getElementById('nextStepsPanel').classList.remove('hidden');
+            document.getElementById('onboardingCta').classList.remove('hidden');
+            document.getElementById('intentConfirmedPanel').classList.add('hidden');
+
+            // Update header
+            document.getElementById('headerSubtitle').textContent = 'Sinu AI on aktiivne';
+
+            // Focus on textarea
+            document.getElementById('automationDesc').focus();
+        }
+
+        function viewDecisionLog() {
+            // Check if proof log URL was provided during setup
+            const proofLogUrl = scopingData.proofLogUrl || localStorage.getItem(DEMO_PROOF_URL_KEY);
+
+            if (proofLogUrl) {
+                window.open(proofLogUrl, '_blank');
+            } else {
+                // Show inline message that log will be available
+                const panel = document.getElementById('intentConfirmedPanel');
+                const existingMsg = panel.querySelector('.log-pending-msg');
+                if (!existingMsg) {
+                    const msg = document.createElement('div');
+                    msg.className = 'log-pending-msg';
+                    msg.style.cssText = 'background:#f0f9ff;border:1px solid #bae6fd;color:#0369a1;padding:12px;border-radius:8px;margin-top:12px;font-size:13px;text-align:center;';
+                    msg.textContent = 'Otsuste Logi link saadetakse sinu kontaktaadressile, kui esimesed otsused on tehtud.';
+                    panel.querySelector('.confirmed-actions').after(msg);
+
+                    // Remove after 5 seconds
+                    setTimeout(() => msg.remove(), 5000);
+                }
+            }
         }
 
         function showNewPaymentConfirm() {
@@ -1650,13 +1897,19 @@
             scopingData.setupLater = false;
             // Reset demo connect state
             resetDemoConnectState();
+            // Reset intent confirmation state
+            document.getElementById('nextStepsPanel').classList.remove('hidden');
+            document.getElementById('onboardingCta').classList.remove('hidden');
+            document.getElementById('intentConfirmedPanel').classList.add('hidden');
             // Clear demo localStorage (but keep demo mode toggle state)
             localStorage.removeItem(DEMO_EMAIL_KEY);
             localStorage.removeItem(DEMO_PROOF_URL_KEY);
             localStorage.removeItem(DEMO_SKIP_CONNECT_KEY);
             localStorage.removeItem(DEMO_CONNECTED_AT_KEY);
+            localStorage.removeItem('savedIntent');
             hideNewPaymentConfirm();
             hideErrorBox();
+            hideStep2Error();
             showThinking(false);
             goToStep(1);
         }
