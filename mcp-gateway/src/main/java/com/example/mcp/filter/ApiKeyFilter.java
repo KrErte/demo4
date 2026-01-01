@@ -87,6 +87,9 @@ public class ApiKeyFilter implements Filter {
                path.equals("/api/auth/login") ||
                path.startsWith("/api/auth/login") ||
                path.equals("/api/payments/webhook") ||
-               path.startsWith("/payment/");
+               path.startsWith("/payment/") ||
+               // OAuth endpoints
+               path.equals("/api/oauth/status") ||
+               path.startsWith("/api/oauth/google/");
     }
 }

@@ -821,6 +821,73 @@
         .form-group.demo-mode .demo-hint {
             display: block;
         }
+
+        /* Google OAuth button */
+        .google-connect-btn {
+            width: 100%;
+            padding: 14px 16px;
+            background: white;
+            border: 2px solid #e5e7eb;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            color: #374151;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            margin-bottom: 16px;
+        }
+        .google-connect-btn:hover:not(:disabled) {
+            border-color: #4285f4;
+            background: #f8fafc;
+        }
+        .google-connect-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+        .google-connect-btn .google-icon {
+            width: 20px;
+            height: 20px;
+        }
+        .google-connect-btn.connecting {
+            border-color: #4285f4;
+            color: #4285f4;
+        }
+
+        /* OAuth not configured message */
+        .oauth-status-msg {
+            font-size: 12px;
+            color: #9ca3af;
+            text-align: center;
+            margin-bottom: 16px;
+            padding: 8px;
+            background: #f9fafb;
+            border-radius: 6px;
+        }
+        .oauth-status-msg.error {
+            color: #dc2626;
+            background: #fef2f2;
+        }
+
+        /* Divider */
+        .divider-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin: 16px 0;
+            color: #9ca3af;
+            font-size: 12px;
+        }
+        .divider-row::before,
+        .divider-row::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e5e7eb;
+        }
     </style>
 </head>
 <body>
@@ -913,14 +980,31 @@
 
             <!-- Step 2: Scoping -->
             <div id="step2" class="card-body hidden">
-                <!-- Demo connect success state (hidden by default) -->
+                <!-- OAuth connect success state (hidden by default) -->
                 <div class="email-connect-success hidden" id="demoConnectSuccess">
                     <div class="success-icon">✓</div>
                     <div class="success-text">
-                        <strong>Postkast ühendatud (demo)</strong>
+                        <strong id="connectSuccessTitle">E-post ühendatud</strong>
                         <span id="demoConnectedEmail">-</span>
                     </div>
                 </div>
+
+                <!-- OAuth status message -->
+                <div class="oauth-status-msg hidden" id="oauthStatusMsg"></div>
+
+                <!-- Google Connect Button (shown when OAuth is configured and not in demo mode) -->
+                <button class="google-connect-btn hidden" id="googleConnectBtn" onclick="startGoogleOAuth()">
+                    <svg class="google-icon" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                    </svg>
+                    <span id="googleConnectBtnText">Ühenda Google kontoga</span>
+                </button>
+
+                <!-- Divider (shown when OAuth is available) -->
+                <div class="divider-row hidden" id="oauthDivider">või sisesta e-post käsitsi</div>
 
                 <div class="form-group" id="scopeEmailGroup">
                     <label for="scopeEmail">Postkasti aadress *</label>
@@ -1103,6 +1187,7 @@
     <script>
         const API_KEY_STORAGE_KEY = 'mcp_gateway_api_key';
         const DEMO_MODE_STORAGE_KEY = 'demoMode';
+        const OAUTH_EMAIL_KEY = 'oauthConnectedEmail';
         let currentPaymentId = null;
         let pollInterval = null;
         let currentStep = 1;
@@ -1110,6 +1195,8 @@
         let lastErrorData = null;
         let isDemoMode = false;
         let demoConnected = false;
+        let isOAuthConfigured = false;
+        let oauthConnectedEmail = null;
 
         // Demo mode localStorage keys
         const DEMO_EMAIL_KEY = 'demoEmail';
@@ -1223,6 +1310,9 @@
 
             // Re-apply toggle field visibility
             toggleProofLogField();
+
+            // Update OAuth UI (hide/show Google button based on demo mode)
+            updateOAuthUI();
         }
 
         function initDemoMode() {
@@ -1357,6 +1447,153 @@
             nextBtn.disabled = false;
         }
 
+        // OAuth Functions
+        async function checkOAuthStatus() {
+            try {
+                const res = await fetch('/api/oauth/status');
+                const data = await res.json();
+                isOAuthConfigured = data.google?.configured || false;
+                updateOAuthUI();
+            } catch (err) {
+                console.log('OAuth status check failed:', err);
+                isOAuthConfigured = false;
+            }
+        }
+
+        function updateOAuthUI() {
+            const googleBtn = document.getElementById('googleConnectBtn');
+            const divider = document.getElementById('oauthDivider');
+            const statusMsg = document.getElementById('oauthStatusMsg');
+
+            // In demo mode, hide OAuth UI
+            if (isDemoMode) {
+                googleBtn.classList.add('hidden');
+                divider.classList.add('hidden');
+                statusMsg.classList.add('hidden');
+                return;
+            }
+
+            // Show/hide based on OAuth configuration
+            if (isOAuthConfigured) {
+                googleBtn.classList.remove('hidden');
+                divider.classList.remove('hidden');
+                statusMsg.classList.add('hidden');
+            } else {
+                googleBtn.classList.add('hidden');
+                divider.classList.add('hidden');
+                // Show message that OAuth is not configured
+                statusMsg.textContent = 'Google OAuth pole seadistatud. Kasuta e-posti aadressi.';
+                statusMsg.classList.remove('hidden', 'error');
+            }
+        }
+
+        async function startGoogleOAuth() {
+            const googleBtn = document.getElementById('googleConnectBtn');
+            const btnText = document.getElementById('googleConnectBtnText');
+
+            googleBtn.disabled = true;
+            googleBtn.classList.add('connecting');
+            btnText.textContent = 'Ühendamine...';
+
+            try {
+                const res = await fetch('/api/oauth/google/start', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+                const data = await res.json();
+
+                if (data.ok && data.authUrl) {
+                    // Save current state before redirect
+                    localStorage.setItem('oauthPendingProofLogUrl', document.getElementById('proofLogUrl').value || '');
+                    localStorage.setItem('oauthPendingSetupLater', document.getElementById('setupLater').checked ? '1' : '0');
+
+                    // Redirect to Google OAuth
+                    window.location.href = data.authUrl;
+                } else {
+                    throw new Error(data.error || 'OAuth start failed');
+                }
+            } catch (err) {
+                console.error('OAuth start failed:', err);
+                googleBtn.disabled = false;
+                googleBtn.classList.remove('connecting');
+                btnText.textContent = 'Ühenda Google kontoga';
+
+                const statusMsg = document.getElementById('oauthStatusMsg');
+                statusMsg.textContent = 'Ühendamine ebaõnnestus: ' + err.message;
+                statusMsg.classList.remove('hidden');
+                statusMsg.classList.add('error');
+            }
+        }
+
+        function handleOAuthCallback(email) {
+            // Restore saved state
+            const proofLogUrl = localStorage.getItem('oauthPendingProofLogUrl') || '';
+            const setupLater = localStorage.getItem('oauthPendingSetupLater') === '1';
+
+            // Clear pending state
+            localStorage.removeItem('oauthPendingProofLogUrl');
+            localStorage.removeItem('oauthPendingSetupLater');
+
+            // Save connected email
+            localStorage.setItem(OAUTH_EMAIL_KEY, email);
+            oauthConnectedEmail = email;
+
+            // Update scoping data
+            scopingData.email = email;
+            scopingData.proofLogUrl = proofLogUrl;
+            scopingData.setupLater = setupLater;
+
+            // Show success state
+            showOAuthSuccess(email);
+
+            // Go to step 2 to show the success, then auto-advance
+            goToStep(2);
+            setTimeout(() => {
+                goToStep(3);
+            }, 1000);
+        }
+
+        function showOAuthSuccess(email) {
+            const emailGroup = document.getElementById('scopeEmailGroup');
+            const successDiv = document.getElementById('demoConnectSuccess');
+            const connectedEmailSpan = document.getElementById('demoConnectedEmail');
+            const connectTitle = document.getElementById('connectSuccessTitle');
+            const googleBtn = document.getElementById('googleConnectBtn');
+            const divider = document.getElementById('oauthDivider');
+
+            // Update success message
+            connectTitle.textContent = 'Google konto ühendatud';
+            connectedEmailSpan.textContent = email;
+
+            // Show success, hide inputs
+            emailGroup.classList.add('hidden');
+            googleBtn.classList.add('hidden');
+            divider.classList.add('hidden');
+            successDiv.classList.remove('hidden');
+        }
+
+        function handleOAuthError(reason) {
+            const statusMsg = document.getElementById('oauthStatusMsg');
+            let message = 'Ühendamine ebaõnnestus';
+
+            if (reason === 'denied') {
+                message = 'Google ühendamine tühistati';
+            } else if (reason) {
+                message = 'Viga: ' + decodeURIComponent(reason);
+            }
+
+            statusMsg.textContent = message;
+            statusMsg.classList.remove('hidden');
+            statusMsg.classList.add('error');
+
+            // Clear pending state
+            localStorage.removeItem('oauthPendingProofLogUrl');
+            localStorage.removeItem('oauthPendingSetupLater');
+
+            // Go to step 2
+            goToStep(2);
+        }
+
         // Update summary amount in real-time
         function updateSummaryAmount() {
             const amount = document.getElementById('amount').value;
@@ -1405,16 +1642,24 @@
             if (step === 2) {
                 // Handle demo mode connected state
                 if (isDemoMode && demoConnected && scopingData.email) {
-                    // Show connected state
+                    // Show connected state (demo)
                     document.getElementById('scopeEmailGroup').classList.add('hidden');
-                    document.getElementById('demoConnectSuccess').classList.remove('hidden');
+                    document.getElementById('googleConnectBtn').classList.add('hidden');
+                    document.getElementById('oauthDivider').classList.add('hidden');
+                    document.getElementById('connectSuccessTitle').textContent = 'E-post ühendatud (demo)';
                     document.getElementById('demoConnectedEmail').textContent = scopingData.email;
+                    document.getElementById('demoConnectSuccess').classList.remove('hidden');
+                } else if (!isDemoMode && oauthConnectedEmail && scopingData.email) {
+                    // Show connected state (OAuth)
+                    showOAuthSuccess(scopingData.email);
                 } else {
                     // Reset to normal input state
                     resetDemoConnectState();
                     if (scopingData.email) {
                         document.getElementById('scopeEmail').value = scopingData.email;
                     }
+                    // Update OAuth UI
+                    updateOAuthUI();
                 }
                 document.getElementById('setupLater').checked = scopingData.setupLater;
                 toggleProofLogField();
@@ -1655,20 +1900,48 @@
             localStorage.removeItem(DEMO_PROOF_URL_KEY);
             localStorage.removeItem(DEMO_SKIP_CONNECT_KEY);
             localStorage.removeItem(DEMO_CONNECTED_AT_KEY);
+            // Clear OAuth state
+            localStorage.removeItem(OAUTH_EMAIL_KEY);
+            localStorage.removeItem('oauthPendingProofLogUrl');
+            localStorage.removeItem('oauthPendingSetupLater');
+            oauthConnectedEmail = null;
             hideNewPaymentConfirm();
             hideErrorBox();
             showThinking(false);
             goToStep(1);
         }
 
-        // Check if returning from Stripe or URL indicates success
+        // Check if returning from Stripe, OAuth, or URL indicates success
         (function init() {
             // Initialize demo mode first (before URL cleaning)
             initDemoMode();
 
+            // Check OAuth configuration status
+            checkOAuthStatus();
+
             const params = new URLSearchParams(window.location.search);
             const sessionId = params.get('session_id');
             const paymentParam = params.get('payment');
+            const oauthParam = params.get('oauth');
+            const oauthEmail = params.get('email');
+            const oauthReason = params.get('reason');
+
+            // Handle OAuth callback
+            if (oauthParam === 'success' && oauthEmail) {
+                // Clean URL first
+                window.history.replaceState({}, document.title, isDemoMode ? '/?demo=1' : '/');
+                // Handle successful OAuth
+                handleOAuthCallback(decodeURIComponent(oauthEmail));
+                return;
+            }
+
+            if (oauthParam === 'error') {
+                // Clean URL first
+                window.history.replaceState({}, document.title, isDemoMode ? '/?demo=1' : '/');
+                // Handle OAuth error
+                handleOAuthError(oauthReason);
+                return;
+            }
 
             // Handle ?payment=success URL param
             if (paymentParam === 'success') {

@@ -1,0 +1,71 @@
+databaseChangeLog:
+  - changeSet:
+      id: 002-create-oauth-token-table
+      author: pilvetark
+      changes:
+        - createTable:
+            tableName: oauth_token
+            columns:
+              - column:
+                  name: id
+                  type: VARCHAR(36)
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: email
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: provider
+                  type: VARCHAR(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: access_token
+                  type: TEXT
+                  constraints:
+                    nullable: false
+              - column:
+                  name: refresh_token
+                  type: TEXT
+              - column:
+                  name: token_type
+                  type: VARCHAR(32)
+              - column:
+                  name: expires_at
+                  type: TIMESTAMP
+              - column:
+                  name: scopes
+                  type: TEXT
+              - column:
+                  name: user_info_json
+                  type: TEXT
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+                  constraints:
+                    nullable: false
+
+        - createIndex:
+            indexName: idx_oauth_token_email
+            tableName: oauth_token
+            columns:
+              - column:
+                  name: email
+
+        - createIndex:
+            indexName: idx_oauth_token_provider_email
+            tableName: oauth_token
+            unique: true
+            columns:
+              - column:
+                  name: provider
+              - column:
+                  name: email
