@@ -1179,6 +1179,110 @@
             font-size: 11px;
             color: #9ca3af;
         }
+
+        /* Use Case Box */
+        .use-case-box {
+            background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .use-case-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: #64748b;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+        .use-case-persona {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .persona-icon {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea20, #764ba220);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .persona-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        .use-case-problem {
+            font-size: 13px;
+            color: #4b5563;
+            line-height: 1.5;
+            margin-bottom: 16px;
+            padding: 12px;
+            background: #fef2f2;
+            border-radius: 8px;
+            border-left: 3px solid #f87171;
+        }
+        .use-case-problem strong {
+            color: #dc2626;
+        }
+        .use-case-delegation {
+            margin-bottom: 16px;
+        }
+        .delegation-label {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 6px;
+        }
+        .delegation-quote {
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.5;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            border-left: 3px solid #667eea;
+            font-style: italic;
+        }
+        .use-case-result {
+            margin-bottom: 16px;
+        }
+        .result-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 8px 0;
+            font-size: 13px;
+            color: #374151;
+            line-height: 1.4;
+        }
+        .result-item:not(:last-child) {
+            border-bottom: 1px solid #e5e7eb;
+        }
+        .result-icon {
+            flex-shrink: 0;
+            width: 20px;
+            text-align: center;
+        }
+        .use-case-value {
+            font-size: 13px;
+            color: #1f2937;
+            line-height: 1.5;
+            padding: 12px;
+            background: #d1fae5;
+            border-radius: 8px;
+            border-left: 3px solid #10b981;
+        }
+        .use-case-value strong {
+            color: #065f46;
+        }
     </style>
 </head>
 <body>
@@ -1312,6 +1416,39 @@
                                     </li>
                                 </ul>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Use Case: Founder Scenario -->
+                    <div class="use-case-box">
+                        <div class="use-case-label">Näide praktikast</div>
+                        <div class="use-case-persona">
+                            <span class="persona-icon">👤</span>
+                            <span class="persona-name">Startup asutaja, 120+ kirja päevas</span>
+                        </div>
+                        <div class="use-case-problem">
+                            <strong>Probleem:</strong> Kliendipäringud kaovad turunduskirjade sekka. Vastused hilinevad. Üks oluline lead jäi nädalaks märkamata.
+                        </div>
+                        <div class="use-case-delegation">
+                            <div class="delegation-label">Ta delegeerib AI-le:</div>
+                            <div class="delegation-quote">"Kliendipäringud on esmatähtsad. Hinnapakkumise küsimisel koosta mustand. Turunduskirjad ignoreeri. Kui keegi mainib investeeringut või partnerlushuvi, märgi kohe."</div>
+                        </div>
+                        <div class="use-case-result">
+                            <div class="result-item">
+                                <span class="result-icon">📬</span>
+                                <span>AI tuvastab kliendi e-kirja, koostab vastuse mustandi, märgib kiireks</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-icon">📋</span>
+                                <span>Otsuste logis: "Hinnapakkumise päring. Sinu kavatsus: kliendid esmatähtsad. Koostasin mustandi."</span>
+                            </div>
+                            <div class="result-item">
+                                <span class="result-icon">🔒</span>
+                                <span>Klient küsib hiljem: "Miks nii kiiresti vastasite?" — logist näeb täpselt, kuidas AI prioritiseeris</span>
+                            </div>
+                        </div>
+                        <div class="use-case-value">
+                            <strong>Miks see väärt on:</strong> Mitte aeg, mis säästetakse. Vaid lead, mis ei jää märkamata. Ja jälg, mis tõestab, et süsteem töötab.
                         </div>
                     </div>
 
