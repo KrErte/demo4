@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pilvetark - AI e-mailide tootleja</title>
+    <title>Pilvetark - AI otsuste delegeerimine</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
@@ -896,12 +896,12 @@
             <!-- Demo Mode Banner -->
             <div class="demo-banner" id="demoBanner">
                 <span class="demo-icon">⚡</span>
-                DEMO REŽIIM – päris ühendust ei tehta
+                DEMO REŽIIM – tegelikku ühendust ei looda
             </div>
 
             <div class="card-header">
                 <h1>Pilvetark</h1>
-                <p id="headerSubtitle">AI e-mailide tootleja</p>
+                <p id="headerSubtitle">AI, mis otsustab sinu eest</p>
             </div>
 
             <!-- Step Indicator -->
@@ -914,30 +914,30 @@
             <!-- Step 1: Landing -->
             <div id="step1" class="card-body">
                 <div class="landing-content">
-                    <h2>Sinu e-post, korras.</h2>
-                    <p class="subtitle">AI loeb su inboxi, tostab esile olulise ja koostab vastused — sina ainult kinnitad.</p>
-                    <p class="differentiator">See ei ole Zapier. See on valmis e-posti autopiloot.</p>
+                    <h2>Delegeeri otsused. Näe, miks.</h2>
+                    <p class="subtitle">AI teeb sinu eest otsuseid e-postis. Iga tegevus on nähtav, põhjendatud ja auditeeritav.</p>
+                    <p class="differentiator">See pole tööriist. See on vastutav assistent.</p>
 
                     <div class="benefits-list">
                         <div class="benefit-item">
-                            <div class="benefit-icon">🏷️</div>
+                            <div class="benefit-icon">🎯</div>
                             <div class="benefit-text">
-                                <strong>Sildistab ja sorteerib</strong>
-                                Kirjad lähevad automaatselt õigetesse kaustadesse
+                                <strong>Otsustab sinu eest</strong>
+                                Hindab sõnumeid ja tegutseb vastavalt sinu kavatsustele
                             </div>
                         </div>
                         <div class="benefit-item">
-                            <div class="benefit-icon">✍️</div>
+                            <div class="benefit-icon">📋</div>
                             <div class="benefit-text">
-                                <strong>Koostab vastusemustandid</strong>
-                                Tõstab esile olulise ja pakub vastusevariante
+                                <strong>Jätab jälje</strong>
+                                Näed täpselt, mida AI kaalus ja miks ta nii otsustas
                             </div>
                         </div>
                         <div class="benefit-item">
-                            <div class="benefit-icon">🔗</div>
+                            <div class="benefit-icon">🔒</div>
                             <div class="benefit-text">
-                                <strong>Gmail / Workspace integratsioon</strong>
-                                Sujuv ühendus sinu olemasoleva e-postiga
+                                <strong>Sina jääd kontrolli</strong>
+                                Muuda oma kavatsusi igal ajal. Audit log säilitab kõik.
                             </div>
                         </div>
                     </div>
@@ -945,7 +945,7 @@
                     <!-- Collapsible: How it works -->
                     <div class="accordion" id="howItWorksAccordion">
                         <button class="accordion-toggle" onclick="toggleAccordion('howItWorksAccordion')">
-                            <span>Kuidas see tootab?</span>
+                            <span>Kuidas see toimib?</span>
                             <span class="accordion-icon">▼</span>
                         </button>
                         <div class="accordion-content">
@@ -953,19 +953,19 @@
                                 <ul class="how-it-works-list">
                                     <li>
                                         <span class="how-step-num">1</span>
-                                        <span>Uhendad oma e-posti (Gmail / Google Workspace)</span>
+                                        <span>Ühendad oma postkasti</span>
                                     </li>
                                     <li>
                                         <span class="how-step-num">2</span>
-                                        <span>Valime koos sobiva toovoo ja reeglid</span>
+                                        <span>Kirjeldad, mis sulle oluline on — AI mõistab sinu kavatsust</span>
                                     </li>
                                     <li>
                                         <span class="how-step-num">3</span>
-                                        <span>Saad Proof Log / Task Exposure lingi, kus näed, mida AI teeb (valikuline)</span>
+                                        <span>Saad ligipääsu Otsuste Logile, kus näed iga tegevust ja põhjendust</span>
                                     </li>
                                     <li>
                                         <span class="how-step-num">4</span>
-                                        <span>Maksad ja automatsioon hakkab kohe toole</span>
+                                        <span>Aktiveerid ja AI hakkab tegutsema — sina jälgid</span>
                                     </li>
                                 </ul>
                             </div>
@@ -973,7 +973,7 @@
                     </div>
 
                     <button class="submit-btn" onclick="goToStep(2)">
-                        Alusta
+                        Alusta seadistamist
                     </button>
                 </div>
             </div>
@@ -1007,13 +1007,13 @@
                 <div class="divider-row hidden" id="oauthDivider">või sisesta e-post käsitsi</div>
 
                 <div class="form-group" id="scopeEmailGroup">
-                    <label for="scopeEmail">E-posti aadress *</label>
+                    <label for="scopeEmail">Postkasti aadress *</label>
                     <input type="email" id="scopeEmail" placeholder="nimi@ettevote.ee" required>
-                    <div class="demo-hint">Demo režiimis aktsepteeritakse iga e-posti aadress</div>
+                    <div class="demo-hint">Demo režiimis aktsepteeritakse iga aadress</div>
                 </div>
 
                 <div class="toggle-row">
-                    <label for="setupLater">Seon hiljem</label>
+                    <label for="setupLater">Ühenda hiljem</label>
                     <div class="toggle-switch">
                         <input type="checkbox" id="setupLater" onchange="toggleProofLogField()">
                         <span class="toggle-slider"></span>
@@ -1021,7 +1021,7 @@
                 </div>
 
                 <div class="form-group" id="proofLogGroup">
-                    <label for="proofLogUrl">Proof Log / Task Exposure URL (valikuline)</label>
+                    <label for="proofLogUrl">Otsuste Logi URL (valikuline)</label>
                     <input type="url" id="proofLogUrl" placeholder="https://...">
                     <div class="demo-hint">Demo režiimis salvestatakse see väärtus lokaalselt</div>
                 </div>
@@ -1038,7 +1038,7 @@
                 <div id="errorBox" class="error-box">
                     <div class="error-summary" id="errorSummary"></div>
                     <button class="error-detail-toggle" onclick="toggleErrorDetail()">
-                        <span>Tehniline detail</span>
+                        <span>Tehniline info</span>
                         <span class="toggle-icon">▼</span>
                     </button>
                     <div class="error-detail-content">
@@ -1048,17 +1048,17 @@
 
                 <!-- Summary Box -->
                 <div class="summary-box" id="summaryBox">
-                    <h4>Kokkuvote</h4>
+                    <h4>Kokkuvõte</h4>
                     <div class="summary-item">
-                        <span class="summary-label">E-post:</span>
+                        <span class="summary-label">Postkast:</span>
                         <span class="summary-value" id="sumEmail">-</span>
                     </div>
                     <div class="summary-item hidden" id="sumProofLogRow">
-                        <span class="summary-label">Proof Log:</span>
+                        <span class="summary-label">Otsuste Logi:</span>
                         <span class="summary-value" id="sumProofLog">-</span>
                     </div>
                     <div class="summary-item" id="sumAmountRow">
-                        <span class="summary-label">Summa:</span>
+                        <span class="summary-label">Aktiveerimistasu:</span>
                         <span class="summary-value amount-highlight" id="sumAmount">-</span>
                     </div>
                 </div>
@@ -1071,17 +1071,17 @@
                             <span></span>
                             <span></span>
                         </div>
-                        <div class="thinking-text">Assistent motleb...</div>
+                        <div class="thinking-text">Valmistatakse ette...</div>
                     </div>
 
                     <form onsubmit="submitPayment(event)">
                         <div class="form-group">
-                            <label for="email">E-posti aadress</label>
+                            <label for="email">Kontaktaadress</label>
                             <input type="email" id="email" placeholder="nimi@ettevote.ee" required>
                         </div>
 
                         <div class="form-group">
-                            <label for="amount">Summa</label>
+                            <label for="amount">Aktiveerimistasu</label>
                             <div class="amount-input-wrapper">
                                 <input type="number" id="amount" placeholder="0.00" min="0.50" step="0.01" required oninput="updateSummaryAmount()">
                                 <span class="currency-label">EUR</span>
@@ -1090,7 +1090,7 @@
 
                         <div class="btn-row">
                             <button type="button" class="btn-secondary" onclick="goToStep(2)">Tagasi</button>
-                            <button type="submit" class="btn-primary" id="submitBtn">Maksa</button>
+                            <button type="submit" class="btn-primary" id="submitBtn">Aktiveeri</button>
                         </div>
                     </form>
                 </div>
@@ -1101,62 +1101,62 @@
                 <div class="status-icon pending">
                     <div class="loading-spinner"></div>
                 </div>
-                <div class="status-title">Ootan makset...</div>
-                <div class="status-desc">Suuname teid makseteenusesse. Palun arge sulgege seda akent.</div>
+                <div class="status-title">Aktiveerime...</div>
+                <div class="status-desc">Suuname teid turvalisele makseleheküljele. Palun ärge sulgege seda akent.</div>
             </div>
 
             <!-- Success Status with Next Steps -->
             <div id="successView" class="card-body hidden">
                 <div class="success-header">
                     <div class="check-icon">&#10003;</div>
-                    <h2>Makse onnestus!</h2>
-                    <p id="successDesc">Tere tulemast Pilvetarki!</p>
+                    <h2>Sinu AI on nüüd aktiivne</h2>
+                    <p id="successDesc">Iga otsus logitakse. Sina jääd kontrolli.</p>
                 </div>
 
                 <div class="next-steps" id="nextStepsPanel">
                     <div class="next-step-item">
                         <div class="step-number done">&#10003;</div>
                         <div class="step-content">
-                            <h4>Kinnitus e-mailile</h4>
-                            <p>Saatsime kinnituse ja arve teie e-posti aadressile. Kontrollige ka ramposti kausta.</p>
+                            <h4>Kinnitus saadetud</h4>
+                            <p>Saatsime kinnituse sinu kontaktaadressile. Kontrolli ka rämpsposti kausta.</p>
                         </div>
                     </div>
 
                     <div class="next-step-item">
                         <div class="step-number">2</div>
                         <div class="step-content">
-                            <h4>Kirjelda oma esimene e-posti reegel</h4>
-                            <p>Mida tahaksite automatiseerida? Kirjeldage vabas vormis.</p>
-                            <textarea id="automationDesc" placeholder="Nt: Tahan, et iga kord kui saan e-maili teatud kliendilt, lisatakse see automaatselt Google Sheets tabelisse..."></textarea>
+                            <h4>Kirjelda, mis sulle oluline on</h4>
+                            <p>Milliseid otsuseid peaks AI sinu eest tegema? Kirjelda oma kavatsust vabas vormis.</p>
+                            <textarea id="automationDesc" placeholder="Nt: Tahan, et kõik päringud klientidelt saaksid kiire vastuse. AI peaks hindama, kas tegemist on kiire teemaga, ja vajadusel koostama vastuse."></textarea>
                         </div>
                     </div>
 
                     <div class="next-step-item">
                         <div class="step-number">3</div>
                         <div class="step-content">
-                            <h4>Proof Log ja Task Exposure</h4>
-                            <p>Soovid naha, mida automatsioon taustal teeb?</p>
+                            <h4>Otsuste Logi</h4>
+                            <p>Soovid näha, mida AI kaalus ja miks ta nii otsustas?</p>
                             <div class="checkbox-row">
                                 <input type="checkbox" id="proofLog" checked>
-                                <label for="proofLog">Jah, tahan naha automatsioonide logi ja staatust</label>
+                                <label for="proofLog">Jah, tahan näha otsuste ajalugu ja põhjendusi</label>
                             </div>
-                            <p class="helper-text">Saad selle hiljem seadetest muuta.</p>
+                            <p class="helper-text">Saad selle igal ajal seadetest muuta.</p>
                         </div>
                     </div>
                 </div>
 
                 <div class="onboarding-cta">
                     <button class="submit-btn" onclick="startOnboarding()">
-                        Seadista esimene reegel
+                        Kirjelda oma kavatsus
                     </button>
                 </div>
 
                 <div class="new-payment-link" id="newPaymentSection">
-                    <button onclick="showNewPaymentConfirm()">Soovin teha uue makse</button>
-                    <p class="warning-text">Kas olete kindel? Teil on juba aktiivne tellimus.</p>
+                    <button onclick="showNewPaymentConfirm()">Soovin lisada uue postkasti</button>
+                    <p class="warning-text">Kas olete kindel? Teil on juba aktiivne AI assistent.</p>
                     <div class="confirm-btns">
-                        <button class="btn-cancel" onclick="hideNewPaymentConfirm()">Tuhista</button>
-                        <button class="btn-confirm" onclick="resetForm()">Jah, uus makse</button>
+                        <button class="btn-cancel" onclick="hideNewPaymentConfirm()">Tühista</button>
+                        <button class="btn-confirm" onclick="resetForm()">Jah, lisa uus</button>
                     </div>
                 </div>
             </div>
@@ -1164,13 +1164,13 @@
             <!-- Error Status -->
             <div id="errorView" class="status-card hidden">
                 <div class="status-icon error">!</div>
-                <div class="status-title">Makse ebaonnestus</div>
-                <div class="status-desc" id="errorDesc">Midagi laks valesti. Palun proovige uuesti.</div>
+                <div class="status-title">Aktiveerimine ebaõnnestus</div>
+                <div class="status-desc" id="errorDesc">Midagi läks valesti. Palun proovige uuesti.</div>
                 <button class="back-btn" onclick="resetForm()">Proovi uuesti</button>
             </div>
 
             <div class="footer">
-                Pilvetark OU &middot; Turvaline maksmine Stripe kaudu
+                Pilvetark OÜ &middot; Turvaline makse
             </div>
 
             <!-- Demo Mode Toggle -->
@@ -1267,7 +1267,7 @@
                 proofLogGroup.classList.add('hidden');
                 proofLogInput.disabled = true;
                 proofLogInput.value = '';
-                // In demo mode, disable email input when "Seon hiljem" is checked
+                // In demo mode, disable email input when "Ühenda hiljem" is checked
                 if (isDemoMode) {
                     scopeEmailInput.disabled = true;
                     scopeEmailInput.placeholder = 'Ühendatakse hiljem...';
@@ -1368,17 +1368,17 @@
                     simulateDemoConnect(email, proofLogUrl);
                     return;
                 } else if (!email) {
-                    alert('Palun sisesta e-posti aadress');
+                    alert('Palun sisesta postkasti aadress');
                     return;
                 } else {
-                    alert('Palun sisesta kehtiv e-posti aadress (peab sisaldama @ ja .)');
+                    alert('Palun sisesta kehtiv aadress (peab sisaldama @ ja .)');
                     return;
                 }
             }
 
             // Normal mode - standard validation
             if (!email) {
-                alert('Palun sisesta e-posti aadress');
+                alert('Palun sisesta postkasti aadress');
                 return;
             }
 
@@ -1400,7 +1400,7 @@
             // Disable input and show processing
             emailInput.disabled = true;
             nextBtn.disabled = true;
-            nextBtn.textContent = 'Ühendamine...';
+            nextBtn.textContent = 'Ühendan...';
 
             // Simulate connection delay (600-900ms)
             const delay = 600 + Math.random() * 300;
@@ -1670,9 +1670,9 @@
 
             // Update header subtitle
             const subtitles = {
-                1: 'AI e-mailide tootleja',
-                2: 'Räägi meile lähemalt',
-                3: 'Turvaline maksmine'
+                1: 'AI, mis otsustab sinu eest',
+                2: 'Ühenda oma postkast',
+                3: 'Aktiveeri oma AI'
             };
             document.getElementById('headerSubtitle').textContent = subtitles[step];
 
@@ -1745,14 +1745,14 @@
 
             // Update header for success view
             if (viewId === 'successView') {
-                document.getElementById('headerSubtitle').textContent = 'Jargmised sammud';
+                document.getElementById('headerSubtitle').textContent = 'Sinu AI on aktiivne';
                 isPaymentSuccess = true;
             }
         }
 
         function showSuccessWithAmount(amount) {
             document.getElementById('successDesc').textContent =
-                amount ? `Makse summas ${amount} EUR on edukalt tehtud.` : 'Tere tulemast Pilvetarki!';
+                amount ? `Aktiveeritud. Iga otsus logitakse.` : 'Iga otsus logitakse. Sina jääd kontrolli.';
             showView('successView');
         }
 
@@ -1764,7 +1764,7 @@
             document.getElementById('nextStepsPanel').scrollIntoView({ behavior: 'smooth' });
 
             // Show confirmation (you could add more logic here)
-            alert('Tanan! Votame teiega peagi uhendust, et seadistada teie esimene automatsioon.');
+            alert('Aitäh! Võtame teiega peagi ühendust, et seadistada teie AI kavatsused.');
         }
 
         function showNewPaymentConfirm() {
@@ -1784,8 +1784,8 @@
 
             if (!email || !amount || amount < 0.50) {
                 showErrorBox(
-                    'Palun sisestage e-posti aadress ja summa (min 0.50 EUR)',
-                    { validation: 'Email ja summa on kohustuslikud. Minimaalne summa on 0.50 EUR.' }
+                    'Palun sisestage kontaktaadress ja aktiveerimistasu (min 0.50 EUR)',
+                    { validation: 'Kontaktaadress ja aktiveerimistasu on kohustuslikud. Minimaalne tasu on 0.50 EUR.' }
                 );
                 return;
             }
@@ -1825,7 +1825,7 @@
             } catch (err) {
                 showThinking(false);
                 showErrorBox(
-                    'Uhenduse viga. Palun kontrollige internetiuhendust ja proovige uuesti.',
+                    'Ühenduse viga. Palun kontrollige internetiühendust ja proovige uuesti.',
                     { error: err.message, type: 'NetworkError' }
                 );
                 btn.disabled = false;
@@ -1835,10 +1835,10 @@
         function getFriendlyErrorMessage(errorText) {
             // Map common error messages to user-friendly Estonian text
             const errorMap = {
-                'Invalid or missing authentication': 'Autentimine ebaonnestus. Palun varskendage lehte.',
+                'Invalid or missing authentication': 'Autentimine ebaõnnestus. Palun värskendage lehte.',
                 'VALIDATION_ERROR': 'Sisestatud andmed on vigased. Palun kontrollige ja proovige uuesti.',
-                'Stripe not configured': 'Maksesusteem ei ole hetkel saadaval. Palun proovige hiljem.',
-                'Payment not found': 'Makset ei leitud. Palun alustage uuesti.',
+                'Stripe not configured': 'Maksesüsteem ei ole hetkel saadaval. Palun proovige hiljem.',
+                'Payment not found': 'Tehingut ei leitud. Palun alustage uuesti.',
             };
 
             for (const [key, value] of Object.entries(errorMap)) {
@@ -1847,7 +1847,7 @@
                 }
             }
 
-            return 'Midagi laks valesti. Palun proovige uuesti voi votke meiega uhendust.';
+            return 'Midagi läks valesti. Palun proovige uuesti või võtke meiega ühendust.';
         }
 
         async function checkPaymentStatus() {
